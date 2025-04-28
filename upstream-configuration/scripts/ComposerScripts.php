@@ -56,11 +56,22 @@ class ComposerScripts
         // If they do not match, force an update to the platform PHP version. If they
         // have the same major.minor version, then
         $platformPhpVersion = static::getCurrentPlatformPhp($event) ?? '';
-        $pantheonPhpVersion = static::getPantheonPhpVersion($event);
-        $updatedPlatformPhpVersion = static::bestPhpPatchVersion($pantheonPhpVersion);
+        $pantheonPhpVersion = static::getPantheonPhpVersion($event) ?? '';
+        $updatedPlatformPhpVersion = static::bestPhpPatchVersion($pantheonPhpVersion) ?? '';
         if ((substr($platformPhpVersion, 0, strlen($pantheonPhpVersion)) != $pantheonPhpVersion) && !empty($updatedPlatformPhpVersion)) {
             $io->write("<info>Setting platform.php from '$platformPhpVersion' to '$updatedPlatformPhpVersion' to conform to pantheon php version.</info>");
             $composerJson['config']['platform']['php'] = $updatedPlatformPhpVersion;
+        }
+
+        // Check to see if the PHP version in the require section of composer.json matches the pantheon.yml PHP version.
+        // If it does not, update it to match the PHP version defined in pantheon.yml.
+        $requirePhpVersion = static::getCurrentRequirePhp($composerJson);
+        if ($requirePhpVersion && false === stripos($requirePhpVersion, $pantheonPhpVersion)) {
+            $strippedRequirePhpVersion = str_replace( '>=', '', $requirePhpVersion);
+            if (version_compare($strippedRequirePhpVersion, '8.1', '<')) {
+                $io->write("<info>Setting require.php from '$requirePhpVersion' to '>=$pantheonPhpVersion' to conform to pantheon php version.</info>");
+                $composerJson['require']['php'] = ">=$pantheonPhpVersion";
+            }
         }
 
         // add our post-update-cmd hook if it's not already present
@@ -131,6 +142,18 @@ class ComposerScripts
     }
 
     /**
+     * Get the current require.php value.
+     */
+    private static function getCurrentRequirePhp($composerJson)
+    {
+        $require = $composerJson['require'];
+        if (isset($require['php'])) {
+            return $require['php'];
+        }
+        return null;
+    }
+
+    /**
      * Get current platform.php value.
      */
     private static function getCurrentPlatformPhp(Event $event)
@@ -183,14 +206,16 @@ class ComposerScripts
     {
         // Integrated Composer requires PHP 7.1 at a minimum.
         $patchVersions = [
-            '8.2' => '8.2.0',
-            '8.1' => '8.1.13',
-            '8.0' => '8.0.26',
+            '8.3' => '8.3.14',
+            '8.2' => '8.2.26',
+            '8.1' => '8.1.31',
+          // EOL final patch version below this line.
+            '8.0' => '8.0.30',
             '7.4' => '7.4.33',
             '7.3' => '7.3.33',
             '7.2' => '7.2.34',
             '7.1' => '7.1.33',
-        ];
+          ];
         if (isset($patchVersions[$pantheonPhpVersion])) {
             return $patchVersions[$pantheonPhpVersion];
         }
