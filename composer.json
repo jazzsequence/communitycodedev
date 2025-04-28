@@ -130,6 +130,12 @@
         "post-update-cmd": [
             "WordPressComposerManaged\\ComposerScripts::postUpdate",
             "@maybe-create-symlinks"
+        ],
+        "deploy": [
+            "bash ./scripts/deploy.sh"
+        ],
+        "deploy:test": [
+            "terminus env:deploy communitycodedev.test"
         ]
     },
     "suggest": {
