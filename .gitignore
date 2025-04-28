@@ -2,6 +2,9 @@
 # WordPress projects. Because .gitignore is specific to your site and its
 # deployment processes, you may need to uncomment, add, or remove rules.
 
+# Ignore auth.json
+auth.json
+
 # The /web/app/ directory is used in favor of /wp-content in a traditional
 # WordPress project. This is where files are uploaded to, where plugins and
 # themes are installed and where other writeable directories are created.
