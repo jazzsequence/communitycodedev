@@ -153,6 +153,46 @@ if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_P
 	$_SERVER['HTTPS'] = 'on';
 }
 
+/**
+ * Object Cache Pro
+ */
+$token = getenv( 'OCP_LICENSE' ); // Get the license from the Pantheon environment variables.
+
+// If working locally, set $token based on the local auth.json file.
+if ( isset( $_ENV['LANDO'] ) && 'ON' === $_ENV['LANDO'] ) {
+	$auth_json = ABSPATH . '/auth.json';
+	if ( file_exists( $auth_json ) ) {
+		$auth_json = json_decode( file_get_contents( $auth_json ) );
+		$token = $auth_json['http-basic']['objectcache.pro']['password'];
+	}
+}
+
+Config::define( 'WP_REDIS_CONFIG', [
+    'token' => $token,
+	'host' => getenv('CACHE_HOST') ?: '127.0.0.1',
+	'port' => getenv('CACHE_PORT') ?: 6379,
+	'database' => getenv('CACHE_DB') ?: 0,
+	'password' => getenv('CACHE_PASSWORD') ?: null,
+	'maxttl' => 86400 * 7,
+	'timeout' => 0.5,
+	'read_timeout' => 0.5,
+	'split_alloptions' => true,
+	'prefetch' => true,
+	'debug' => false,
+	'save_commands' => false,
+	'analytics' => [
+		'enabled' => true,
+		'persist' => true,
+		'retention' => 3600, // 1 hour
+		'footnote' => true,
+	],
+	'prefix' => "ocppantheon", // This prefix can be changed. Setting a prefix helps avoid conflict when switching from other plugins like wp-redis.
+	'serializer' => 'igbinary',
+	'compression' => 'zstd',
+	'async_flush' => true,
+	'strict' => true,
+] );
+
 $env_config = __DIR__ . '/environments/' . WP_ENV . '.php';
 
 if ( file_exists( $env_config ) ) {
