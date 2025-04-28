@@ -53,6 +53,10 @@
             ]
         },
         {
+          "type": "composer",
+          "url": "https://objectcache.pro/repo/"
+        },
+        {
             "type": "path",
             "url": "upstream-configuration"
         }
@@ -65,6 +69,7 @@
         "oscarotero/env": "^2.1",
         "pantheon-systems/pantheon-mu-plugin": "*",
         "pantheon-upstreams/upstream-configuration": "dev-main",
+        "rhubarbgroup/object-cache-pro": "^1.23",
         "roots/bedrock-autoloader": "*",
         "roots/bedrock-disallow-indexing": "*",
         "roots/wordpress": "*",
