@@ -87,6 +87,9 @@
             "roots/wordpress-core-installer": true,
             "cweagans/composer-patches": true,
             "dealerdirect/phpcodesniffer-composer-installer": true
+        },
+        "platform": {
+            "php": "8.3.14"
         }
     },
     "minimum-stability": "stable",
