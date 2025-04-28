@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b6cc2baf06a7ba5cf39edd94a6f39483",
+    "content-hash": "260f506b325b9a76efa70faf5ea81749",
     "packages": [
         {
             "name": "composer/installers",
@@ -261,6 +261,54 @@
                 }
             ],
             "time": "2024-07-20T21:45:45+00:00"
+        },
+        {
+            "name": "humanmade/two-factor",
+            "version": "0.8.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/humanmade/two-factor.git",
+                "reference": "2d4b9ecfb2890d3f41c888778e0a74772a75c13a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/humanmade/two-factor/zipball/2d4b9ecfb2890d3f41c888778e0a74772a75c13a",
+                "reference": "2d4b9ecfb2890d3f41c888778e0a74772a75c13a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "automattic/vipwpcs": "^2.3",
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
+                "php-coveralls/php-coveralls": "^2.5",
+                "phpcompatibility/php-compatibility": "10.x-dev as 9.99.99",
+                "phpcompatibility/phpcompatibility-wp": "dev-master",
+                "phpunit/phpunit": "^9.5",
+                "roots/wordpress-core-installer": "^1.100",
+                "roots/wordpress-full": "~6.0",
+                "spatie/phpunit-watcher": "^1.23",
+                "wp-coding-standards/wpcs": "^2.3",
+                "wp-phpunit/wp-phpunit": "^6.0",
+                "yoast/phpunit-polyfills": "^1.0"
+            },
+            "type": "wordpress-plugin",
+            "extra": {
+                "wordpress-install-dir": "wordpress"
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Two-Factor Authentication for WordPress.",
+            "homepage": "https://wordpress.org/plugins/two-factor/",
+            "support": {
+                "forum": "https://wordpress.org/support/plugin/two-factor/",
+                "issues": "https://github.com/WordPress/two-factor/issues",
+                "source": "https://github.com/WordPress/two-factor"
+            },
+            "time": "2023-09-04T20:35:54+00:00"
         },
         {
             "name": "oscarotero/env",
@@ -1132,6 +1180,42 @@
             "time": "2024-07-20T21:52:34+00:00"
         },
         {
+            "name": "wpackagist-plugin/akismet",
+            "version": "5.3.7",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/akismet/",
+                "reference": "tags/5.3.7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/akismet.5.3.7.zip"
+            },
+            "require": {
+                "composer/installers": "^1.0 || ^2.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/akismet/"
+        },
+        {
+            "name": "wpackagist-plugin/ninja-forms",
+            "version": "3.10.1",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/ninja-forms/",
+                "reference": "tags/3.10.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.10.1.zip"
+            },
+            "require": {
+                "composer/installers": "^1.0 || ^2.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/ninja-forms/"
+        },
+        {
             "name": "wpackagist-plugin/pantheon-advanced-page-cache",
             "version": "2.1.1",
             "source": {
@@ -1148,6 +1232,24 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/pantheon-advanced-page-cache/"
+        },
+        {
+            "name": "wpackagist-plugin/powerpress",
+            "version": "11.12.8",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/powerpress/",
+                "reference": "tags/11.12.8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/powerpress.11.12.8.zip"
+            },
+            "require": {
+                "composer/installers": "^1.0 || ^2.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/powerpress/"
         },
         {
             "name": "wpackagist-plugin/wp-native-php-sessions",
@@ -3147,5 +3249,8 @@
         "php": ">=8.1"
     },
     "platform-dev": {},
+    "platform-overrides": {
+        "php": "8.3.14"
+    },
     "plugin-api-version": "2.6.0"
 }
