@@ -132,7 +132,7 @@
             "@maybe-create-symlinks"
         ],
         "deploy": [
-            "bash ./scripts/deploy.sh"
+            "bash ./private/scripts/deploy.sh"
         ],
         "deploy:test": [
             "terminus env:deploy communitycodedev.test"
