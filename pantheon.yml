@@ -5,6 +5,7 @@ database:
 object_cache:
   version: 6.2
 
+# Slack notifications
 workflows:
   create_cloud_development_environment:
     after:
