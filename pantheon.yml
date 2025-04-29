@@ -10,19 +10,19 @@ workflows:
     after:
       - type: webphp
         description: Post to Slack after Multidev creation
-        script: private/scripts/slack-notification.php
+        script: scripts/slack-notification.php
   deploy:
     after:
       - type: webphp
         description: Post to Slack after deploy
-        script: private/scripts/slack-notification.php
+        script: scripts/slack-notification.php
   sync_code:
     after:
       - type: webphp
         description: Post to Slack after code commit
-        script: private/scripts/slack-notification.php
+        script: scripts/slack-notification.php
   clear_cache:
     after:
       - type: webphp
         description: Someone is clearing the cache again
-        script: private/scripts/slack-notification.php
+        script: scripts/slack-notification.php
