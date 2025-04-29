@@ -245,7 +245,12 @@ function _post_to_slack() {
 
 	$attachments = _get_attachments();
 	$blocks = _get_blocks_for_workflow();
-	$slack_token = pantheon_get_secret($secret_key);
+    if (function_exists('pantheon_get_secret')) {
+        $slack_token = pantheon_get_secret($secret_key);
+    } else {
+        echo "pantheon_get_secret does not exist";
+        return;
+    }
 
 	$post['channel'] = $slack_channel;
 
