@@ -20,6 +20,11 @@ function init() {
 	});
 
     add_action( 'init', __NAMESPACE__ . '\\register_episodes' );
+
+    add_filter( 'powerpress_post_types', function( $post_types ) {
+        $post_types[] = 'episodes'; // Allow PowerPress fields on episodes
+        return $post_types;
+    });
 }
 
 /**
