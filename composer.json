@@ -79,6 +79,7 @@
         "wpackagist-plugin/ninja-forms": "*",
         "wpackagist-plugin/pantheon-advanced-page-cache": "*",
         "wpackagist-plugin/powerpress": "*",
+        "wpackagist-plugin/wp-mail-smtp": "^4.4",
         "wpackagist-plugin/wp-native-php-sessions": "*",
         "wpackagist-theme/twentytwentyfive": "*"
     },

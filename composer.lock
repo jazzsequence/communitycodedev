@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d835bbcfeac95e0fd4f4bd69e76a04a5",
+    "content-hash": "8ada379e15eb47a8fd636c2e03c79321",
     "packages": [
         {
             "name": "composer/installers",
@@ -1294,6 +1294,24 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/powerpress/"
+        },
+        {
+            "name": "wpackagist-plugin/wp-mail-smtp",
+            "version": "4.4.0",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/wp-mail-smtp/",
+                "reference": "tags/4.4.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/wp-mail-smtp.4.4.0.zip"
+            },
+            "require": {
+                "composer/installers": "^1.0 || ^2.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/wp-mail-smtp/"
         },
         {
             "name": "wpackagist-plugin/wp-native-php-sessions",
