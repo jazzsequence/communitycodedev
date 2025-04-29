@@ -55,7 +55,7 @@ function register_episodes() {
 		'show_in_menu' => true,
 		'query_var' => true,
 		'rewrite' => [
-            'slug' => 'episodes/%year%/%monthnum%',
+            'slug' => 'episodes',
             'with_front' => false
         ],
 		'capability_type' => 'post',
@@ -65,6 +65,7 @@ function register_episodes() {
 		'supports' => [ 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments' ],
         'show_in_rest' => true,
         'menu_icon' => 'dashicons-microphone',
+        'feeds' => true,
     ];
 
     register_post_type( 'episodes', $args );
