@@ -1,9 +1,9 @@
 {
-    "name": "pantheon-systems/wordpress-composer-managed",
+    "name": "jazzsequence/communitycodedev",
     "type": "project",
     "license": "MIT",
-    "description": "Pantheon's recommended starting point for WordPress upstreams using the platform's Integrated Composer build process.",
-    "homepage": "https://pantheon.io/docs/guides/wordpress-composer",
+    "description": "A podcast about the people behind the commits.",
+    "homepage": "https://communitycode.dev",
     "authors": [
         {
             "name": "Pantheon Systems",
