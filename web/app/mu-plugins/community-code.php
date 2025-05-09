@@ -20,6 +20,7 @@ function init() {
 	});
 
     add_action( 'init', __NAMESPACE__ . '\\register_episodes' );
+    add_filter( 'default_content', __NAMESPACE__ . '\\set_episode_default_content', 10, 2 );
 
     add_filter( 'powerpress_post_types', function( $post_types ) {
         $post_types[] = 'episodes'; // Allow PowerPress fields on episodes
@@ -69,6 +70,36 @@ function register_episodes() {
     ];
 
     register_post_type( 'episodes', $args );
+}
+
+/**
+ * Set up the default episode podcast content.
+ */
+function set_episode_default_content( $content, $post ) {
+    // Bail if register_block_pattern function does not exist.
+    if ( ! get_post_type( $post ) === 'episodes' ) {
+        return;
+    }
+
+    $content = <<<HTML
+<!-- wp:heading -->
+<h2>Episode Title</h2>
+<!-- /wp:heading -->
+
+<!-- wp:embed {"providerNameSlug":"youtube"} -->
+<p><a href="">Paste YouTube link here</a></p>
+<!-- /wp:embed -->
+
+<!-- wp:shortcode -->
+[powerpress]
+<!-- /wp:shortcode -->
+
+<!-- wp:paragraph -->
+<p>Episode notes</p>
+<!-- /wp:paragraph -->
+HTML;
+
+    return $content;
 }
 
 init();
