@@ -82,13 +82,7 @@ function set_episode_default_content( $content, $post ) {
     }
 
     $content = <<<HTML
-<!-- wp:heading -->
-<h2>Episode Title</h2>
-<!-- /wp:heading -->
-
-<!-- wp:embed {"providerNameSlug":"youtube"} -->
-<p><a href="">Paste YouTube link here</a></p>
-<!-- /wp:embed -->
+<!-- wp:embed {"providerNameSlug":"youtube"} /-->
 
 <!-- wp:shortcode -->
 [powerpress]
