@@ -21,6 +21,7 @@ function init() {
 
     add_action( 'init', __NAMESPACE__ . '\\register_episodes' );
     add_filter( 'default_content', __NAMESPACE__ . '\\set_episode_default_content', 10, 2 );
+    add_filter( 'enter_title_here', __NAMESPACE__ . '\\filter_episode_title_placeholder', 10, 2 );
 
     add_filter( 'powerpress_post_types', function( $post_types ) {
         $post_types[] = 'episodes'; // Allow PowerPress fields on episodes
@@ -92,6 +93,16 @@ function set_episode_default_content( $content, $post ) {
 HTML;
 
     return $content;
+}
+
+/**
+ * Set the placeholder text for the episode title.
+ */
+function filter_episode_title_placeholder( $title, $post ) {
+    if ( 'episodes' === $post->post_type ) {
+        return __( 'Episode title', 'community-code' );
+    }
+    return $title;
 }
 
 init();
