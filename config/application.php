@@ -68,7 +68,7 @@ Config::define( 'DB_PASSWORD', env( 'DB_PASSWORD' ) );
 Config::define( 'DB_HOST', env( 'DB_HOST' ) ?: 'localhost' );
 Config::define( 'DB_CHARSET', 'utf8mb4' );
 Config::define( 'DB_COLLATE', '' );
-$table_prefix = env( 'DB_PREFIX' ) ?: 'wp_';
+$table_prefix = env( 'DB_PREFIX' ) ?: 'wp_'; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 
 if ( env( 'DATABASE_URL' ) ) {
 	$dsn = (object) parse_url( env( 'DATABASE_URL' ) );
@@ -83,7 +83,7 @@ if ( env( 'DATABASE_URL' ) ) {
  * Pantheon modifications
  */
 if ( isset( $_ENV['PANTHEON_ENVIRONMENT'] ) && ! isset( $_ENV['LANDO'] ) ) {
-	Config::define( 'DB_HOST', $_ENV['DB_HOST'] . ':' . $_ENV['DB_PORT'] );
+	Config::define( 'DB_HOST', $_ENV['DB_HOST'] . ':' . $_ENV['DB_PORT'] ); // phpcs:ignore
 } else {
 	/**
 	 * URLs
@@ -130,12 +130,12 @@ if ( $_ENV['PANTHEON_ENVIRONMENT'] === 'dev' || isset( $_ENV['LANDO'] ) ) {
 	Config::define( 'WP_DEBUG_DISPLAY', true );
 	Config::define( 'WP_DEBUG_LOG', true );
 	Config::define( 'SCRIPT_DEBUG', true );
-	ini_set( 'display_errors', '1' );
+	ini_set( 'display_errors', '1' ); // phpcs:ignore WordPress.PHP.IniSet.display_errors_Disallowed
 } else {
 	Config::define( 'WP_DEBUG_DISPLAY', false );
 	Config::define( 'WP_DEBUG_LOG', false );
 	Config::define( 'SCRIPT_DEBUG', false );
-	ini_set( 'display_errors', '0' );
+	ini_set( 'display_errors', '0' ); // phpcs:ignore WordPress.PHP.IniSet.display_errors_Disallowed
 }
 
 /**

@@ -20,26 +20,8 @@
   <exclude-pattern>web/app/plugins/*</exclude-pattern>
   <exclude-pattern>web/private/*</exclude-pattern>
   <exclude-pattern>upstream-configuration/*</exclude-pattern>
-
-  <!-- Ignore sniffs against things that we explicitly want for Pantheon upstreams. -->
-  <rule ref="Pantheon-WP">
-    <exclude name="WordPress.PHP.IniSet.display_errors_Disallowed">
-      <exclude-pattern>config/application.php</exclude-pattern>
-    </exclude>
-    <exclude name="WordPress.PHP.IniSet.display_errors_Blacklisted">
-      <exclude-pattern>config/application.php</exclude-pattern>
-    </exclude>
-    <exclude name="WordPress.Security.ValidatedSanitizedInput.InputNotSanitized">
-      <exclude-pattern>config/application.php</exclude-pattern>
-    </exclude>
-    <exclude name="WordPress.Security.ValidatedSanitizedInput.InputNotValidated">
-      <exclude-pattern>config/application.php</exclude-pattern>
-    </exclude>
-    <exclude name="WordPress.WP.GlobalVariablesOverride.Prohibited">
-      <exclude-pattern>config/application.php</exclude-pattern>
-    </exclude>
-  </rule>
-  <!-- End Pantheon addition -->
+  <exclude-pattern>config/application.pantheon.php</exclude-pattern>
+  <exclude-pattern>private/scripts/*.php</exclude-pattern> <!-- Exclude Quicksilver scripts -->
 
   <!-- Show colors in console -->
   <arg value="-colors"/>
@@ -48,5 +30,10 @@
   <arg value="ns"/>
 
   <!-- Use Pantheon-WP as a base -->
-  <rule ref="Pantheon-WP"/>
+  <rule ref="Pantheon-WP">
+
+  </rule>
+
+	<!-- Ignore PHP-related errors. -->
+	<ini name="error_reporting" value="E_ALL &#38; ~E_DEPRECATED" />
 </ruleset>
