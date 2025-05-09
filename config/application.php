@@ -168,11 +168,11 @@ if ( isset( $_ENV['LANDO'] ) && 'ON' === $_ENV['LANDO'] ) {
 }
 
 Config::define( 'WP_REDIS_CONFIG', [
-    'token' => $token,
-	'host' => getenv('CACHE_HOST') ?: '127.0.0.1',
-	'port' => getenv('CACHE_PORT') ?: 6379,
-	'database' => getenv('CACHE_DB') ?: 0,
-	'password' => getenv('CACHE_PASSWORD') ?: null,
+	'token' => $token,
+	'host' => getenv( 'CACHE_HOST' ) ?: '127.0.0.1',
+	'port' => getenv( 'CACHE_PORT' ) ?: 6379,
+	'database' => getenv( 'CACHE_DB' ) ?: 0,
+	'password' => getenv( 'CACHE_PASSWORD' ) ?: null,
 	'maxttl' => 86400 * 7,
 	'timeout' => 0.5,
 	'read_timeout' => 0.5,
@@ -186,7 +186,7 @@ Config::define( 'WP_REDIS_CONFIG', [
 		'retention' => 3600, // 1 hour
 		'footnote' => true,
 	],
-	'prefix' => "ocppantheon", // This prefix can be changed. Setting a prefix helps avoid conflict when switching from other plugins like wp-redis.
+	'prefix' => 'ocppantheon', // This prefix can be changed. Setting a prefix helps avoid conflict when switching from other plugins like wp-redis.
 	'serializer' => 'igbinary',
 	'compression' => 'zstd',
 	'async_flush' => true,
