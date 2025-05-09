@@ -75,6 +75,10 @@ function register_episodes() {
 
 /**
  * Set up the default episode podcast content.
+ *
+ * @param string $content The default content.
+ * @param WP_Post $post The post object.
+ * @return string The modified content.
  */
 function set_episode_default_content( $content, $post ) {
     // Bail if register_block_pattern function does not exist.
@@ -97,6 +101,10 @@ HTML;
 
 /**
  * Set the placeholder text for the episode title.
+ *
+ * @param string $title The title placeholder text.
+ * @param WP_Post $post The post object.
+ * @return string The modified title placeholder text.
  */
 function filter_episode_title_placeholder( $title, $post ) {
     if ( 'episodes' === $post->post_type ) {
