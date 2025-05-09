@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8ada379e15eb47a8fd636c2e03c79321",
+    "content-hash": "53461fd5383daccea567b9ad949e499b",
     "packages": [
         {
             "name": "composer/installers",
@@ -1348,6 +1348,86 @@
             },
             "type": "wordpress-theme",
             "homepage": "https://wordpress.org/themes/twentytwentyfive/"
+        },
+        {
+            "name": "yoast/wordpress-seo",
+            "version": "25.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Yoast-dist/wordpress-seo.git",
+                "reference": "8e7978886bd776e58dff88ce62abdfacc63662fe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Yoast-dist/wordpress-seo/zipball/8e7978886bd776e58dff88ce62abdfacc63662fe",
+                "reference": "8e7978886bd776e58dff88ce62abdfacc63662fe",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "^1.12 || ^2.0",
+                "ext-filter": "*",
+                "php": "^7.4| ^8.0"
+            },
+            "require-dev": {
+                "guzzlehttp/guzzle": "7.8.1",
+                "humbug/php-scoper": "^0.13.4",
+                "league/oauth2-client": "2.7.0",
+                "psr/container": "1.0.0",
+                "psr/log": "^1.0",
+                "symfony/config": "^3.4",
+                "symfony/dependency-injection": "^3.4",
+                "wpackagist-plugin/google-site-kit": "dev-trunk",
+                "yoast/wp-test-utils": "^1.2",
+                "yoast/yoastcs": "^3.2.0"
+            },
+            "suggest": {
+                "ext-bcmath": "For more accurate calculations",
+                "ext-dom": "Improves image sitemap",
+                "ext-libxml": "Improves image sitemap",
+                "ext-mbstring": "For cyrillic support"
+            },
+            "type": "wordpress-plugin",
+            "extra": {
+                "installer-paths": {
+                    "vendor/{$name}": [
+                        "wpackagist-plugin/google-site-kit"
+                    ]
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "admin/",
+                    "inc/",
+                    "vendor_prefixed/",
+                    "src/",
+                    "lib/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Team Yoast",
+                    "email": "support@yoast.com",
+                    "homepage": "https://yoa.st/1--"
+                }
+            ],
+            "description": "Improve your WordPress SEO: Write better content and have a fully optimized WordPress site using the Yoast SEO plugin.",
+            "homepage": "https://yoa.st/1ui",
+            "keywords": [
+                "seo",
+                "wordpress"
+            ],
+            "support": {
+                "forum": "https://wordpress.org/support/plugin/wordpress-seo",
+                "issues": "https://github.com/Yoast/wordpress-seo/issues",
+                "security": "https://yoast.com/security-program/",
+                "source": "https://github.com/Yoast/wordpress-seo",
+                "wiki": "https://github.com/Yoast/wordpress-seo/wiki"
+            },
+            "time": "2025-04-29T08:04:54+00:00"
         }
     ],
     "packages-dev": [

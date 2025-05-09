@@ -69,7 +69,7 @@
         "oscarotero/env": "^2.1",
         "pantheon-systems/pantheon-mu-plugin": "*",
         "pantheon-upstreams/upstream-configuration": "dev-main",
-        "rhubarbgroup/object-cache-pro": "^1.23",
+        "rhubarbgroup/object-cache-pro": "*",
         "roots/bedrock-autoloader": "*",
         "roots/bedrock-disallow-indexing": "*",
         "roots/wordpress": "*",
@@ -79,9 +79,10 @@
         "wpackagist-plugin/ninja-forms": "*",
         "wpackagist-plugin/pantheon-advanced-page-cache": "*",
         "wpackagist-plugin/powerpress": "*",
-        "wpackagist-plugin/wp-mail-smtp": "^4.4",
+        "wpackagist-plugin/wp-mail-smtp": "*",
         "wpackagist-plugin/wp-native-php-sessions": "*",
-        "wpackagist-theme/twentytwentyfive": "*"
+        "wpackagist-theme/twentytwentyfive": "*",
+        "yoast/wordpress-seo": "*"
     },
     "require-dev": {
         "pantheon-systems/pantheon-wp-coding-standards": "*",
