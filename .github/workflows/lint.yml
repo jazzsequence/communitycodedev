@@ -1,0 +1,28 @@
+name: Composer Lint
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  lint:
+    name: Run Composer Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3' # Adjust PHP version as needed
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install --no-scripts --no-progress --prefer-dist
+
+      - name: Run Composer Lint
+        run: composer lint
