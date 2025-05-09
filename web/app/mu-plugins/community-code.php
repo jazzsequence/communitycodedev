@@ -83,7 +83,7 @@ function register_episodes() {
 function set_episode_default_content( $content, $post ) {
     // Bail if register_block_pattern function does not exist.
     if ( ! get_post_type( $post ) === 'episodes' ) {
-        return;
+        return $content;
     }
 
     $content = <<<HTML
