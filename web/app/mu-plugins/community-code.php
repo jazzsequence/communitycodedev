@@ -84,9 +84,7 @@ function set_episode_default_content( $content, $post ) {
     $content = <<<HTML
 <!-- wp:embed {"providerNameSlug":"youtube"} /-->
 
-<!-- wp:shortcode -->
-[powerpress]
-<!-- /wp:shortcode -->
+<!-- wp:powerpress/player-block {"id":"738278d6-aef0-43a3-ab58-9dd9ef1bb12c"} /-->
 
 <!-- wp:paragraph -->
 <p>Episode notes</p>
