@@ -59,6 +59,10 @@
         {
             "type": "path",
             "url": "upstream-configuration"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/pantheon-systems/fastly-io"
         }
     ],
     "require": {
@@ -67,6 +71,7 @@
         "cweagans/composer-patches": "^1.7",
         "humanmade/two-factor": "*",
         "oscarotero/env": "^2.1",
+        "pantheon-systems/fastly-io": "dev-master",
         "pantheon-systems/pantheon-mu-plugin": "*",
         "pantheon-upstreams/upstream-configuration": "dev-main",
         "rhubarbgroup/object-cache-pro": "*",
@@ -76,7 +81,7 @@
         "roots/wp-config": "*",
         "vlucas/phpdotenv": "^5.5",
         "wpackagist-plugin/akismet": "*",
-        "wpackagist-plugin/autoblue": "^0.0.6",
+        "wpackagist-plugin/autoblue": "*",
         "wpackagist-plugin/ninja-forms": "*",
         "wpackagist-plugin/pantheon-advanced-page-cache": "*",
         "wpackagist-plugin/powerpress": "*",
