@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "557874cc83c54f383a974a5ad1158305",
+    "content-hash": "0763901726a208bd4ce346e49963c717",
     "packages": [
         {
             "name": "composer/installers",
@@ -364,6 +364,50 @@
                 "source": "https://github.com/oscarotero/env/tree/v2.1.1"
             },
             "time": "2024-12-03T01:02:28+00:00"
+        },
+        {
+            "name": "pantheon-systems/fastly-io",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pantheon-systems/fastly-io.git",
+                "reference": "cec33c9838658f65b0b56fda9ffb1b5c14d27c0c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pantheon-systems/fastly-io/zipball/cec33c9838658f65b0b56fda9ffb1b5c14d27c0c",
+                "reference": "cec33c9838658f65b0b56fda9ffb1b5c14d27c0c",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.6",
+                "yoast/phpunit-polyfills": "^2.0"
+            },
+            "default-branch": true,
+            "type": "wordpress-plugin",
+            "scripts": {
+                "test-init": [
+                    "bin/install-wp-tests.sh wordpress_tests root \"\""
+                ],
+                "test": [
+                    "phpunit"
+                ]
+            },
+            "license": [
+                "GPL3"
+            ],
+            "authors": [
+                {
+                    "name": "Ryan Hoover",
+                    "email": "ryan.hoover@pantheon.io"
+                }
+            ],
+            "description": "WordPress plugin to use Fastly Image I/O as image editor",
+            "support": {
+                "source": "https://github.com/pantheon-systems/fastly-io/tree/master",
+                "issues": "https://github.com/pantheon-systems/fastly-io/issues"
+            },
+            "time": "2025-04-25T19:54:32+00:00"
         },
         {
             "name": "pantheon-systems/pantheon-mu-plugin",
@@ -1370,16 +1414,16 @@
         },
         {
             "name": "yoast/wordpress-seo",
-            "version": "25.0",
+            "version": "25.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Yoast-dist/wordpress-seo.git",
-                "reference": "8e7978886bd776e58dff88ce62abdfacc63662fe"
+                "reference": "c38662ba0460def64d842e883b380e085d691814"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Yoast-dist/wordpress-seo/zipball/8e7978886bd776e58dff88ce62abdfacc63662fe",
-                "reference": "8e7978886bd776e58dff88ce62abdfacc63662fe",
+                "url": "https://api.github.com/repos/Yoast-dist/wordpress-seo/zipball/c38662ba0460def64d842e883b380e085d691814",
+                "reference": "c38662ba0460def64d842e883b380e085d691814",
                 "shasum": ""
             },
             "require": {
@@ -1446,7 +1490,7 @@
                 "source": "https://github.com/Yoast/wordpress-seo",
                 "wiki": "https://github.com/Yoast/wordpress-seo/wiki"
             },
-            "time": "2025-04-29T08:04:54+00:00"
+            "time": "2025-05-13T08:14:09+00:00"
         }
     ],
     "packages-dev": [
@@ -1851,21 +1895,22 @@
         },
         {
             "name": "phpcompatibility/phpcompatibility-wp",
-            "version": "2.1.6",
+            "version": "2.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCompatibility/PHPCompatibilityWP.git",
-                "reference": "80ccb1a7640995edf1b87a4409fa584cd5869469"
+                "reference": "5bfbbfbabb3df2b9a83e601de9153e4a7111962c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCompatibility/PHPCompatibilityWP/zipball/80ccb1a7640995edf1b87a4409fa584cd5869469",
-                "reference": "80ccb1a7640995edf1b87a4409fa584cd5869469",
+                "url": "https://api.github.com/repos/PHPCompatibility/PHPCompatibilityWP/zipball/5bfbbfbabb3df2b9a83e601de9153e4a7111962c",
+                "reference": "5bfbbfbabb3df2b9a83e601de9153e4a7111962c",
                 "shasum": ""
             },
             "require": {
                 "phpcompatibility/php-compatibility": "^9.0",
-                "phpcompatibility/phpcompatibility-paragonie": "^1.0"
+                "phpcompatibility/phpcompatibility-paragonie": "^1.0",
+                "squizlabs/php_codesniffer": "^3.3"
             },
             "require-dev": {
                 "dealerdirect/phpcodesniffer-composer-installer": "^1.0"
@@ -1915,9 +1960,13 @@
                 {
                     "url": "https://opencollective.com/php_codesniffer",
                     "type": "open_collective"
+                },
+                {
+                    "url": "https://thanks.dev/u/gh/phpcompatibility",
+                    "type": "thanks_dev"
                 }
             ],
-            "time": "2025-01-16T22:34:19+00:00"
+            "time": "2025-05-12T16:38:37+00:00"
         },
         {
             "name": "phpcsstandards/phpcsextra",
@@ -2142,12 +2191,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "59be420c5cdc0c3c9cdae31804d32fefb515a918"
+                "reference": "1027d9bda31e8db3234e2cb9ca75e97b63b74bf0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/59be420c5cdc0c3c9cdae31804d32fefb515a918",
-                "reference": "59be420c5cdc0c3c9cdae31804d32fefb515a918",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/1027d9bda31e8db3234e2cb9ca75e97b63b74bf0",
+                "reference": "1027d9bda31e8db3234e2cb9ca75e97b63b74bf0",
                 "shasum": ""
             },
             "conflict": {
@@ -2751,8 +2800,8 @@
                 "serluck/phpwhois": "<=4.2.6",
                 "sfroemken/url_redirect": "<=1.2.1",
                 "sheng/yiicms": "<1.2.1",
-                "shopware/core": "<6.6.10.3-dev|>=6.7.0.0-RC1-dev,<6.7.0.0-RC2-dev",
-                "shopware/platform": "<6.6.10.3-dev|>=6.7.0.0-RC1-dev,<6.7.0.0-RC2-dev",
+                "shopware/core": "<6.5.8.18-dev|>=6.6,<6.6.10.3-dev|>=6.7.0.0-RC1-dev,<6.7.0.0-RC2-dev",
+                "shopware/platform": "<6.5.8.18-dev|>=6.6,<6.6.10.3-dev|>=6.7.0.0-RC1-dev,<6.7.0.0-RC2-dev",
                 "shopware/production": "<=6.3.5.2",
                 "shopware/shopware": "<=5.7.17",
                 "shopware/storefront": "<=6.4.8.1|>=6.5.8,<6.5.8.7-dev",
@@ -3065,7 +3114,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-05-08T20:06:04+00:00"
+            "time": "2025-05-12T23:05:17+00:00"
         },
         {
             "name": "sirbrillig/phpcs-variable-analysis",
@@ -3250,16 +3299,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.12.2",
+            "version": "3.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "6d4cf6032d4b718f168c90a96e36c7d0eaacb2aa"
+                "reference": "65ff2489553b83b4597e89c3b8b721487011d186"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/6d4cf6032d4b718f168c90a96e36c7d0eaacb2aa",
-                "reference": "6d4cf6032d4b718f168c90a96e36c7d0eaacb2aa",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/65ff2489553b83b4597e89c3b8b721487011d186",
+                "reference": "65ff2489553b83b4597e89c3b8b721487011d186",
                 "shasum": ""
             },
             "require": {
@@ -3330,7 +3379,7 @@
                     "type": "thanks_dev"
                 }
             ],
-            "time": "2025-04-13T04:10:18+00:00"
+            "time": "2025-05-11T03:36:00+00:00"
         },
         {
             "name": "wp-coding-standards/wpcs",
@@ -3402,6 +3451,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "pantheon-systems/fastly-io": 20,
         "pantheon-upstreams/upstream-configuration": 20,
         "roave/security-advisories": 20
     },
