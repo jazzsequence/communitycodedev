@@ -4,6 +4,7 @@ database:
   version: 10.6
 object_cache:
   version: 6.2
+php_runtime_generation: 2
 
 # Slack notifications
 workflows:
