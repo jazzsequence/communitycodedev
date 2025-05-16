@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "03c71290499a4f0a8add832e5ee4263f",
+    "content-hash": "148715ac285e251a06629abff0a776b2",
     "packages": [
         {
             "name": "composer/installers",
@@ -1315,24 +1315,6 @@
             "homepage": "https://wordpress.org/plugins/powerpress/"
         },
         {
-            "name": "wpackagist-plugin/webp-converter-for-media",
-            "version": "6.2.2",
-            "source": {
-                "type": "svn",
-                "url": "https://plugins.svn.wordpress.org/webp-converter-for-media/",
-                "reference": "tags/6.2.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/webp-converter-for-media.6.2.2.zip"
-            },
-            "require": {
-                "composer/installers": "^1.0 || ^2.0"
-            },
-            "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/webp-converter-for-media/"
-        },
-        {
             "name": "wpackagist-plugin/wp-mail-smtp",
             "version": "4.4.0",
             "source": {
@@ -1367,6 +1349,24 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/wp-native-php-sessions/"
+        },
+        {
+            "name": "wpackagist-plugin/wp-smushit",
+            "version": "3.18.1",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/wp-smushit/",
+                "reference": "tags/3.18.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/wp-smushit.3.18.1.zip"
+            },
+            "require": {
+                "composer/installers": "^1.0 || ^2.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/wp-smushit/"
         },
         {
             "name": "wpackagist-theme/twentytwentyfive",
