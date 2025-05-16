@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8d8cef343e1f1e140e1e91c5b121cd94",
+    "content-hash": "f529691b4099261693368911e2213f5d",
     "packages": [
         {
             "name": "composer/installers",
@@ -364,6 +364,50 @@
                 "source": "https://github.com/oscarotero/env/tree/v2.1.1"
             },
             "time": "2024-12-03T01:02:28+00:00"
+        },
+        {
+            "name": "pantheon-systems/pantheon-hud",
+            "version": "0.4.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pantheon-systems/pantheon-hud.git",
+                "reference": "44c38c60321789602f329ba54979a2cef8c09304"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pantheon-systems/pantheon-hud/zipball/44c38c60321789602f329ba54979a2cef8c09304",
+                "reference": "44c38c60321789602f329ba54979a2cef8c09304",
+                "shasum": ""
+            },
+            "require-dev": {
+                "pantheon-systems/pantheon-wordpress-upstream-tests": "dev-master",
+                "pantheon-systems/pantheon-wp-coding-standards": "^2.0",
+                "pantheon-systems/wpunit-helpers": "^2.0",
+                "phpunit/phpunit": "^9",
+                "symfony/yaml": "^5.4 || ^6",
+                "yoast/phpunit-polyfills": "^2.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Pantheon",
+                    "email": "noreply@pantheon.io"
+                },
+                {
+                    "name": "Daniel Bachhuber",
+                    "email": "daniel@handbuilt.co"
+                }
+            ],
+            "description": "Provide situational awareness of the Pantheon platform from within your WordPress dashboard.",
+            "support": {
+                "issues": "https://github.com/pantheon-systems/pantheon-hud/issues",
+                "source": "https://github.com/pantheon-systems/pantheon-hud/tree/0.4.4"
+            },
+            "time": "2024-12-06T21:38:28+00:00"
         },
         {
             "name": "pantheon-systems/pantheon-mu-plugin",

@@ -71,6 +71,7 @@
         "cweagans/composer-patches": "^1.7",
         "humanmade/two-factor": "*",
         "oscarotero/env": "^2.1",
+        "pantheon-systems/pantheon-hud": "^0.4.4",
         "pantheon-systems/pantheon-mu-plugin": "*",
         "pantheon-upstreams/upstream-configuration": "dev-main",
         "rhubarbgroup/object-cache-pro": "*",
