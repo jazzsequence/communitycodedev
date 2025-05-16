@@ -22,6 +22,7 @@ function init() {
     add_action( 'init', __NAMESPACE__ . '\\register_episodes' );
     add_filter( 'default_content', __NAMESPACE__ . '\\set_episode_default_content', 10, 2 );
     add_filter( 'enter_title_here', __NAMESPACE__ . '\\filter_episode_title_placeholder', 10, 2 );
+    add_filter( 'webpc_dir_name', __NAMESPACE__ . '\\filter_webpc_upload_path', 10, 2 );
 
     add_filter( 'powerpress_post_types', function( $post_types ) {
         $post_types[] = 'episodes'; // Allow PowerPress fields on episodes
@@ -113,6 +114,14 @@ function filter_episode_title_placeholder( $title, $post ) {
         return __( 'Episode title', 'community-code' );
     }
     return $title;
+}
+
+function filter_webpc_upload_path( $path, $directory ) {
+    if ( $directory !== 'webp' ) {
+        return $path;
+    }
+
+    return WP_CONTENT_DIR . '/uploads/uploads-webpc';
 }
 
 init();
