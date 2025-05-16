@@ -121,7 +121,7 @@ function filter_webpc_upload_path( $path, $directory ) {
         return $path;
     }
 
-    return WP_CONTENT_DIR . '/uploads/uploads-webpc';
+    return 'app/uploads/uploads-webpc';
 }
 
 init();
