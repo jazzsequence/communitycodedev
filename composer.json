@@ -83,6 +83,7 @@
         "wpackagist-plugin/akismet": "*",
         "wpackagist-plugin/autoblue": "*",
         "wpackagist-plugin/imagify": "^2.2",
+        "wpackagist-plugin/mailpoet": "^5.12",
         "wpackagist-plugin/ninja-forms": "*",
         "wpackagist-plugin/pantheon-advanced-page-cache": "*",
         "wpackagist-plugin/powerpress": "*",
