@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fa5c18fb2b5170c22a56171362b2105d",
+    "content-hash": "79fd367208510fa3157c9cff7502bd8e",
     "packages": [
         {
             "name": "composer/installers",
@@ -199,6 +199,82 @@
                 "source": "https://github.com/cweagans/composer-patches/tree/1.7.3"
             },
             "time": "2022-12-20T22:53:13+00:00"
+        },
+        {
+            "name": "fair/fair-plugin",
+            "version": "0.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fairpm/fair-plugin.git",
+                "reference": "18e515f4bf652a957ca0e53c5a33faf159fad9de"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fairpm/fair-plugin/zipball/18e515f4bf652a957ca0e53c5a33faf159fad9de",
+                "reference": "18e515f4bf652a957ca0e53c5a33faf159fad9de",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "nimut/phpunit-merger": "*",
+                "yoast/phpunit-polyfills": "*"
+            },
+            "type": "wordpress-plugin",
+            "scripts": {
+                "test": [
+                    "Composer\\Config::disableProcessTimeout",
+                    "@php ./vendor/phpunit/phpunit/phpunit"
+                ],
+                "test:multisite": [
+                    "Composer\\Config::disableProcessTimeout",
+                    "@php ./vendor/phpunit/phpunit/phpunit -c tests/phpunit/multisite.xml"
+                ],
+                "coverage:merge": [
+                    "Composer\\Config::disableProcessTimeout",
+                    "@putenv XDEBUG_MODE=coverage",
+                    "@php ./vendor/bin/phpunit-merger coverage tests/phpunit/coverage/php --html tests/phpunit/coverage/html/full tests/phpunit/cache/full-cache.xml"
+                ],
+                "coverage:single": [
+                    "Composer\\Config::disableProcessTimeout",
+                    "@putenv XDEBUG_MODE=off",
+                    "@putenv WP_TESTS_SKIP_INSTALL=0",
+                    "@test --filter prime_test_suite",
+                    "@putenv XDEBUG_MODE=coverage",
+                    "@putenv WP_TESTS_SKIP_INSTALL=1",
+                    "@test"
+                ],
+                "coverage:multisite": [
+                    "Composer\\Config::disableProcessTimeout",
+                    "@putenv XDEBUG_MODE=off",
+                    "@putenv WP_TESTS_SKIP_INSTALL=0",
+                    "@test:multisite --filter prime_test_suite",
+                    "@putenv XDEBUG_MODE=coverage",
+                    "@putenv WP_TESTS_SKIP_INSTALL=1",
+                    "@test:multisite"
+                ],
+                "coverage:full": [
+                    "Composer\\Config::disableProcessTimeout",
+                    "@coverage:single",
+                    "@coverage:multisite",
+                    "@coverage:merge"
+                ]
+            },
+            "license": [
+                "gpl-2.0-only"
+            ],
+            "authors": [
+                {
+                    "name": "FAIR Contributors"
+                }
+            ],
+            "description": "Make your site more FAIR.",
+            "support": {
+                "source": "https://github.com/fairpm/fair-plugin/tree/0.3.0",
+                "issues": "https://github.com/fairpm/fair-plugin/issues"
+            },
+            "time": "2025-06-17T21:22:21+00:00"
         },
         {
             "name": "graham-campbell/result-type",
