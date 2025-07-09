@@ -63,12 +63,17 @@
         {
           "type": "vcs",
           "url": "https://github.com/pantheon-systems/fastly-io"
+        },
+        {
+          "type": "vcs",
+          "url": "git@github.com:fairpm/fair-plugin.git"
         }
     ],
     "require": {
         "php": ">=8.1",
         "composer/installers": "^2.2",
         "cweagans/composer-patches": "^1.7",
+        "fair/fair-plugin": "*",
         "humanmade/two-factor": "*",
         "oscarotero/env": "^2.1",
         "pantheon-systems/pantheon-hud": "*",
@@ -117,7 +122,10 @@
     "prefer-stable": true,
     "extra": {
         "installer-paths": {
-            "web/app/mu-plugins/{$name}/": ["type:wordpress-muplugin"],
+            "web/app/mu-plugins/{$name}/": [
+              "type:wordpress-muplugin",
+              "fair/fair-plugin"
+            ],
             "web/app/plugins/{$name}/": ["type:wordpress-plugin"],
             "web/app/themes/{$name}/": ["type:wordpress-theme"]
         },
