@@ -92,7 +92,7 @@
         "wpackagist-plugin/ninja-forms": "*",
         "wpackagist-plugin/pantheon-advanced-page-cache": "*",
         "wpackagist-plugin/powerpress": "*",
-        "wpackagist-plugin/progress-planner": "*",
+        "wpackagist-plugin/progress-planner": "^1.5.0",
         "wpackagist-plugin/wp-mail-smtp": "*",
         "wpackagist-plugin/wp-native-php-sessions": "*",
         "wpackagist-theme/twentytwentyfive": "*",
@@ -123,7 +123,8 @@
     "extra": {
         "installer-paths": {
             "web/app/mu-plugins/{$name}/": [
-              "type:wordpress-muplugin"
+              "type:wordpress-muplugin",
+              "fair/fair-plugin"
             ],
             "web/app/plugins/{$name}/": ["type:wordpress-plugin"],
             "web/app/themes/{$name}/": ["type:wordpress-theme"]
