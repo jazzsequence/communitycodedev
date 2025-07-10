@@ -92,7 +92,7 @@
         "wpackagist-plugin/ninja-forms": "*",
         "wpackagist-plugin/pantheon-advanced-page-cache": "*",
         "wpackagist-plugin/powerpress": "*",
-        "wpackagist-plugin/progress-planner": "^1.5.0",
+        "wpackagist-plugin/progress-planner": "*",
         "wpackagist-plugin/wp-mail-smtp": "*",
         "wpackagist-plugin/wp-native-php-sessions": "*",
         "wpackagist-theme/twentytwentyfive": "*",
