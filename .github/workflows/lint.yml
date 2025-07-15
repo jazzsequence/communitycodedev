@@ -1,4 +1,4 @@
-name: Composer Lint
+name: Lint
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   lint:
-    name: Run Composer Lint
+    name: Run Linting
     runs-on: ubuntu-latest
 
     steps:
