@@ -151,7 +151,9 @@
             "@lint:phpcs",
             "@lint:bash"
         ],
-        "lint:php": ["php -l web/wp/wp-settings.php"],
+        "lint:php": [
+            "find ./web/app/mu-plugins/community-code.php -name '*.php' -print0 | xargs -0 -n1 php -l"
+        ],
         "lint:phpcs": ["vendor/bin/phpcs -s ."],
         "lint:phpcbf": ["vendor/bin/phpcbf ."],
         "lint:bash": ["shellcheck private/scripts/*.sh"],
