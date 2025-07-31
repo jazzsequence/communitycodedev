@@ -2,6 +2,8 @@
 
 export TERMINUS_SITE=${TERMINUS_SITE:-"communitycodedev"}
 
+terminus workflow:wait "$TERMINUS_SITE.dev" --timeout=30
+
 # Get the last commit message and store it in a variable
 LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
 
