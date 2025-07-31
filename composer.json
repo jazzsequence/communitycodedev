@@ -61,8 +61,8 @@
             "url": "upstream-configuration"
         },
         {
-          "type": "vcs",
-          "url": "git@github.com:fairpm/fair-plugin.git"
+          "type": "composer",
+          "url": "https://dev-cxr-satis-server.pantheonsite.io"
         }
     ],
     "require": {
