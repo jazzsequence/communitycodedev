@@ -62,7 +62,7 @@
         },
         {
           "type": "composer",
-          "url": "https://dev-cxr-satis-server.pantheonsite.io"
+          "url": "https://packages.jazzsequence.com"
         }
     ],
     "require": {
