@@ -2,10 +2,21 @@
 
 export TERMINUS_SITE=${TERMINUS_SITE:-"communitycodedev"}
 
-echo "Waiting for sync_code to complete..."
-terminus workflow:wait "$TERMINUS_SITE.dev" "Sync code on dev"
-echo "Waiting for build_slim_image to complete..."
-terminus workflow:wait "$TERMINUS_SITE.dev" "Build a slim image for test/live environment"
+STEPS_TO_WAIT=(
+  "Change object cache version for dev"
+  "Update pantheon.yml for environment"
+  "Sync code on dev"
+  "Build a slim image for test/live environment"
+)
+
+# Wait for the specified workflows to complete
+for step in "${STEPS_TO_WAIT[@]}"; do
+  echo "Waiting for $step to complete..."
+  if ! terminus workflow:wait "$TERMINUS_SITE.dev" "$step"; then
+    echo "⚠️ Workflow '$step' failed. Exiting."
+    exit 1
+  fi
+done
 
 # Get the last commit message and store it in a variable
 LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
