@@ -2,7 +2,8 @@
 
 export TERMINUS_SITE=${TERMINUS_SITE:-"communitycodedev"}
 
-terminus workflow:wait "$TERMINUS_SITE.dev" --timeout=30
+echo "Waiting for build_slim_image to complete..."
+terminus workflow:wait "$TERMINUS_SITE.dev" "Build a slim image for test/live environment" --max=60
 
 # Get the last commit message and store it in a variable
 LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
