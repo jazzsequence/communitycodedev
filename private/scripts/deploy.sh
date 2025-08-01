@@ -10,7 +10,7 @@ STEPS_TO_WAIT=(
 # Wait for the specified workflows to complete
 for step in "${STEPS_TO_WAIT[@]}"; do
   echo "Waiting for $step to complete..."
-  if ! terminus workflow:wait "$TERMINUS_SITE.dev" "$step"; then
+  if ! terminus workflow:wait "$TERMINUS_SITE.dev" "$step" --max=220; then
     echo "⚠️ Workflow '$step' failed. Exiting."
     exit 1
   fi
