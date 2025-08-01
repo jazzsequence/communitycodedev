@@ -3,9 +3,9 @@
 export TERMINUS_SITE=${TERMINUS_SITE:-"communitycodedev"}
 
 STEPS_TO_WAIT=(
-  "Change object cache version for dev"
-  "Update pantheon.yml for environment"
   "Sync code on dev"
+  "Update pantheon.yml for environment"
+  "Change object cache version for dev"
   "Build a slim image for test/live environment"
 )
 
