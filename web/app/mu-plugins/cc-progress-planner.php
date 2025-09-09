@@ -40,7 +40,11 @@ function init() {
     // Customize row actions for tasks
     add_filter( 'post_row_actions', function( $actions, $post ) {
         if ( 'prpl_recommendations' === $post->post_type && isset( $actions['trash'] ) ) {
-            $actions['trash'] = str_replace( 'Trash', 'Complete', $actions['trash'] );
+            $trash_url = get_delete_post_link( $post->ID );
+            $actions['trash'] = sprintf(
+                '<a href="%s" class="submitdelete">Complete</a>',
+                $trash_url
+            );
         }
         return $actions;
     }, 10, 2 );
