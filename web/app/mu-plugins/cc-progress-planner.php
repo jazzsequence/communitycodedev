@@ -36,6 +36,14 @@ function init() {
         }
         return $args;
     }, 5, 2 );
+    
+    // Customize row actions for tasks
+    add_filter( 'post_row_actions', function( $actions, $post ) {
+        if ( 'prpl_recommendations' === $post->post_type && isset( $actions['trash'] ) ) {
+            $actions['trash'] = str_replace( 'Trash', 'Complete', $actions['trash'] );
+        }
+        return $actions;
+    }, 10, 2 );
 }
 
 add_action( 'init', __NAMESPACE__ . '\\init', 0 );
