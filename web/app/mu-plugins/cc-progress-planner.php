@@ -21,7 +21,7 @@ function init() {
             $args['map_meta_cap'] = true;
         }
         return $args;
-    }, 10, 2 );
+    }, 5, 2 );
 }
 
-add_action( 'init', __NAMESPACE__ . '\\init' );
+add_action( 'init', __NAMESPACE__ . '\\init', 0 );
