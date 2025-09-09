@@ -10,12 +10,6 @@ STEPS_TO_WAIT=(
 # Get the last commit message and store it in a variable
 LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
 
-# if the last command ended in error, bail with a warning.
-if ! terminus env:deploy "$TERMINUS_SITE.test" --note="Deploy to Test: ${LAST_COMMIT_MESSAGE}"; then
-  echo "⚠️ Deploy to test failed. Skipping live deploy."
-  exit 1
-fi
-
 # Only wait for workflows if they are actually running
 for step in "${STEPS_TO_WAIT[@]}"; do
   # Check if this workflow is currently running
@@ -30,5 +24,11 @@ for step in "${STEPS_TO_WAIT[@]}"; do
     echo "Skipping wait for '$step' - workflow not currently running."
   fi
 done
+
+# if the last command ended in error, bail with a warning.
+if ! terminus env:deploy "$TERMINUS_SITE.test" --note="Deploy to Test: ${LAST_COMMIT_MESSAGE}"; then
+  echo "⚠️ Deploy to test failed. Skipping live deploy."
+  exit 1
+fi
 
 terminus env:deploy "$TERMINUS_SITE.live" --note="Deploy to Live: ${LAST_COMMIT_MESSAGE}"
