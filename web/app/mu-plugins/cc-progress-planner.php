@@ -47,7 +47,19 @@ function init() {
             );
         }
         return $actions;
-    }, 10, 2 );
+    }, 99, 2 );
+    
+    // Also try targeting the page-specific filter
+    add_filter( 'page_row_actions', function( $actions, $post ) {
+        if ( 'prpl_recommendations' === $post->post_type && isset( $actions['trash'] ) ) {
+            $trash_url = get_delete_post_link( $post->ID );
+            $actions['trash'] = sprintf(
+                '<a href="%s" class="submitdelete">Complete</a>',
+                $trash_url
+            );
+        }
+        return $actions;
+    }, 99, 2 );
 }
 
 add_action( 'init', __NAMESPACE__ . '\\init', 0 );
