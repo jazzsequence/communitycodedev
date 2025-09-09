@@ -5,6 +5,9 @@
 # Ignore auth.json
 auth.json
 
+# Ignore LLM files
+CLAUDE.md
+
 # The /web/app/ directory is used in favor of /wp-content in a traditional
 # WordPress project. This is where files are uploaded to, where plugins and
 # themes are installed and where other writeable directories are created.
