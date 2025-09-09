@@ -21,10 +21,10 @@ if echo "$current_workflow_output" | grep -q "Workflow .* running"; then
   # Parse format: [notice] Workflow 'Sync code on dev' running.
   current_workflow=$(echo "$current_workflow_output" | sed -n "s/.*Workflow '\([^']*\)' running.*/\1/p")
   echo "Currently running workflow: $current_workflow"
-elif echo "$current_workflow_output" | grep -q "Current workflow is"; then
-  # Parse format: Current workflow is 'Deploy code to test'; waiting for 'Build a slim image...'
-  current_workflow=$(echo "$current_workflow_output" | sed -n "s/.*Current workflow is '\([^']*\)'.*/\1/p")
-  echo "Currently running workflow: $current_workflow"
+else
+  # If we see "Current workflow is X; waiting for X", it means X has completed
+  # If we see "Current workflow is X; waiting for Y", it means X is running but we're waiting for Y
+  echo "No workflows currently running."
 fi
 
 # Only wait for workflows if they match the currently running workflow
