@@ -2,6 +2,7 @@
 
 export TERMINUS_SITE=${TERMINUS_SITE:-"communitycodedev"}
 
+# Maybe wait for previous actions.
 STEPS_TO_WAIT=(
   "Sync code on dev"
   "Build a slim image for test/live environment"
