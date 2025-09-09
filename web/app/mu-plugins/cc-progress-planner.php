@@ -16,8 +16,9 @@ function init() {
     add_filter( 'progress_planner_tasks_show_ui', '__return_true' );
     add_filter( 'register_post_type_args', function( $args, $post_type ) {
         if ( 'prpl_recommendations' === $post_type ) {
-            $args['show_ui']      = true;
+            $args['show_ui'] = true;
             $args['show_in_menu'] = true;
+            $args['map_meta_cap'] = true;
         }
         return $args;
     }, 10, 2 );
