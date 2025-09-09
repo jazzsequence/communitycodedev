@@ -19,6 +19,20 @@ function init() {
             $args['show_ui'] = true;
             $args['show_in_menu'] = true;
             $args['map_meta_cap'] = true;
+            $args['labels'] = array(
+                'name' => 'Tasks',
+                'singular_name' => 'Task',
+                'menu_name' => 'Tasks',
+                'all_items' => 'All Tasks',
+                'add_new' => 'Add New',
+                'add_new_item' => 'Add New Task',
+                'edit_item' => 'Edit Task',
+                'new_item' => 'New Task',
+                'view_item' => 'View Task',
+                'search_items' => 'Search Tasks',
+                'not_found' => 'No tasks found',
+                'not_found_in_trash' => 'No tasks found in trash'
+            );
         }
         return $args;
     }, 5, 2 );
