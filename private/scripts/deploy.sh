@@ -16,7 +16,12 @@ LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
 current_workflow_output=$(terminus workflow:wait "$TERMINUS_SITE.dev" --max=1 2>&1 || true)
 current_workflow=""
 
-if echo "$current_workflow_output" | grep -q "Current workflow is"; then
+if echo "$current_workflow_output" | grep -q "Workflow .* running"; then
+  # Parse format: [notice] Workflow 'Sync code on dev' running.
+  current_workflow=$(echo "$current_workflow_output" | sed -n "s/.*Workflow '\([^']*\)' running.*/\1/p")
+  echo "Currently running workflow: $current_workflow"
+elif echo "$current_workflow_output" | grep -q "Current workflow is"; then
+  # Parse format: Current workflow is 'Deploy code to test'; waiting for 'Build a slim image...'
   current_workflow=$(echo "$current_workflow_output" | sed -n "s/.*Current workflow is '\([^']*\)'.*/\1/p")
   echo "Currently running workflow: $current_workflow"
 fi
