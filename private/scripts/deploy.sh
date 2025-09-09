@@ -16,12 +16,18 @@ if ! terminus env:deploy "$TERMINUS_SITE.test" --note="Deploy to Test: ${LAST_CO
   exit 1
 fi
 
-# Wait for the specified workflows to complete
+# Only wait for workflows if they are actually running
 for step in "${STEPS_TO_WAIT[@]}"; do
-  echo "Waiting for $step to complete..."
-  if ! terminus workflow:wait "$TERMINUS_SITE.dev" "$step" --max=220; then
-    echo "⚠️ Workflow '$step' failed. Exiting."
-    exit 1
+  # Check if this workflow is currently running
+  if terminus workflow:list "$TERMINUS_SITE.dev" --format=json | jq -r '.[].workflow' | grep -q "^$step$" && \
+     terminus workflow:list "$TERMINUS_SITE.dev" --format=json | jq -r '.[] | select(.workflow == "'"$step"'") | .status' | grep -q "running"; then
+    echo "Waiting for $step to complete..."
+    if ! terminus workflow:wait "$TERMINUS_SITE.dev" "$step" --max=220; then
+      echo "⚠️ Workflow '$step' failed. Exiting."
+      exit 1
+    fi
+  else
+    echo "Skipping wait for '$step' - workflow not currently running."
   fi
 done
 
