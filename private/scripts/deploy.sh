@@ -5,23 +5,32 @@ export TERMINUS_SITE=${TERMINUS_SITE:-"communitycodedev"}
 STEPS_TO_WAIT=(
   "Sync code on dev"
   "Build a slim image for test/live environment"
+  "Deploy code to test"
+  "Deploy code to live"
 )
 
 # Get the last commit message and store it in a variable
 LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
 
-# Only wait for workflows if they are actually running
+# Get the currently running workflow
+current_workflow_output=$(terminus workflow:wait "$TERMINUS_SITE.dev" --max=1 2>&1 || true)
+current_workflow=""
+
+if echo "$current_workflow_output" | grep -q "Current workflow is"; then
+  current_workflow=$(echo "$current_workflow_output" | sed -n "s/.*Current workflow is '\([^']*\)'.*/\1/p")
+  echo "Currently running workflow: $current_workflow"
+fi
+
+# Only wait for workflows if they match the currently running workflow
 for step in "${STEPS_TO_WAIT[@]}"; do
-  # Check if this workflow is currently running
-  if terminus workflow:list "$TERMINUS_SITE.dev" --format=json | jq -r '.[].workflow' | grep -q "^$step$" && \
-     terminus workflow:list "$TERMINUS_SITE.dev" --format=json | jq -r '.[] | select(.workflow == "'"$step"'") | .status' | grep -q "running"; then
+  if [ "$current_workflow" = "$step" ]; then
     echo "Waiting for $step to complete..."
     if ! terminus workflow:wait "$TERMINUS_SITE.dev" "$step" --max=220; then
       echo "⚠️ Workflow '$step' failed. Exiting."
       exit 1
     fi
   else
-    echo "Skipping wait for '$step' - workflow not currently running."
+    echo "Skipping wait for '$step' - not currently running."
   fi
 done
 
