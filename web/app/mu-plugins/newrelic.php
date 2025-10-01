@@ -19,30 +19,36 @@ function bootstrap() {
 	add_action( 'wp_footer', __NAMESPACE__ . '\\add_newrelic_footer', 99 );
 }
 
+function get_newrelic_inline( string $where ) : void {
+	$fn = $where === 'footer' ? 'newrelic_get_browser_timing_footer' : 'newrelic_get_browser_timing_header';
+
+	if ( ! function_exists( $fn ) ) {
+		return;
+	}
+
+	$raw = $fn();
+	echo "\n<!-- NR diag {$where} length: ".strlen($raw)." -->\n";
+	if ( $raw && preg_match( '#<script\b[^>]*>([\s\S]*?)</script>#i', $raw, $m ) ) {
+		$js = $m[1];
+	}
+
+	if ( ! empty( $js ) ) {
+		wp_print_inline_script_tag( $js, [ 'id' => "newrelic-browser-{$where}" ] );
+	}
+}
+
 /**
  * Add New Relic headers to the page head.
  */
 function add_newrelic_headers() {
-	// Debug.
-	echo "\n<!-- NR diag: ext=" . (int)extension_loaded('newrelic') . " fn=" . (int)function_exists('newrelic_get_browser_timing_header') . " -->\n";
-	if ( function_exists( 'newrelic_get_browser_timing_header' ) ) {
-		$raw = newrelic_get_browser_timing_header();
-		echo "\n<!-- NR diag header length: ".strlen($raw)." -->\n";
-		$script_content = preg_replace('/<script[^>]*>|<\/script>/i', '', $raw);
-        wp_print_inline_script_tag( $script_content, [ 'id' => 'newrelic-browser-header' ] );
-	}
+	get_newrelic_inline( 'header' );
 }
 
 /**
  * Add New Relic footer to the page footer.
  */
 function add_newrelic_footer() {
-	if ( function_exists( 'newrelic_get_browser_timing_footer' ) ) {
-		$raw = newrelic_get_browser_timing_footer();
-		echo "\n<!-- NR diag footer length: ".strlen($raw)." -->\n";
-		$script_content = preg_replace('/<script[^>]*>|<\/script>/i', '', $raw);
-        wp_print_inline_script_tag( $script_content, [ 'id' => 'newrelic-browser-footer' ] );
-	}
+	get_newrelic_inline( 'footer' );
 }
 
 // Bootstrap the plugin.
