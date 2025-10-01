@@ -32,6 +32,7 @@ function get_newrelic_inline( string $where ) : void {
 		$js = $m[1];
 	}
 
+	echo "\n<!-- NR diag {$where} js length: ".(empty($js) ? 0 : strlen($js))." -->\n";
 	if ( ! empty( $js ) ) {
 		wp_print_inline_script_tag( $js, [ 'id' => "newrelic-browser-{$where}" ] );
 	}
