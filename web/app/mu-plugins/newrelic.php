@@ -23,14 +23,21 @@ function bootstrap() {
  * Add New Relic headers to the page head.
  */
 function add_newrelic_headers() {
+    // Debug.
+	echo "\n<!-- NR diag: ext=";
+    echo (int)extension_loaded('newrelic');
+    echo " fn=";
+    echo (int)function_exists('newrelic_get_browser_timing_header');
+    echo " -->\n";
 	if ( function_exists( 'newrelic_get_browser_timing_header' ) ) {
 		$raw = newrelic_get_browser_timing_header();
-        if ( preg_match( '#<script|^>]*>(.*)</script>#is', $raw, $m ) ) {
-            $js = $m[1];
-            wp_print_inline_script_tag( $js, [ 'id' => 'newrelic-browser' ] );
-        } else {
-            echo $raw; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-        }
+        echo "\n<!-- NR diag header length: ".strlen($raw)." -->\n";
+		if ( preg_match( '#<script|^>]*>(.*)</script>#is', $raw, $m ) ) {
+			$js = $m[1];
+			wp_print_inline_script_tag( $js, [ 'id' => 'newrelic-browser' ] );
+		} else {
+			echo $raw; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
 	}
 }
 
@@ -40,12 +47,13 @@ function add_newrelic_headers() {
 function add_newrelic_footer() {
 	if ( function_exists( 'newrelic_get_browser_timing_footer' ) ) {
 		$raw = newrelic_get_browser_timing_footer();
-        if ( preg_match( '#<script|^>]*>(.*)</script>#is', $raw, $m ) ) {
-            $js = $m[1];
-            wp_print_inline_script_tag( $js, [ 'id' => 'newrelic-browser' ] );
-        } else {
-            echo $raw; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-        }
+        echo "\n<!-- NR diag footer length: ".strlen($raw)." -->\n";
+		if ( preg_match( '#<script|^>]*>(.*)</script>#is', $raw, $m ) ) {
+			$js = $m[1];
+			wp_print_inline_script_tag( $js, [ 'id' => 'newrelic-browser' ] );
+		} else {
+			echo $raw; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
 	}
 }
 
