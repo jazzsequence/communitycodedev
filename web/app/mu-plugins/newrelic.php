@@ -24,7 +24,13 @@ function bootstrap() {
  */
 function add_newrelic_headers() {
 	if ( function_exists( 'newrelic_get_browser_timing_header' ) ) {
-		echo newrelic_get_browser_timing_header();
+		$raw = newrelic_get_browser_timing_header();
+        if ( preg_match( '#<script|^>]*>(.*)</script>#is', $raw, $m ) ) {
+            $js = $m[1];
+            wp_print_inline_script_tag( $js, [ 'id' => 'newrelic-browser' ] );
+        } else {
+            echo $raw; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        }
 	}
 }
 
@@ -33,7 +39,13 @@ function add_newrelic_headers() {
  */
 function add_newrelic_footer() {
 	if ( function_exists( 'newrelic_get_browser_timing_footer' ) ) {
-		echo newrelic_get_browser_timing_footer();
+		$raw = newrelic_get_browser_timing_footer();
+        if ( preg_match( '#<script|^>]*>(.*)</script>#is', $raw, $m ) ) {
+            $js = $m[1];
+            wp_print_inline_script_tag( $js, [ 'id' => 'newrelic-browser' ] );
+        } else {
+            echo $raw; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        }
 	}
 }
 
