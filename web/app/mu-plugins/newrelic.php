@@ -30,6 +30,7 @@ function get_newrelic_inline( string $where ) : void {
 	echo "\n<!-- NR diag {$where} length: ".strlen($raw)." -->\n";
 	if ( $raw && preg_match( '#<script\b[^>]*>([\s\S]*?)</script>#i', $raw, $m ) ) {
 		$js = $m[1];
+		echo "\n<!-- NR {$where} script stripped js length: ".strlen($js)." -->\n";
 	}
 
 	echo "\n<!-- NR diag {$where} js length: ".(empty($js) ? 0 : strlen($js))." -->\n";
