@@ -28,6 +28,14 @@ $root_dir = dirname( __DIR__ );
 $webroot_dir = $root_dir . '/web';
 
 /**
+ * Disable New Relic agent.
+ * Re-add it later in the execution.
+ */
+if ( function_exists( 'newrelic_disable_autorum' ) ) {
+    newrelic_disable_autorum();
+}
+
+/**
  * Use Dotenv to set required environment variables and load .env file in root
  * .env.local will override .env if it exists
  */
