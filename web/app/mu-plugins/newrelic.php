@@ -26,9 +26,9 @@ function add_newrelic_headers() {
 	// Debug.
 	echo "\n<!-- NR diag: ext=" . (int)extension_loaded('newrelic') . " fn=" . (int)function_exists('newrelic_get_browser_timing_header') . " -->\n";
 	if ( function_exists( 'newrelic_get_browser_timing_header' ) ) {
-		$raw = newrelic_get_browser_timing_header();
+		$raw = newrelic_get_browser_timing_header(true);
 		echo "\n<!-- NR diag header length: ".strlen($raw)." -->\n";
-		if ( preg_match( '#<script|^>]*>(.*)</script>#is', $raw, $m ) ) {
+		if ( preg_match( '<script[^>]*>(.*?)</script>#i', $raw, $m ) ) {
 			$js = $m[1];
 			wp_print_inline_script_tag( $js, [ 'id' => 'newrelic-browser' ] );
 		} else {
@@ -42,9 +42,9 @@ function add_newrelic_headers() {
  */
 function add_newrelic_footer() {
 	if ( function_exists( 'newrelic_get_browser_timing_footer' ) ) {
-		$raw = newrelic_get_browser_timing_footer();
+		$raw = newrelic_get_browser_timing_footer(true);
 		echo "\n<!-- NR diag footer length: ".strlen($raw)." -->\n";
-		if ( preg_match( '#<script|^>]*>(.*)</script>#is', $raw, $m ) ) {
+		if ( preg_match( '<script[^>]*>(.*?)</script>#i', $raw, $m ) ) {
 			$js = $m[1];
 			wp_print_inline_script_tag( $js, [ 'id' => 'newrelic-browser' ] );
 		} else {
