@@ -24,11 +24,7 @@ function bootstrap() {
  */
 function add_newrelic_headers() {
     // Debug.
-	echo "\n<!-- NR diag: ext=";
-    echo (int)extension_loaded('newrelic');
-    echo " fn=";
-    echo (int)function_exists('newrelic_get_browser_timing_header');
-    echo " -->\n";
+	echo "\n<!-- NR diag: ext=" . (int)extension_loaded('newrelic') . " fn=" . (int)function_exists('newrelic_get_browser_timing_header') . " -->\n";
 	if ( function_exists( 'newrelic_get_browser_timing_header' ) ) {
 		$raw = newrelic_get_browser_timing_header();
         echo "\n<!-- NR diag header length: ".strlen($raw)." -->\n";
