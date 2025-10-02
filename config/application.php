@@ -33,8 +33,15 @@ function _cc_filter_nr_script_for_bots() {
 	$is_unfurl_bot = preg_match( '/Slackbot-LinkExpanding|Slackbot|Discordbot|LinkedInBot|Twitterbot|facebookexternalhit|SkypeUriPreview/i', $ua );
 
 	// Disable New Relic agent.
-	if ( function_exists( 'newrelic_disable_autorum' ) && $is_unfurl_bot ) {
-		newrelic_disable_autorum();
+	if ( $is_unfurl_bot ) {
+        if ( function_exists( 'newrelic_disable_autorum' ) ) {
+		    newrelic_disable_autorum();
+        }
+
+        if ( ! headers_sent() ) {
+            header( 'Vary: User-Agent' );
+            header( 'Cache-Control: private, no-store' );
+        }
 	}
 }
 _cc_filter_nr_script_for_bots();
