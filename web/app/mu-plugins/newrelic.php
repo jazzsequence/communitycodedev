@@ -47,7 +47,20 @@ function get_newrelic_inline( string $where ) : void {
 		return;
 	}
 
-	// 3) Nothing available.
+    // 3) Last attempt. Try with no parameter. In the past this has printed the raw javascript.
+    $raw = $fn();
+    echo "\n<!-- NR diag {$where}: raw len " . strlen( (string) $raw ) . " -->\n";
+    if ( $raw !== '' ) {
+        // Check if the script has a <script> tag. If not, wrap it.
+        if ( strpos( $raw, '<script' ) === false ) {
+            wp_print_inline_script_tag( $raw, [ 'id' => "newrelic-browser-{$where}-raw" ] );
+        } else {
+            echo $raw; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscape.OutputNotEscaped
+        }
+        return;
+    }
+
+	// 4) Nothing available.
 	echo "\n<!-- NR diag {$where}: no snippet returned -->\n";
 }
 
