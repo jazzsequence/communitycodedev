@@ -35,7 +35,9 @@ function _cc_filter_nr_script_for_bots() {
 	// Disable New Relic agent.
 	if ( function_exists( 'newrelic_disable_autorum' ) && $is_unfurl_bot ) {
 		newrelic_disable_autorum();
-	}
+	} else {
+        echo "\n<!-- NR diag: not a bot or no newrelic_disable_autorum function -->\n";
+    }
 }
 _cc_filter_nr_script_for_bots();
 
