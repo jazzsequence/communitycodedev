@@ -27,31 +27,9 @@ $root_dir = dirname( __DIR__ );
  */
 $webroot_dir = $root_dir . '/web';
 
-/**
- * Filter out New Relic script for unfurl bots (Slack, Discord, LinkedIn, Twitter, Facebook, Skype).
- * These bots do not execute JavaScript, so the New Relic script is useless to them.
- * Additionally, the New Relic script can interfere with OpenGraph metadata parsing,
- * causing incorrect titles and descriptions to be displayed when links are shared.
- */
-function _cc_filter_nr_script_for_bots() {
-
-	$ua = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : '';
-	$is_unfurl_bot = preg_match( '/Slackbot-LinkExpanding|Slackbot|Discordbot|LinkedInBot|Twitterbot|facebookexternalhit|SkypeUriPreview/i', $ua );
-
-	// Disable New Relic agent.
-	if ( $is_unfurl_bot ) {
-		if ( function_exists( 'newrelic_disable_autorum' ) ) {
-			newrelic_disable_autorum();
-		}
-
-		if ( ! headers_sent() ) {
-			header( 'Vary: User-Agent' );
-			header( 'Cache-Control: private, no-store' );
-		}
-	}
+if ( function_exists( 'newrelic_disable_autorum' ) ) {
+    newrelic_disable_autorum();
 }
-_cc_filter_nr_script_for_bots();
-
 /**
  * Use Dotenv to set required environment variables and load .env file in root
  * .env.local will override .env if it exists
