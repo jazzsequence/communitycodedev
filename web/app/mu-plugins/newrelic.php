@@ -35,14 +35,7 @@ function get_newrelic_inline( string $where ) : void {
 
 	echo "\n<!-- NR diag {$where} js length: ".(empty($js) ? 0 : strlen($js))." -->\n";
 	if ( ! empty( $js ) ) {
-		echo wp_kses( $js, [
-			'script' => [
-				'type' => true,
-				'src' => true,
-				'async' => true,
-				'defer' => true,
-			],
-		] );
+		echo $js;
 	}
 }
 
