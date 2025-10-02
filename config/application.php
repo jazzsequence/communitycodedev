@@ -30,19 +30,10 @@ $webroot_dir = $root_dir . '/web';
 function _cc_filter_nr_script_for_bots() {
 
 	$ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
-    $accept = $_SERVER['HTTP_ACCEPT'] ?? '';
-    $uri = $_SERVER['REQUEST_URI'] ?? '';
-    $method = $_SERVER['REQUEST_METHOD'] ?? '';
-    $is_html_request = (stripos( $accept, 'text/html' ) !== false) && ($method === 'GET');
-    $is_adminish = (strpos($uri, '/wp-admin/') !== false) || (strpos($uri, '/wp-login.php') !== false);
-    $is_rest = (strpos($uri, '/wp-json/') !== false);
-    $is_feed = (strpos($uri, '/feed') !== false);
-    $is_robots = (strpos($uri, '/robots.txt') !== false);
-    $is_front = $is_html_request && ! $is_adminish && ! $is_rest && ! $is_feed && ! $is_robots;
 	$is_unfurl_bot = preg_match( '/Slackbot-LinkExpanding|Slackbot|Discordbot|LinkedInBot|Twitterbot|facebookexternalhit|SkypeUriPreview/i', $ua );
 
 	// Disable New Relic agent.
-	if ( $is_front && $is_unfurl_bot ) {
+	if ( $is_unfurl_bot ) {
         if ( function_exists( 'newrelic_disable_autorum' ) ) {
 		    newrelic_disable_autorum();
         }
@@ -51,10 +42,7 @@ function _cc_filter_nr_script_for_bots() {
             header( 'Vary: User-Agent' );
             header( 'Cache-Control: private, no-store' );
         }
-	} else {
-        if ( function_exists( 'newrelic_enable_autorum' ) ) {
-            newrelic_enable_autorum();
-        }
+	}
     }
 }
 _cc_filter_nr_script_for_bots();
