@@ -27,6 +27,12 @@ $root_dir = dirname( __DIR__ );
  */
 $webroot_dir = $root_dir . '/web';
 
+/**
+ * Filter out New Relic script for unfurl bots (Slack, Discord, LinkedIn, Twitter, Facebook, Skype).
+ * These bots do not execute JavaScript, so the New Relic script is useless to them.
+ * Additionally, the New Relic script can interfere with OpenGraph metadata parsing,
+ * causing incorrect titles and descriptions to be displayed when links are shared.
+ */
 function _cc_filter_nr_script_for_bots() {
 
 	$ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
