@@ -34,15 +34,15 @@ function _cc_filter_nr_script_for_bots() {
 
 	// Disable New Relic agent.
 	if ( $is_unfurl_bot ) {
-        if ( function_exists( 'newrelic_disable_autorum' ) ) {
-		    newrelic_disable_autorum();
-        }
+		if ( function_exists( 'newrelic_disable_autorum' ) ) {
+			newrelic_disable_autorum();
+		}
 
-        if ( ! headers_sent() ) {
-            header( 'Vary: User-Agent' );
-            header( 'Cache-Control: private, no-store' );
-        }
-    }
+		if ( ! headers_sent() ) {
+			header( 'Vary: User-Agent' );
+			header( 'Cache-Control: private, no-store' );
+		}
+	}
 }
 _cc_filter_nr_script_for_bots();
 
