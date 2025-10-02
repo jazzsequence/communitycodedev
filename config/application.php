@@ -35,7 +35,7 @@ $webroot_dir = $root_dir . '/web';
  */
 function _cc_filter_nr_script_for_bots() {
 
-	$ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
+	$ua = esc_attr( $_SERVER['HTTP_USER_AGENT'] ) ?? '';
 	$is_unfurl_bot = preg_match( '/Slackbot-LinkExpanding|Slackbot|Discordbot|LinkedInBot|Twitterbot|facebookexternalhit|SkypeUriPreview/i', $ua );
 
 	// Disable New Relic agent.
