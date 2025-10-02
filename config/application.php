@@ -42,7 +42,6 @@ function _cc_filter_nr_script_for_bots() {
             header( 'Vary: User-Agent' );
             header( 'Cache-Control: private, no-store' );
         }
-	}
     }
 }
 _cc_filter_nr_script_for_bots();
