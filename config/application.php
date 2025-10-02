@@ -27,13 +27,17 @@ $root_dir = dirname( __DIR__ );
  */
 $webroot_dir = $root_dir . '/web';
 
-/**
- * Disable New Relic agent.
- * Re-add it later in the execution.
- */
-if ( function_exists( 'newrelic_disable_autorum' ) ) {
-    newrelic_disable_autorum();
+function _cc_filter_nr_script_for_bots() {
+
+	$ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
+	$is_unfurl_bot = preg_match( '/Slackbot-LinkExpanding|Slackbot|Discordbot|LinkedInBot|Twitterbot|facebookexternalhit|SkypeUriPreview/i', $ua );
+
+	// Disable New Relic agent.
+	if ( function_exists( 'newrelic_disable_autorum' ) && $is_unfurl_bot ) {
+		newrelic_disable_autorum();
+	}
 }
+_cc_filter_nr_script_for_bots();
 
 /**
  * Use Dotenv to set required environment variables and load .env file in root
