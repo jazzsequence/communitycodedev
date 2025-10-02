@@ -19,6 +19,11 @@ function bootstrap() {
 	add_action( 'wp_footer', __NAMESPACE__ . '\\add_newrelic_footer', 99 );
 }
 
+/**
+ * Get New Relic inline script for header or footer.
+ *
+ * @param string $where 'header' or 'footer'.
+ */
 function get_newrelic_inline( string $where ) : void {
 	$fn = $where === 'footer' ? 'newrelic_get_browser_timing_footer' : 'newrelic_get_browser_timing_header';
 
