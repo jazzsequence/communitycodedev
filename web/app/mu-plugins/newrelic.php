@@ -23,6 +23,7 @@ function get_newrelic_inline( string $where ) : void {
 	$fn = $where === 'footer' ? 'newrelic_get_browser_timing_footer' : 'newrelic_get_browser_timing_header';
 
 	if ( ! function_exists( $fn ) ) {
+        echo "\n<!-- NR diag {$where} function {$fn} does not exist -->\n";
 		return;
 	}
 
