@@ -36,7 +36,7 @@ function _cc_filter_nr_script_for_bots() {
 	if ( function_exists( 'newrelic_disable_autorum' ) && $is_unfurl_bot ) {
 		newrelic_disable_autorum();
 	} else {
-        echo "\n<!-- NR diag: not a bot or no newrelic_disable_autorum function -->\n";
+        echo "\n<!-- NR diag: newrelic_disable_autorum function exists?" . function_exists( 'newrelic_disable_autorum' ) . "; bot? " . $is_unfurl_bot . " -->\n";
     }
 }
 _cc_filter_nr_script_for_bots();
