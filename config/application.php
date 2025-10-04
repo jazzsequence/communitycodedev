@@ -27,7 +27,7 @@ $root_dir = dirname( __DIR__ );
  */
 $webroot_dir = $root_dir . '/web';
 
-$ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
+$ua = $_SERVER['HTTP_USER_AGENT'] ?? ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 $is_unfurl_bot = (bool) preg_match(
     '/Slackbot-LinkExpanding|Slackbot|Discordbot|LinkedInBot|Twitterbot|facebookexternalhit|SkypeUriPreview/i',
     $ua
