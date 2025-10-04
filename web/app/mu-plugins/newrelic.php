@@ -116,4 +116,4 @@ ROBOTS;
 }
 
 // Bootstrap the plugin.
-bootstrap();
+// bootstrap();
