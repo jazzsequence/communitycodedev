@@ -27,8 +27,18 @@ $root_dir = dirname( __DIR__ );
  */
 $webroot_dir = $root_dir . '/web';
 
-if ( function_exists( 'newrelic_disable_autorum' ) ) {
+$ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
+$is_unfurl_bot = (bool) preg_match(
+    '/Slackbot-LinkExpanding|Slackbot|Discordbot|LinkedInBot|Twitterbot|facebookexternalhit|SkypeUriPreview/i',
+    $ua
+);
+
+if ($is_unfurl_bot && function_exists('newrelic_disable_autorum')) {
     newrelic_disable_autorum();
+    if (!headers_sent()) {
+        header('Vary: User-Agent');
+        header('Cache-Control: private, no-store'); // prevent caching the bot variant
+    }
 }
 /**
  * Use Dotenv to set required environment variables and load .env file in root
