@@ -17,6 +17,7 @@ namespace CommunityCode\NewRelic;
 function bootstrap() {
 	add_action( 'wp_head', __NAMESPACE__ . '\\add_newrelic_headers', 99 );
 	add_action( 'wp_footer', __NAMESPACE__ . '\\add_newrelic_footer', 99 );
+    add_filter( 'robots_txt', __NAMESPACE__ . '\\allow_slackbot_in_robots', 10, 2 );
 }
 
 /**
@@ -83,5 +84,35 @@ function add_newrelic_footer() {
 	get_newrelic_inline( 'footer' );
 }
 
+<?php
+/**
+ * Plugin Name: Community+Code — robots.txt allow Slackbot
+ * Description: Always allow link-preview bots in robots.txt, even if the site is "discouraged".
+ */
+
+function allow_slackbot_in_robots( string $output, bool $public ) : string {
+    // Prepend Slack/Discord/LinkedIn/Twitter/Facebook/Skype bots with Allow: /
+    // Then include the default output (which may Disallow: / on dev).
+    $allow = <<<ROBOTS
+User-agent: Slackbot-LinkExpanding
+Allow: /
+User-agent: Slackbot
+Allow: /
+User-agent: Discordbot
+Allow: /
+User-agent: LinkedInBot
+Allow: /
+User-agent: Twitterbot
+Allow: /
+User-agent: facebookexternalhit
+Allow: /
+User-agent: SkypeUriPreview
+Allow: /
+
+ROBOTS;
+
+    return $allow . $output;
+}
+
 // Bootstrap the plugin.
-// bootstrap();
+bootstrap();
