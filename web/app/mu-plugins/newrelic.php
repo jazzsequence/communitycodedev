@@ -84,4 +84,4 @@ function add_newrelic_footer() {
 }
 
 // Bootstrap the plugin.
-bootstrap();
+// bootstrap();
