@@ -84,12 +84,13 @@ function add_newrelic_footer() {
 	get_newrelic_inline( 'footer' );
 }
 
-<?php
 /**
- * Plugin Name: Community+Code — robots.txt allow Slackbot
- * Description: Always allow link-preview bots in robots.txt, even if the site is "discouraged".
+ * Always allow link-preview bots in robots.txt, even if the site is "discouraged".
+ *
+ * @param string $output The current robots.txt output.
+ * @param bool $public Whether the site is set to be public (true) or discouraged (false).
+ * @return string Modified robots.txt output.
  */
-
 function allow_slackbot_in_robots( string $output, bool $public ) : string {
     // Prepend Slack/Discord/LinkedIn/Twitter/Facebook/Skype bots with Allow: /
     // Then include the default output (which may Disallow: / on dev).
