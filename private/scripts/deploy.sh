@@ -14,7 +14,7 @@ STEPS_TO_WAIT=(
 LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
 
 # Get the currently running workflow
-current_workflow_output=$(terminus workflow:wait "$TERMINUS_SITE.dev" --max=1 2>&1 || true)
+current_workflow_output=$(t4 workflow:wait "$TERMINUS_SITE.dev" --max=1 2>&1 || true)
 current_workflow=""
 
 if echo "$current_workflow_output" | grep -q "Workflow .* running"; then
@@ -31,7 +31,7 @@ fi
 for step in "${STEPS_TO_WAIT[@]}"; do
   if [ "$current_workflow" = "$step" ]; then
     echo "Waiting for $step to complete..."
-    if ! terminus workflow:wait "$TERMINUS_SITE.dev" "$step" --max=220; then
+    if ! t4 workflow:wait "$TERMINUS_SITE.dev" "$step" --max=220; then
       echo "⚠️ Workflow '$step' failed. Exiting."
       exit 1
     fi
@@ -41,9 +41,9 @@ for step in "${STEPS_TO_WAIT[@]}"; do
 done
 
 # if the last command ended in error, bail with a warning.
-if ! terminus env:deploy "$TERMINUS_SITE.test" --note="Deploy to Test: ${LAST_COMMIT_MESSAGE}"; then
+if ! t4 env:deploy "$TERMINUS_SITE.test" --note="Deploy to Test: ${LAST_COMMIT_MESSAGE}"; then
   echo "⚠️ Deploy to test failed. Skipping live deploy."
   exit 1
 fi
 
-terminus env:deploy "$TERMINUS_SITE.live" --note="Deploy to Live: ${LAST_COMMIT_MESSAGE}"
+t4 env:deploy "$TERMINUS_SITE.live" --note="Deploy to Live: ${LAST_COMMIT_MESSAGE}"
