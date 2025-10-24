@@ -80,10 +80,10 @@ function register_episodes() {
  */
 function register_youtube_url() {
     register_post_meta( 'episode', 'youtube_url', [
-        'type'         => 'string',
-        'single'       => true,
+        'type' => 'string',
+        'single' => true,
         'show_in_rest' => true,   // exposes it to the REST API
-        'auth_callback'=> function() { return current_user_can('edit_posts'); },
+        'auth_callback' => function() { return current_user_can('edit_posts'); },
     ] );
 }
 
