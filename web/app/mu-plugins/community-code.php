@@ -65,7 +65,7 @@ function register_episodes() {
 		'has_archive' => true,
 		'hierarchical' => false,
 		'menu_position' => 2,
-		'supports' => [ 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments' ],
+		'supports' => [ 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments', 'custom-fields' ],
         'show_in_rest' => true,
         'menu_icon' => 'dashicons-microphone',
         'feeds' => true,
