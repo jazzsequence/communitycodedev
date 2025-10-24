@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b7596f5d288ffd78b9b5fa215758e89f",
+    "content-hash": "50fd8350399b9d3afd6124c00f066b25",
     "packages": [
         {
             "name": "composer/installers",
@@ -1400,6 +1400,24 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/imagify/"
+        },
+        {
+            "name": "wpackagist-plugin/integromat-connector",
+            "version": "1.6.5",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/integromat-connector/",
+                "reference": "tags/1.6.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/integromat-connector.1.6.5.zip"
+            },
+            "require": {
+                "composer/installers": "^1.0 || ^2.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/integromat-connector/"
         },
         {
             "name": "wpackagist-plugin/mailpoet",
