@@ -20,6 +20,7 @@ function init() {
 	});
 
     add_action( 'init', __NAMESPACE__ . '\\register_episodes' );
+    add_action( 'init', __NAMESPACE__ . '\\register_youtube_url' );
     add_filter( 'default_content', __NAMESPACE__ . '\\set_episode_default_content', 10, 2 );
     add_filter( 'enter_title_here', __NAMESPACE__ . '\\filter_episode_title_placeholder', 10, 2 );
     add_filter( 'webpc_dir_name', __NAMESPACE__ . '\\filter_webpc_upload_path', 10, 2 );
@@ -72,6 +73,18 @@ function register_episodes() {
     ];
 
     register_post_type( 'episodes', $args );
+}
+
+/**
+ * Register the YouTube URL meta field for episodes.
+ */
+function register_youtube_url() {
+    register_post_meta( 'episode', 'youtube_url', [
+        'type'         => 'string',
+        'single'       => true,
+        'show_in_rest' => true,   // exposes it to the REST API
+        'auth_callback'=> function() { return current_user_can('edit_posts'); },
+    ] );
 }
 
 /**
