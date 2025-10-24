@@ -79,12 +79,14 @@ function register_episodes() {
 /**
  * Register the YouTube URL meta field for episodes.
  */
-function register_youtube_url() {
-    register_post_meta( 'episode', 'youtube_url', [
-        'type' => 'string',
-        'single' => true,
-        'show_in_rest' => true,   // exposes it to the REST API
-        'auth_callback' => '__return_true',
+function register_youtube_url( array $prepared ) {
+    register_rest_field( 'episodes', 'youtube_url', [
+        'get_callback' => __NAMESPACE__ . '\\get_youtube_url',
+        'schema' => [
+            'description' => 'The YouTube URL for the episode.',
+            'type' => 'string',
+            'context' => [ 'view', 'edit' ],
+        ],
     ] );
 }
 
@@ -122,6 +124,28 @@ function get_yoast_meta_description( array $prepared ) {
     $raw = has_excerpt( $post_id ) ? get_the_excerpt( $post_id ) : wp_strip_all_tags( get_post_field( 'post_content', $post_id ) );
     $raw = trim( preg_replace( '/\s+/', ' ', $raw ) );
     return mb_substr( $raw, 0 ) > 300 ? mb_substr( $raw, 0, 297 ) . '...' : $raw;
+}
+
+function get_youtube_url( array $prepared ) {
+    $post_id = isset( $prepared['id'] ) ? $prepared['id'] : 0;
+    $youtube_url = get_post_meta( $post_id, 'youtube_url', true );
+    if ( $youtube_url ) {
+        return esc_url_raw( $youtube_url );
+    }
+
+    // Fall back to extracting from content.
+    $content = get_post_field( 'post_content', $post_id );
+    if ( preg_match('/src=["\']https?:\/\/(?:www\.)?youtube\.com\/embed\/([A-Za-z0-9_-]{11})/i', $content, $m ) ) {
+        return 'https://www.youtube.com/watch?v=' . $m[1];
+    }
+    if (preg_match('/https?:\/\/(?:www\.)?youtu\.be\/([A-Za-z0-9_-]{11})/i', $content, $m)) {
+        return 'https://www.youtube.com/watch?v=' . $m[1];
+    }
+    if (preg_match('/https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([A-Za-z0-9_-]{11})/i', $content, $m)) {
+        return 'https://www.youtube.com/watch?v=' . $m[1];
+    }
+
+    return '';
 }
 
 /**
