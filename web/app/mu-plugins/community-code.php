@@ -21,6 +21,7 @@ function init() {
 
     add_action( 'init', __NAMESPACE__ . '\\register_episodes' );
     add_action( 'init', __NAMESPACE__ . '\\register_youtube_url' );
+    add_action( 'rest_api_init', __NAMESPACE__ . '\\register_yoast_meta_description_to_rest' );
     add_filter( 'default_content', __NAMESPACE__ . '\\set_episode_default_content', 10, 2 );
     add_filter( 'enter_title_here', __NAMESPACE__ . '\\filter_episode_title_placeholder', 10, 2 );
     add_filter( 'webpc_dir_name', __NAMESPACE__ . '\\filter_webpc_upload_path', 10, 2 );
@@ -85,6 +86,42 @@ function register_youtube_url() {
         'show_in_rest' => true,   // exposes it to the REST API
         'auth_callback' => '__return_true',
     ] );
+}
+
+/**
+ * Expose Yoast meta description field to REST API for episodes.
+ */
+function register_yoast_meta_description_to_rest() {
+    register_rest_field( 'episodes', 'yoast_metadesc', [
+        'get_callback' => __NAMESPACE__ . '\\get_yoast_meta_description',
+        'schema' => [
+            'description' => 'The Yoast SEO meta description for the episode.',
+            'type' => 'string',
+            'context' => [ 'view', 'edit' ],
+        ],
+    ] );
+}
+
+/**
+ * Get the Yoast meta description for a post.
+ *
+ * @param array $prepared The prepared post data.
+ * @return string The meta description.
+ */
+function get_yoast_meta_description( array $prepared ) {
+    $post_id = isset( $prepared['id'] ) ? $prepared['id'] : 0;
+    $desc = get_post_meta( $post_id, '_yoast_wpseo_metadesc', true );
+    if ( $desc ) {
+        return $desc;
+    }
+
+    if ( ! empty( $prepared['yoast_head_json']['og_description'] ) ) {
+        return $prepared['yoast_head_json']['og_description'];
+    }
+
+    $raw = has_excerpt( $post_id ) ? get_the_excerpt( $post_id ) : wp_strip_all_tags( get_post_field( 'post_content', $post_id ) );
+    $raw = trim( preg_replace( '/\s+/', ' ', $raw ) );
+    return mb_substr( $raw, 0 ) > 300 ? mb_substr( $raw, 0, 297 ) . '...' : $raw;
 }
 
 /**
