@@ -20,7 +20,7 @@ function init() {
 	});
 
     add_action( 'init', __NAMESPACE__ . '\\register_episodes' );
-    add_action( 'init', __NAMESPACE__ . '\\register_youtube_url' );
+    add_action( 'rest_api_init', __NAMESPACE__ . '\\register_youtube_url' );
     add_action( 'rest_api_init', __NAMESPACE__ . '\\register_yoast_meta_description_to_rest' );
     add_filter( 'default_content', __NAMESPACE__ . '\\set_episode_default_content', 10, 2 );
     add_filter( 'enter_title_here', __NAMESPACE__ . '\\filter_episode_title_placeholder', 10, 2 );
@@ -79,7 +79,7 @@ function register_episodes() {
 /**
  * Register the YouTube URL meta field for episodes.
  */
-function register_youtube_url( array $prepared ) {
+function register_youtube_url() {
     register_rest_field( 'episodes', 'youtube_url', [
         'get_callback' => __NAMESPACE__ . '\\get_youtube_url',
         'schema' => [
