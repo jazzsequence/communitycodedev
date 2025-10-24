@@ -83,7 +83,7 @@ function register_youtube_url() {
         'type' => 'string',
         'single' => true,
         'show_in_rest' => true,   // exposes it to the REST API
-        'auth_callback' => function() { return current_user_can('edit_posts'); },
+        'auth_callback' => '__return_true',
     ] );
 }
 
