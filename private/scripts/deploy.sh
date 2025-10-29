@@ -25,7 +25,7 @@ while true; do
 
   # Wait for each running workflow to complete before checking again.
   if ! terminus workflow:wait "$TERMINUS_SITE.dev" "$running_workflows" --max=200; then
-    echo "⚠️ Worflow timed out or failed. Exiting."
+    echo "⚠️ Workflow timed out or failed. Exiting."
   fi
 
   ran_wait=true
