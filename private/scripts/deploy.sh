@@ -6,21 +6,31 @@ export TERMINUS_SITE=${TERMINUS_SITE:-"communitycodedev"}
 LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
 
 # Check for currently running workflows.
-running_workflows=$(terminus workflow:list "$TERMINUS_SITE.dev" --format=json | jq -r '.[] | select(.finished_at == null) | .workflow' 2> /dev/null)
+ran_wait=false
+while true; do
+  running_workflows=$(terminus workflow:list "$TERMINUS_SITE.dev" --format=json | jq -r '.[] | select(.finished_at == null) | .workflow' 2> /dev/null)
 
-if [ -z "$running_workflows" ]; then
-  echo "No workflows currently running on dev."
-else
+  if [ -z "$running_workflows" ]; then
+    if [ "$ran_wait" = true ]; then
+      echo "Workflows completed on dev."
+    else
+      echo "No workflows currently running on dev."
+    fi
+    break
+  fi
+
   echo "Currently running workflows:"
   echo "$running_workflows"
   echo "Waiting for workflows to complete..."
 
-  # Wait for each running workflow to complete
-  terminus workflow:wait "$TERMINUS_SITE.dev" --max=300 || {
+  # Wait for each running workflow to complete before checking again.
+  if ! terminus workflow:wait "$TERMINUS_SITE.dev" --max=300; then
     echo "⚠️ Worflow timed out or failed. Exiting."
     exit 1
-  }
-fi
+  fi
+
+  ran_wait=true
+done
 
 # if the last command ended in error, bail with a warning.
 if ! terminus env:deploy "$TERMINUS_SITE.test" --note="Deploy to Test: ${LAST_COMMIT_MESSAGE}"; then
