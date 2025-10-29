@@ -8,9 +8,9 @@ LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
 # Check for currently running workflows.
 ran_wait=false
 while true; do
-  running_workflows=$(terminus workflow:list "$TERMINUS_SITE.dev" --format=json | jq -r '.[] | select(.finished_at == null) | (.workflow | gsub("\""; ""))' 2> /dev/null)
+  running_workflow=$(terminus workflow:list "$TERMINUS_SITE.dev" --format=json | jq -r '.[] | select(.finished_at == null) | (.workflow | gsub("\""; ""))' 2> /dev/null)
 
-  if [ -z "$running_workflows" ]; then
+  if [ -z "$running_workflow" ]; then
     if [ "$ran_wait" = true ]; then
       echo "Workflows completed on dev."
     else
@@ -19,17 +19,17 @@ while true; do
     break
   fi
 
-  echo "Currently running workflows:"
-  echo "$running_workflows"
-  echo "Waiting for workflows to complete..."
+  echo "Currently running workflow:"
+  echo "$running_workflow"
+  echo "Waiting for $running_workflow to complete..."
 
   # Wait for each running workflow to complete before checking again.
-  if ! terminus workflow:wait "$TERMINUS_SITE.dev" "$running_workflows" --max=200; then
+  if ! terminus workflow:wait "$TERMINUS_SITE.dev" "$running_workflow" --max=200; then
     echo "⚠️ Workflow timed out or failed. Exiting."
   fi
 
-  # Reset running_workflows to ensure the workflow we're waiting for is correct.
-  running_workflows=""
+  # Reset running_workflow to ensure the workflow we're waiting for is correct.
+  running_workflow=""
   ran_wait=true
 done
 
