@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4de4ed89026a381ddd9848ed4c291008",
+    "content-hash": "2d829bc1ca5cb41e2307cb85431b1aa5",
     "packages": [
         {
             "name": "composer/installers",
@@ -1397,6 +1397,24 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/autoblue/"
+        },
+        {
+            "name": "wpackagist-plugin/block-accessibility-checks",
+            "version": "2.2.0",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/block-accessibility-checks/",
+                "reference": "tags/2.2.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/block-accessibility-checks.2.2.0.zip"
+            },
+            "require": {
+                "composer/installers": "^1.0 || ^2.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/block-accessibility-checks/"
         },
         {
             "name": "wpackagist-plugin/imagify",

@@ -83,6 +83,7 @@
         "vlucas/phpdotenv": "^5.5",
         "wpackagist-plugin/akismet": "*",
         "wpackagist-plugin/autoblue": "*",
+        "wpackagist-plugin/block-accessibility-checks": "^2.2",
         "wpackagist-plugin/imagify": "*",
         "wpackagist-plugin/integromat-connector": "*",
         "wpackagist-plugin/mailpoet": "*",
