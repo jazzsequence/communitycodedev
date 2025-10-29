@@ -8,7 +8,7 @@ LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
 # Check for currently running workflows.
 ran_wait=false
 while true; do
-  running_workflows=$(terminus workflow:list "$TERMINUS_SITE.dev" --format=json | jq -r '.[] | select(.finished_at == null) | .workflow' 2> /dev/null)
+  running_workflows=$(terminus workflow:list "$TERMINUS_SITE.dev" --format=json | jq -r '.[] | select(.finished_at == null) | (.workflow | gsub("\""; ""))' 2> /dev/null)
 
   if [ -z "$running_workflows" ]; then
     if [ "$ran_wait" = true ]; then
