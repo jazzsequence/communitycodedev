@@ -6,7 +6,7 @@ export TERMINUS_SITE=${TERMINUS_SITE:-"communitycodedev"}
 LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
 
 # Check for currently running workflows.
-running_workflows=$(terminus workflow:list "$TERMINUS_SITE.dev" --format=json | \ jq -r '.[] | select(.phase != "complete") | .description' 2> /dev/null)
+running_workflows=$(terminus workflow:list "$TERMINUS_SITE.dev" --format=json | jq -r '.[] | select(.finished_at == null) | .workflow' 2> /dev/null)
 
 if [ -z "$running_workflows" ]; then
   echo "No workflows currently running on dev."
