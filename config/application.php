@@ -122,6 +122,8 @@ Config::define( 'DISALLOW_FILE_EDIT', true );
 Config::define( 'DISALLOW_FILE_MODS', true );
 // Limit the number of post revisions that Wordpress stores (true (default WP): store every revision).
 Config::define( 'WP_POST_REVISIONS', env( 'WP_POST_REVISIONS' ) ?? true );
+// Keep the default WordPress dashboard instead of the Altis Accelerate replacement.
+Config::define( 'ALTIS_ACCELERATE_DASHBOARD', false );
 
 /**
  * Debugging Settings
