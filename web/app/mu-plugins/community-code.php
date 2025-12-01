@@ -22,6 +22,7 @@ function init() {
     add_action( 'init', __NAMESPACE__ . '\\register_episodes' );
     add_action( 'rest_api_init', __NAMESPACE__ . '\\register_youtube_url' );
     add_action( 'rest_api_init', __NAMESPACE__ . '\\register_yoast_meta_description_to_rest' );
+    add_action( 'wp_dashboard_setup', __NAMESPACE__ . '\\dashboard_setup' );
     add_filter( 'default_content', __NAMESPACE__ . '\\set_episode_default_content', 10, 2 );
     add_filter( 'enter_title_here', __NAMESPACE__ . '\\filter_episode_title_placeholder', 10, 2 );
     add_filter( 'webpc_dir_name', __NAMESPACE__ . '\\filter_webpc_upload_path', 10, 2 );
@@ -126,6 +127,12 @@ function get_yoast_meta_description( array $prepared ) {
     return mb_substr( $raw, 0 ) > 300 ? mb_substr( $raw, 0, 297 ) . '...' : $raw;
 }
 
+/**
+ * Get the YouTube URL for a post.
+ *
+ * @param array $prepared The prepared post data.
+ * @return string The YouTube URL.
+ */
 function get_youtube_url( array $prepared ) {
     $post_id = isset( $prepared['id'] ) ? $prepared['id'] : 0;
     $youtube_url = get_post_meta( $post_id, 'youtube_url', true );
@@ -190,12 +197,66 @@ function filter_episode_title_placeholder( $title, $post ) {
     return $title;
 }
 
+/**
+ * Filter the upload path for WebP images.
+ *
+ * @param string $path The upload path.
+ * @param string $directory The directory name.
+ * @return string The modified upload path.
+ */
 function filter_webpc_upload_path( $path, $directory ) {
     if ( $directory !== 'webp' ) {
         return $path;
     }
 
     return 'app/uploads/uploads-webpc';
+}
+
+/**
+ * Set up the custom dashboard widgets.
+ */
+function dashboard_setup() {
+    // Remove default Activity widget
+    remove_meta_box( 'dashboard_activity', 'dashboard', 'normal' );
+
+    // Add custom activity widget
+    wp_add_dashboard_widget(
+        'dashboard_activity_custom',
+        __( 'Activity', 'community-code' ),
+        'modified_activity_widget'
+    );
+}
+
+/**
+ * Modify the Activity widget to show upcoming scheduled posts and episodes.
+ */
+function modified_activity_widget() {
+    // Your own combined query of posts + episodes
+    $upcoming = new WP_Query([
+        'post_type' => [ 'post', 'episode' ],
+        'post_status' => 'future',
+        'posts_per_page' => 10,
+        'orderby' => 'post_date',
+        'order' => 'ASC',
+    ]);
+
+    if ( $upcoming->have_posts() ) {
+        echo '<ul>';
+        while ( $upcoming->have_posts() ) {
+            $upcoming->the_post();
+            printf(
+                '<li><a href="%s">%s</a> — %s</li>',
+                get_edit_post_link(),
+                get_the_title(),
+                get_the_date()
+            );
+        }
+        echo '</ul>';
+    } else {
+        echo '<p>No scheduled content.</p>';
+    }
+
+    wp_reset_postdata();
 }
 
 init();
