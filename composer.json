@@ -83,6 +83,7 @@
         "roots/wp-config": "*",
         "vlucas/phpdotenv": "^5.5",
         "wpackagist-plugin/akismet": "*",
+        "wpackagist-plugin/altis-accelerate": "^3.5",
         "wpackagist-plugin/autoblue": "*",
         "wpackagist-plugin/block-accessibility-checks": "^2.2",
         "wpackagist-plugin/imagify": "*",
