@@ -203,7 +203,7 @@ $ep_host = pantheon_get_secret( 'ep_host' ) ?? ''; // Get the host from Pantheon
 $ep_token = pantheon_get_secret( 'ep_token' ) ?? ''; // Get the token from Pantheon secrets.
 Config::define( 'EP_INDEX_PREFIX', $ep_prefix );
 Config::define( 'EP_HOST', $ep_host );
-Config::define( 'EP_CREDENTIALS', "subscriptionID:$ep_token" );
+Config::define( 'EP_CREDENTIALS', "$ep_prefix:$ep_token" );
 
 $env_config = __DIR__ . '/environments/' . WP_ENV . '.php';
 
