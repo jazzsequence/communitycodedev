@@ -280,6 +280,7 @@ function modified_activity_widget() {
             ?>
 		    </ul>
         </div>
+    </div>
     <?php
 	wp_reset_postdata();
 }
