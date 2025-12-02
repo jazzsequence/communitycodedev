@@ -19,18 +19,18 @@ function init() {
 		}
 	});
 
-    add_action( 'init', __NAMESPACE__ . '\\register_episodes' );
-    add_action( 'rest_api_init', __NAMESPACE__ . '\\register_youtube_url' );
-    add_action( 'rest_api_init', __NAMESPACE__ . '\\register_yoast_meta_description_to_rest' );
-    add_action( 'wp_dashboard_setup', __NAMESPACE__ . '\\dashboard_setup' );
-    add_filter( 'default_content', __NAMESPACE__ . '\\set_episode_default_content', 10, 2 );
-    add_filter( 'enter_title_here', __NAMESPACE__ . '\\filter_episode_title_placeholder', 10, 2 );
-    add_filter( 'webpc_dir_name', __NAMESPACE__ . '\\filter_webpc_upload_path', 10, 2 );
+	add_action( 'init', __NAMESPACE__ . '\\register_episodes' );
+	add_action( 'rest_api_init', __NAMESPACE__ . '\\register_youtube_url' );
+	add_action( 'rest_api_init', __NAMESPACE__ . '\\register_yoast_meta_description_to_rest' );
+	add_action( 'wp_dashboard_setup', __NAMESPACE__ . '\\dashboard_setup' );
+	add_filter( 'default_content', __NAMESPACE__ . '\\set_episode_default_content', 10, 2 );
+	add_filter( 'enter_title_here', __NAMESPACE__ . '\\filter_episode_title_placeholder', 10, 2 );
+	add_filter( 'webpc_dir_name', __NAMESPACE__ . '\\filter_webpc_upload_path', 10, 2 );
 
-    add_filter( 'powerpress_post_types', function( $post_types ) {
-        $post_types[] = 'episodes'; // Allow PowerPress fields on episodes
-        return $post_types;
-    });
+	add_filter( 'powerpress_post_types', function( $post_types ) {
+		$post_types[] = 'episodes'; // Allow PowerPress fields on episodes
+		return $post_types;
+	});
 }
 
 /**
@@ -61,48 +61,48 @@ function register_episodes() {
 		'show_in_menu' => true,
 		'query_var' => true,
 		'rewrite' => [
-            'slug' => 'episodes',
-            'with_front' => false
-        ],
+			'slug' => 'episodes',
+			'with_front' => false
+		],
 		'capability_type' => 'post',
 		'has_archive' => true,
 		'hierarchical' => false,
 		'menu_position' => 2,
 		'supports' => [ 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments', 'custom-fields' ],
-        'show_in_rest' => true,
-        'menu_icon' => 'dashicons-microphone',
-        'feeds' => true,
-    ];
+		'show_in_rest' => true,
+		'menu_icon' => 'dashicons-microphone',
+		'feeds' => true,
+	];
 
-    register_post_type( 'episodes', $args );
+	register_post_type( 'episodes', $args );
 }
 
 /**
  * Register the YouTube URL meta field for episodes.
  */
 function register_youtube_url() {
-    register_rest_field( 'episodes', 'youtube_url', [
-        'get_callback' => __NAMESPACE__ . '\\get_youtube_url',
-        'schema' => [
-            'description' => 'The YouTube URL for the episode.',
-            'type' => 'string',
-            'context' => [ 'view', 'edit' ],
-        ],
-    ] );
+	register_rest_field( 'episodes', 'youtube_url', [
+		'get_callback' => __NAMESPACE__ . '\\get_youtube_url',
+		'schema' => [
+			'description' => 'The YouTube URL for the episode.',
+			'type' => 'string',
+			'context' => [ 'view', 'edit' ],
+		],
+	] );
 }
 
 /**
  * Expose Yoast meta description field to REST API for episodes.
  */
 function register_yoast_meta_description_to_rest() {
-    register_rest_field( 'episodes', 'yoast_metadesc', [
-        'get_callback' => __NAMESPACE__ . '\\get_yoast_meta_description',
-        'schema' => [
-            'description' => 'The Yoast SEO meta description for the episode.',
-            'type' => 'string',
-            'context' => [ 'view', 'edit' ],
-        ],
-    ] );
+	register_rest_field( 'episodes', 'yoast_metadesc', [
+		'get_callback' => __NAMESPACE__ . '\\get_yoast_meta_description',
+		'schema' => [
+			'description' => 'The Yoast SEO meta description for the episode.',
+			'type' => 'string',
+			'context' => [ 'view', 'edit' ],
+		],
+	] );
 }
 
 /**
@@ -112,19 +112,19 @@ function register_yoast_meta_description_to_rest() {
  * @return string The meta description.
  */
 function get_yoast_meta_description( array $prepared ) {
-    $post_id = isset( $prepared['id'] ) ? $prepared['id'] : 0;
-    $desc = get_post_meta( $post_id, '_yoast_wpseo_metadesc', true );
-    if ( $desc ) {
-        return $desc;
-    }
+	$post_id = isset( $prepared['id'] ) ? $prepared['id'] : 0;
+	$desc = get_post_meta( $post_id, '_yoast_wpseo_metadesc', true );
+	if ( $desc ) {
+		return $desc;
+	}
 
-    if ( ! empty( $prepared['yoast_head_json']['og_description'] ) ) {
-        return $prepared['yoast_head_json']['og_description'];
-    }
+	if ( ! empty( $prepared['yoast_head_json']['og_description'] ) ) {
+		return $prepared['yoast_head_json']['og_description'];
+	}
 
-    $raw = has_excerpt( $post_id ) ? get_the_excerpt( $post_id ) : wp_strip_all_tags( get_post_field( 'post_content', $post_id ) );
-    $raw = trim( preg_replace( '/\s+/', ' ', $raw ) );
-    return mb_substr( $raw, 0 ) > 300 ? mb_substr( $raw, 0, 297 ) . '...' : $raw;
+	$raw = has_excerpt( $post_id ) ? get_the_excerpt( $post_id ) : wp_strip_all_tags( get_post_field( 'post_content', $post_id ) );
+	$raw = trim( preg_replace( '/\s+/', ' ', $raw ) );
+	return mb_substr( $raw, 0 ) > 300 ? mb_substr( $raw, 0, 297 ) . '...' : $raw;
 }
 
 /**
@@ -134,25 +134,25 @@ function get_yoast_meta_description( array $prepared ) {
  * @return string The YouTube URL.
  */
 function get_youtube_url( array $prepared ) {
-    $post_id = isset( $prepared['id'] ) ? $prepared['id'] : 0;
-    $youtube_url = get_post_meta( $post_id, 'youtube_url', true );
-    if ( $youtube_url ) {
-        return esc_url_raw( $youtube_url );
-    }
+	$post_id = isset( $prepared['id'] ) ? $prepared['id'] : 0;
+	$youtube_url = get_post_meta( $post_id, 'youtube_url', true );
+	if ( $youtube_url ) {
+		return esc_url_raw( $youtube_url );
+	}
 
-    // Fall back to extracting from content.
-    $content = get_post_field( 'post_content', $post_id );
-    if ( preg_match('/src=["\']https?:\/\/(?:www\.)?youtube\.com\/embed\/([A-Za-z0-9_-]{11})/i', $content, $m ) ) {
-        return 'https://www.youtube.com/watch?v=' . $m[1];
-    }
-    if (preg_match('/https?:\/\/(?:www\.)?youtu\.be\/([A-Za-z0-9_-]{11})/i', $content, $m)) {
-        return 'https://www.youtube.com/watch?v=' . $m[1];
-    }
-    if (preg_match('/https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([A-Za-z0-9_-]{11})/i', $content, $m)) {
-        return 'https://www.youtube.com/watch?v=' . $m[1];
-    }
+	// Fall back to extracting from content.
+	$content = get_post_field( 'post_content', $post_id );
+	if ( preg_match('/src=["\']https?:\/\/(?:www\.)?youtube\.com\/embed\/([A-Za-z0-9_-]{11})/i', $content, $m ) ) {
+		return 'https://www.youtube.com/watch?v=' . $m[1];
+	}
+	if (preg_match('/https?:\/\/(?:www\.)?youtu\.be\/([A-Za-z0-9_-]{11})/i', $content, $m)) {
+		return 'https://www.youtube.com/watch?v=' . $m[1];
+	}
+	if (preg_match('/https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([A-Za-z0-9_-]{11})/i', $content, $m)) {
+		return 'https://www.youtube.com/watch?v=' . $m[1];
+	}
 
-    return '';
+	return '';
 }
 
 /**
@@ -163,12 +163,12 @@ function get_youtube_url( array $prepared ) {
  * @return string The modified content.
  */
 function set_episode_default_content( $content, $post ) {
-    // Bail if register_block_pattern function does not exist.
-    if ( get_post_type( $post ) !== 'episodes' ) {
-        return $content;
-    }
+	// Bail if register_block_pattern function does not exist.
+	if ( get_post_type( $post ) !== 'episodes' ) {
+		return $content;
+	}
 
-    $content = <<<HTML
+	$content = <<<HTML
 <!-- wp:embed {"providerNameSlug":"youtube"} /-->
 
 <!-- wp:shortcode -->
@@ -180,7 +180,7 @@ function set_episode_default_content( $content, $post ) {
 <!-- /wp:paragraph -->
 HTML;
 
-    return $content;
+	return $content;
 }
 
 /**
@@ -191,10 +191,10 @@ HTML;
  * @return string The modified title placeholder text.
  */
 function filter_episode_title_placeholder( $title, $post ) {
-    if ( 'episodes' === $post->post_type ) {
-        return __( 'Episode title', 'community-code' );
-    }
-    return $title;
+	if ( 'episodes' === $post->post_type ) {
+		return __( 'Episode title', 'community-code' );
+	}
+	return $title;
 }
 
 /**
@@ -205,58 +205,58 @@ function filter_episode_title_placeholder( $title, $post ) {
  * @return string The modified upload path.
  */
 function filter_webpc_upload_path( $path, $directory ) {
-    if ( $directory !== 'webp' ) {
-        return $path;
-    }
+	if ( $directory !== 'webp' ) {
+		return $path;
+	}
 
-    return 'app/uploads/uploads-webpc';
+	return 'app/uploads/uploads-webpc';
 }
 
 /**
  * Set up the custom dashboard widgets.
  */
 function dashboard_setup() {
-    // Remove default Activity widget
-    remove_meta_box( 'dashboard_activity', 'dashboard', 'normal' );
+	// Remove default Activity widget
+	remove_meta_box( 'dashboard_activity', 'dashboard', 'normal' );
 
-    // Add custom activity widget
-    wp_add_dashboard_widget(
-        'dashboard_activity_custom',
-        __( 'Activity', 'community-code' ),
+	// Add custom activity widget
+	wp_add_dashboard_widget(
+		'dashboard_activity_custom',
+		__( 'Activity', 'community-code' ),
 		__NAMESPACE__ . '\\modified_activity_widget'
-    );
+	);
 }
 
 /**
  * Modify the Activity widget to show upcoming scheduled posts and episodes.
  */
 function modified_activity_widget() {
-    // Combined query of posts + episodes.
-    $upcoming = new \WP_Query([
-        'post_type' => [ 'post', 'episodes' ],
-        'post_status' => 'future',
-        'posts_per_page' => 10,
-        'orderby' => 'post_date',
-        'order' => 'ASC',
-    ]);
+	// Combined query of posts + episodes.
+	$upcoming = new \WP_Query([
+		'post_type' => [ 'post', 'episodes' ],
+		'post_status' => 'future',
+		'posts_per_page' => 10,
+		'orderby' => 'post_date',
+		'order' => 'ASC',
+	]);
 
-    if ( $upcoming->have_posts() ) {
-        echo '<ul>';
-        while ( $upcoming->have_posts() ) {
-            $upcoming->the_post();
-            printf(
-                '<li><a href="%s">%s</a> — %s</li>',
-                get_edit_post_link(),
-                get_the_title(),
-                get_the_date()
-            );
-        }
-        echo '</ul>';
-    } else {
-        echo '<p>No scheduled content.</p>';
-    }
+	if ( $upcoming->have_posts() ) {
+		echo '<ul>';
+		while ( $upcoming->have_posts() ) {
+			$upcoming->the_post();
+			printf(
+				'<li><a href="%s">%s</a> — %s</li>',
+				get_edit_post_link(),
+				get_the_title(),
+				get_the_date()
+			);
+		}
+		echo '</ul>';
+	} else {
+		echo '<p>No scheduled content.</p>';
+	}
 
-    wp_reset_postdata();
+	wp_reset_postdata();
 }
 
 init();
