@@ -240,22 +240,47 @@ function modified_activity_widget() {
 		'order' => 'ASC',
 	]);
 
-	if ( $upcoming->have_posts() ) {
-		echo '<ul>';
-		while ( $upcoming->have_posts() ) {
-			$upcoming->the_post();
-			printf(
-				'<li><a href="%s">%s</a> — %s</li>',
-				get_edit_post_link(),
-				get_the_title(),
-				get_the_date()
-			);
-		}
-		echo '</ul>';
-	} else {
-		echo '<p>No scheduled content.</p>';
+	if ( ! $upcoming->have_posts() ) {
+		_e( 'No scheduled content.', 'community-code' );
 	}
 
+	$today = current_time( 'Y-m-d' );
+	$tomorrow = current_datetime()->modify( '+1 day' )->format( 'Y-m-d' );
+	$year = current_time( 'Y' );
+	?>
+	<div id="activity-widget">
+		<div id="future-posts" class="activity-block">
+			<h3><?php _e( 'Publishing Soon', 'community-code' ); ?></h3>
+			<ul>
+			<?php
+			while ( $upcoming->have_posts() ) {
+				$upcoming->the_post();
+				$time = get_the_time( 'U' );
+				$post_type = get_post_type();
+				$post_link = current_user_can( 'edit_post', get_the_id() ) ? get_edit_post_link() : get_permalink();
+				$draft_or_post_title = _draft_or_post_title();
+				if ( gmdate( 'Y-m-d', $time ) === $today ) {
+					$when = __( 'Today', 'community-code' );
+				} elseif ( gmdate( 'Y-m-d', $time ) === $tomorrow ) {
+					$when = __( 'Tomorrow', 'community-code' );
+				} elseif ( gmdate( 'Y', $time ) == $year ) {
+					$when = date_i18n( __( 'M jS Y', 'community-code' ), $time );
+				} else {
+					$when = date_i18n( __( 'M jS', 'community-code' ), $time );
+				}
+				printf(
+					'<li><span>%1$s</span> <a href="%2$s" aria-label="%3$s">%4$s</a> (%5$s)</li>',
+					sprintf( _x( '%1$s, %2$s', 'dashboard' ), $when, get_the_time() ),
+					$post_link,
+					esc_attr( sprintf( __( 'Edit &#8220;%s&#8221;', 'community-code' ), $draft_or_post_title ) ),
+					$draft_or_post_title,
+					ucwords( str_replace( '_', ' ', $post_type ) )
+				);
+			}
+            ?>
+		    </ul>
+        </div>
+    <?php
 	wp_reset_postdata();
 }
 
