@@ -231,9 +231,9 @@ function dashboard_setup() {
  * Modify the Activity widget to show upcoming scheduled posts and episodes.
  */
 function modified_activity_widget() {
-    // Your own combined query of posts + episodes
-    $upcoming = new WP_Query([
-        'post_type' => [ 'post', 'episode' ],
+    // Combined query of posts + episodes.
+    $upcoming = new \WP_Query([
+        'post_type' => [ 'post', 'episodes' ],
         'post_status' => 'future',
         'posts_per_page' => 10,
         'orderby' => 'post_date',
