@@ -195,6 +195,16 @@ Config::define( 'WP_REDIS_CONFIG', [
 	'strict' => true,
 ] );
 
+/**
+ * ElasticSearch
+ */
+$ep_prefix = pantheon_get_secret( 'ep_index_prefix' ) ?? 'pantheon-se-demo-1'; // Get the index prefix from Pantheon secrets.
+$ep_host = pantheon_get_secret( 'ep_host' ) ?? ''; // Get the host from Pantheon secrets.
+$ep_token = pantheon_get_secret( 'ep_token' ) ?? ''; // Get the token from Pantheon secrets.
+Config::define( 'EP_INDEX_PREFIX', $ep_prefix );
+Config::define( 'EP_HOST', $ep_host );
+Config::define( 'EP_CREDENTIALS', $ep_token );
+
 $env_config = __DIR__ . '/environments/' . WP_ENV . '.php';
 
 if ( file_exists( $env_config ) ) {
