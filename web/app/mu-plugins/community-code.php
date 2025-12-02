@@ -223,7 +223,7 @@ function dashboard_setup() {
     wp_add_dashboard_widget(
         'dashboard_activity_custom',
         __( 'Activity', 'community-code' ),
-        'modified_activity_widget'
+		__NAMESPACE__ . '\\modified_activity_widget'
     );
 }
 
