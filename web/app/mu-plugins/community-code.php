@@ -69,6 +69,7 @@ function register_episodes() {
 		'hierarchical' => false,
 		'menu_position' => 2,
 		'supports' => [ 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments', 'custom-fields' ],
+        'taxonomies' => [ 'post_tag' ],
 		'show_in_rest' => true,
 		'menu_icon' => 'dashicons-microphone',
 		'feeds' => true,
