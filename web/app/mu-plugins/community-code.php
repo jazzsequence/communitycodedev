@@ -19,6 +19,8 @@ function init() {
 		}
 	});
 
+	// Keep the native dashboard while still loading the Accelerate menu items.
+	add_action( 'plugins_loaded', __NAMESPACE__ . '\\remove_altis_dashboard', 20 );
 	add_action( 'init', __NAMESPACE__ . '\\register_episodes' );
 	add_action( 'rest_api_init', __NAMESPACE__ . '\\register_youtube_url' );
 	add_action( 'rest_api_init', __NAMESPACE__ . '\\register_yoast_meta_description_to_rest' );
@@ -31,6 +33,13 @@ function init() {
 		$post_types[] = 'episodes'; // Allow PowerPress fields on episodes
 		return $post_types;
 	});
+}
+
+/**
+ * Remove the Altis Accelerate dashboard replacement.
+ */
+function remove_altis_dashboard() {
+    remove_action( 'load-index.php', '\\Altis\\Accelerate\\Dashboard\\load_dashboard' );
 }
 
 /**
