@@ -24,7 +24,6 @@ function init() {
 	add_action( 'rest_api_init', __NAMESPACE__ . '\\register_youtube_url' );
 	add_action( 'rest_api_init', __NAMESPACE__ . '\\register_yoast_meta_description_to_rest' );
 	add_action( 'wp_dashboard_setup', __NAMESPACE__ . '\\dashboard_setup' );
-    add_action( 'init', __NAMESPACE__ . '\\did_you_mean' );
 
 	add_filter( 'default_content', __NAMESPACE__ . '\\set_episode_default_content', 10, 2 );
 	add_filter( 'enter_title_here', __NAMESPACE__ . '\\filter_episode_title_placeholder', 10, 2 );
@@ -331,23 +330,6 @@ function modified_activity_widget() {
     </div>
     <?php
 	wp_reset_postdata();
-}
-
-/**
- * Register the "Did You Mean" block.
- */
-function did_you_mean() {
-    register_block_type( 'community-code/did-you-mean', [
-        'render_callback' => function() {
-            ob_start();
-            do_action( 'ep_suggestions' );
-            return ob_get_clean();
-        },
-        'supports' => [
-            'html' => false,
-        ],
-        'api_version' => 2,
-    ] );
 }
 
 init();
