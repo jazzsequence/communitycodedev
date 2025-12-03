@@ -168,7 +168,7 @@
         "deploy:test": [
             "terminus env:deploy communitycodedev.test"
         ],
-        "ep:sync": "terminus wp communitycodedev.live -- elasticpress sync --show-errors"
+        "ep:sync": "HTTPS=on HTTP_X_FORWARDED_PROTO=https WP_HOME='https://communitycode.dev' WP_SITEURL='https://communitycode.dev/wp' terminus wp communitycodedev.live -- elasticpress sync --url=https://communitycode.dev --show-errors"
     },
     "suggest": {
         "pantheon-systems/upstream-management": "Composer plugin that provides commands for managing custom upstreams on Pantheon."
