@@ -25,6 +25,7 @@ function init() {
 	add_action( 'rest_api_init', __NAMESPACE__ . '\\register_yoast_meta_description_to_rest' );
 	add_action( 'wp_dashboard_setup', __NAMESPACE__ . '\\dashboard_setup' );
 	add_action( 'init', __NAMESPACE__ . '\\register_related_episodes_block' );
+	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_instant_results_overrides' );
 
 	add_filter( 'default_content', __NAMESPACE__ . '\\set_episode_default_content', 10, 2 );
 	add_filter( 'enter_title_here', __NAMESPACE__ . '\\filter_episode_title_placeholder', 10, 2 );
@@ -441,6 +442,23 @@ function normalize_ep_thumbnail_scheme( array $post_args, int $post_id ) : array
 	}
 
 	return $post_args;
+}
+
+/**
+ * Enqueue Instant Results overrides (front-end).
+ */
+function enqueue_instant_results_overrides() {
+	if ( ! wp_script_is( 'elasticpress-instant-results', 'registered' ) ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'community-code-instant-results-overrides',
+		plugins_url( 'instant-results-overrides.js', __FILE__ ),
+		[ 'elasticpress-instant-results', 'wp-hooks', 'wp-element', 'wp-i18n' ],
+		filemtime( __DIR__ . '/instant-results-overrides.js' ),
+		true
+	);
 }
 
 /**
