@@ -30,6 +30,7 @@ function init() {
 	add_filter( 'enter_title_here', __NAMESPACE__ . '\\filter_episode_title_placeholder', 10, 2 );
 	add_filter( 'webpc_dir_name', __NAMESPACE__ . '\\filter_webpc_upload_path', 10, 2 );
 	add_filter( 'ep_post_sync_args', __NAMESPACE__ . '\\include_episode_transcript_in_index', 15, 2 );
+	add_filter( 'ep_post_sync_args_post_prepare_meta', __NAMESPACE__ . '\\normalize_ep_thumbnail_scheme', 20, 2 );
 
 	add_filter( 'powerpress_post_types', function( $post_types ) {
 		$post_types[] = 'episodes'; // Allow PowerPress fields on episodes
@@ -406,6 +407,40 @@ function fetch_transcript_body( string $url ) : string {
 	}
 
 	return $body;
+}
+
+/**
+ * Ensure EP thumbnails use the site's scheme (prevents http thumbnails in https UIs).
+ *
+ * @param array $post_args Post args being sent to Elasticsearch.
+ * @param int   $post_id   Post ID.
+ * @return array
+ */
+function normalize_ep_thumbnail_scheme( array $post_args, int $post_id ) : array {
+	if ( empty( $post_args['thumbnail'] ) ) {
+		return $post_args;
+	}
+
+	$target_scheme = parse_url( home_url(), PHP_URL_SCHEME );
+	if ( ! $target_scheme ) {
+		return $post_args;
+	}
+
+	if ( ! empty( $post_args['thumbnail']['src'] ) ) {
+		$post_args['thumbnail']['src'] = set_url_scheme( $post_args['thumbnail']['src'], $target_scheme );
+	}
+
+	if ( ! empty( $post_args['thumbnail']['srcset'] ) && is_string( $post_args['thumbnail']['srcset'] ) ) {
+		$post_args['thumbnail']['srcset'] = preg_replace_callback(
+			'#https?://[^\\s,"]+#',
+			static function ( $matches ) use ( $target_scheme ) {
+				return set_url_scheme( $matches[0], $target_scheme );
+			},
+			$post_args['thumbnail']['srcset']
+		);
+	}
+
+	return $post_args;
 }
 
 /**
