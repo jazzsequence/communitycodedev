@@ -24,10 +24,12 @@ function init() {
 	add_action( 'rest_api_init', __NAMESPACE__ . '\\register_youtube_url' );
 	add_action( 'rest_api_init', __NAMESPACE__ . '\\register_yoast_meta_description_to_rest' );
 	add_action( 'wp_dashboard_setup', __NAMESPACE__ . '\\dashboard_setup' );
+	add_action( 'init', __NAMESPACE__ . '\\register_related_episodes_block' );
 
 	add_filter( 'default_content', __NAMESPACE__ . '\\set_episode_default_content', 10, 2 );
 	add_filter( 'enter_title_here', __NAMESPACE__ . '\\filter_episode_title_placeholder', 10, 2 );
 	add_filter( 'webpc_dir_name', __NAMESPACE__ . '\\filter_webpc_upload_path', 10, 2 );
+	add_filter( 'ep_post_sync_args', __NAMESPACE__ . '\\include_episode_transcript_in_index', 15, 2 );
 
 	add_filter( 'powerpress_post_types', function( $post_types ) {
 		$post_types[] = 'episodes'; // Allow PowerPress fields on episodes
@@ -330,6 +332,190 @@ function modified_activity_widget() {
     </div>
     <?php
 	wp_reset_postdata();
+}
+
+/**
+ * Append transcript text to the indexed post content for episodes so EP related content can use it.
+ *
+ * @param array $post_args Post args being sent to Elasticsearch.
+ * @param int   $post_id   Post ID.
+ * @return array
+ */
+function include_episode_transcript_in_index( array $post_args, int $post_id ) : array {
+	if ( get_post_type( $post_id ) !== 'episodes' ) {
+		return $post_args;
+	}
+
+	$transcript_url = get_episode_transcript_url( $post_id );
+	if ( ! $transcript_url ) {
+		return $post_args;
+	}
+
+	$transcript_body = fetch_transcript_body( $transcript_url );
+	if ( ! $transcript_body ) {
+		return $post_args;
+	}
+
+	$post_args['post_content'] .= "\n\n" . wp_strip_all_tags( $transcript_body );
+
+	return $post_args;
+}
+
+/**
+ * Retrieve the transcript URL from PowerPress enclosure data.
+ *
+ * @param int $post_id Post ID.
+ * @return string
+ */
+function get_episode_transcript_url( int $post_id ) : string {
+	if ( ! function_exists( '\\powerpress_get_enclosure_data' ) ) {
+		return '';
+	}
+
+	$data = \powerpress_get_enclosure_data( $post_id, 'podcast' );
+	if ( empty( $data['pci_transcript_url'] ) ) {
+		return '';
+	}
+
+	return esc_url_raw( $data['pci_transcript_url'] );
+}
+
+/**
+ * Fetch the contents of a transcript file.
+ *
+ * @param string $url Transcript URL.
+ * @return string
+ */
+function fetch_transcript_body( string $url ) : string {
+	$response = wp_remote_get( $url, [
+		'timeout' => 8,
+	] );
+
+	if ( is_wp_error( $response ) ) {
+		return '';
+	}
+
+	$body = wp_remote_retrieve_body( $response );
+	if ( ! $body ) {
+		return '';
+	}
+
+	// Avoid indexing extremely large files.
+	if ( strlen( $body ) > 300000 ) {
+		$body = substr( $body, 0, 300000 );
+	}
+
+	return $body;
+}
+
+/**
+ * Register the Related Episodes block (server-rendered).
+ */
+function register_related_episodes_block() {
+	if ( ! function_exists( 'register_block_type' ) ) {
+		return;
+	}
+
+	$handle = 'community-code-related-episodes-block';
+
+	wp_register_script(
+		$handle,
+		plugins_url( 'related-episodes-block.js', __FILE__ ),
+		[
+			'wp-blocks',
+			'wp-element',
+			'wp-i18n',
+			'wp-components',
+			'wp-block-editor',
+		],
+		filemtime( __DIR__ . '/related-episodes-block.js' ),
+		true
+	);
+
+	register_block_type(
+		'community-code/related-episodes',
+		[
+			'title'           => __( 'Related Episodes (ElasticPress)', 'community-code' ),
+			'description'     => __( 'Show ElasticPress related episodes using transcript content.', 'community-code' ),
+			'category'        => 'widgets',
+			'icon'            => 'controls-repeat',
+			'supports'        => [
+				'align' => [ 'wide', 'full' ],
+				'html'  => false,
+			],
+			'attributes'      => [
+				'number' => [
+					'type'    => 'number',
+					'default' => 3,
+				],
+				'align'  => [
+					'type' => 'string',
+				],
+			],
+			'render_callback' => __NAMESPACE__ . '\\render_related_episodes_block',
+			'editor_script'   => $handle,
+		]
+	);
+}
+
+/**
+ * Render the Related Episodes block.
+ *
+ * @param array $attributes Block attributes.
+ * @return string
+ */
+function render_related_episodes_block( array $attributes ) : string {
+	if ( ! is_singular( 'episodes' ) ) {
+		return '';
+	}
+
+	if ( ! class_exists( '\\ElasticPress\\Features' ) ) {
+		return '';
+	}
+
+	$feature = \ElasticPress\Features::factory()->get_registered_feature( 'related_posts' );
+	if ( empty( $feature ) || ! $feature->is_active() ) {
+		return '';
+	}
+
+	$count = isset( $attributes['number'] ) ? absint( $attributes['number'] ) : 3;
+	$count = $count > 0 ? $count : 3;
+
+	// Constrain related results to episodes only for this block.
+	$scoped_filter = static function ( $args ) {
+		$args['post_type'] = [ 'episodes' ];
+		return $args;
+	};
+
+	add_filter( 'ep_find_related_args', $scoped_filter );
+	$posts = $feature->find_related( get_the_ID(), $count );
+	remove_filter( 'ep_find_related_args', $scoped_filter );
+
+	if ( empty( $posts ) ) {
+		return '';
+	}
+
+	$classes = [ 'wp-block-community-code-related-episodes' ];
+	if ( ! empty( $attributes['align'] ) ) {
+		$classes[] = 'align' . $attributes['align'];
+	}
+
+	ob_start();
+	?>
+	<section class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
+		<ul>
+			<?php foreach ( $posts as $related_post ) : ?>
+				<li>
+					<a href="<?php echo esc_url( get_permalink( $related_post->ID ) ); ?>">
+						<?php echo esc_html( get_the_title( $related_post->ID ) ); ?>
+					</a>
+				</li>
+			<?php endforeach; ?>
+		</ul>
+	</section>
+	<?php
+
+	return ob_get_clean();
 }
 
 init();
