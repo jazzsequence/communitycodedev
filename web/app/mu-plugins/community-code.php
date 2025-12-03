@@ -503,12 +503,36 @@ function render_related_episodes_block( array $attributes ) : string {
 	ob_start();
 	?>
 	<section class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
-		<ul>
+		<ul class="alignfull wp-block-post-template is-layout-flow wp-container-core-post-template-is-layout-3ee800f6 wp-block-post-template-is-layout-flow">
 			<?php foreach ( $posts as $related_post ) : ?>
+				<?php
+				$date_display = get_the_date( '', $related_post->ID );
+				$tags         = get_the_terms( $related_post->ID, 'post_tag' );
+				$tag_labels   = is_array( $tags ) ? wp_list_pluck( $tags, 'name' ) : [];
+				?>
 				<li>
-					<a href="<?php echo esc_url( get_permalink( $related_post->ID ) ); ?>">
+					<h3 class="wp-block-post-title has-large-font-size"><a href="<?php echo esc_url( get_permalink( $related_post->ID ) ); ?>">
 						<?php echo esc_html( get_the_title( $related_post->ID ) ); ?>
 					</a>
+					<?php if ( $date_display ) : ?>
+						<div class="related-episode__meta">
+							<time datetime="<?php echo esc_attr( get_the_date( 'c', $related_post->ID ) ); ?>">
+								<?php echo esc_html( $date_display ); ?>
+							</time>
+							<?php if ( ! empty( $tag_labels ) ) : ?>
+								<span class="related-episode__tags">
+                                    <?php _e( 'topics: ', 'community-code' ); ?>
+									<?php echo esc_html( implode( ', ', $tag_labels ) ); ?>
+								</span>
+							<?php endif; ?>
+						</div>
+					<?php elseif ( ! empty( $tag_labels ) ) : ?>
+						<div class="related-episode__meta">
+							<span class="related-episode__tags">
+								<?php echo esc_html( implode( ', ', $tag_labels ) ); ?>
+							</span>
+						</div>
+					<?php endif; ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>
