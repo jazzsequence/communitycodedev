@@ -151,6 +151,12 @@ Config::define( 'FORCE_SSL', true );
  * Allow WordPress to detect HTTPS when used behind a reverse proxy or a load balancer
  * See https://codex.wordpress.org/Function_Reference/is_ssl#Notes
  */
+if ( php_sapi_name() === 'cli' && ! isset( $_SERVER['HTTPS'] ) ) {
+	// Ensure CLI contexts (e.g., wp-cli reindex) treat the site as HTTPS.
+	$_SERVER['HTTPS'] = 'on';
+	$_SERVER['SERVER_PORT'] = 443;
+	$_SERVER['HTTP_X_FORWARDED_PROTO'] = 'https';
+}
 if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' ) {
 	$_SERVER['HTTPS'] = 'on';
 }
