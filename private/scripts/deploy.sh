@@ -41,3 +41,7 @@ if ! terminus env:deploy "$TERMINUS_SITE.test" --note="Deploy to Test: ${LAST_CO
 fi
 
 terminus env:deploy "$TERMINUS_SITE.live" --note="Deploy to Live: ${LAST_COMMIT_MESSAGE}"
+
+# Sync ElasticPress indexes after deploy to live.
+echo "Syncing ElasticPress indexes on live..."
+terminus wp "$TERMINUS_SITE.live" -- elasticpress sync --show-errors
