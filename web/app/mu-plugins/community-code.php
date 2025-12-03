@@ -19,8 +19,7 @@ function init() {
 		}
 	});
 
-	// Keep the native dashboard while still loading the Accelerate menu items.
-	add_action( 'plugins_loaded', __NAMESPACE__ . '\\remove_altis_dashboard', 20 );
+	add_action( 'admin_menu', __NAMESPACE__ . '\\add_accelerate_analytics_page', 100 );
 	add_action( 'init', __NAMESPACE__ . '\\register_episodes' );
 	add_action( 'rest_api_init', __NAMESPACE__ . '\\register_youtube_url' );
 	add_action( 'rest_api_init', __NAMESPACE__ . '\\register_yoast_meta_description_to_rest' );
@@ -36,10 +35,47 @@ function init() {
 }
 
 /**
- * Remove the Altis Accelerate dashboard replacement.
+ * Re-add the Accelerate Analytics page when the dashboard takeover is disabled.
  */
-function remove_altis_dashboard() {
-    remove_action( 'load-index.php', '\\Altis\\Accelerate\\Dashboard\\load_dashboard' );
+function add_accelerate_analytics_page() {
+	if ( ! function_exists( '\\Altis\\Accelerate\\Dashboard\\render_analytics_page' ) ) {
+		return;
+	}
+
+	$hook = add_submenu_page(
+		'accelerate',
+		_x( 'Analytics', 'page title', 'altis' ),
+		_x( 'Analytics', 'menu title', 'altis' ),
+		'read',
+		'altis-analytics',
+		'\\Altis\\Accelerate\\Dashboard\\render_analytics_page',
+		1000
+	);
+
+	add_action( 'load-' . $hook, function () {
+		wp_enqueue_style(
+			'altis-accelerate-tailwind',
+			plugins_url( 'build/tailwind.css', \Altis\Accelerate\PLUGIN_FILE ),
+			[],
+			\Altis\Accelerate\VERSION
+		);
+
+		\Altis\Accelerate\Utils\register_assets( 'dashboard', [
+			'dependencies' => [
+				'lodash',
+				'altis-accelerate-accelerate-admin',
+				'altis-accelerate-audiences/data',
+				'wp-api-fetch',
+				'wp-components',
+				'wp-core-data',
+				'wp-data',
+				'wp-element',
+				'wp-i18n',
+				'wp-url',
+				'wp-html-entities',
+			],
+		], true );
+	} );
 }
 
 /**
