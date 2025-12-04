@@ -21,6 +21,7 @@ function init() {
 	add_filter( 'ep_post_sync_args', __NAMESPACE__ . '\\add_yoast_description_field', 16, 2 );
 	add_filter( 'ep_post_sync_args_post_prepare_meta', __NAMESPACE__ . '\\normalize_ep_thumbnail_scheme', 20, 2 );
 	add_filter( 'ep_prepare_meta_allowed_protected_keys', __NAMESPACE__ . '\\allow_yoast_meta', 10, 2 );
+	add_filter( 'ep_prepare_meta_allowed_keys', __NAMESPACE__ . '\\allow_yoast_meta_public', 10, 2 );
 }
 
 /**
@@ -117,6 +118,11 @@ function add_yoast_description_field( array $post_args, int $post_id ) : array {
 
 	$post_args['yoast_description'] = $desc;
 
+	// If post_content_plain is empty (e.g., link-only posts), use the Yoast description so Instant Results has text.
+	if ( empty( $post_args['post_content_plain'] ) ) {
+		$post_args['post_content_plain'] = $desc;
+	}
+
 	return $post_args;
 }
 
@@ -187,6 +193,18 @@ function normalize_ep_thumbnail_scheme( array $post_args, int $post_id ) : array
  * @return array
  */
 function allow_yoast_meta( array $keys, $post ) : array {
+	$keys[] = '_yoast_wpseo_metadesc';
+	return array_values( array_unique( $keys ) );
+}
+
+/**
+ * Ensure Yoast meta description is treated as an allowed public key (for completeness).
+ *
+ * @param array   $keys  Allowed public keys.
+ * @param WP_Post $post  Post object.
+ * @return array
+ */
+function allow_yoast_meta_public( array $keys, $post ) : array {
 	$keys[] = '_yoast_wpseo_metadesc';
 	return array_values( array_unique( $keys ) );
 }
