@@ -139,9 +139,9 @@ function enqueue_instant_results_overrides() {
 
 	wp_enqueue_script(
 		'community-code-instant-results-overrides',
-		plugins_url( 'instant-results-overrides.js', __FILE__ ),
+		plugins_url( 'assets/js/instant-results-overrides.js', __FILE__ ),
 		[ 'elasticpress-instant-results', 'wp-hooks', 'wp-element', 'wp-i18n' ],
-		filemtime( __DIR__ . '/instant-results-overrides.js' ),
+		filemtime( __DIR__ . '/assets/js/instant-results-overrides.js' ),
 		true
 	);
 }
@@ -158,7 +158,7 @@ function register_related_episodes_block() {
 
 	wp_register_script(
 		$handle,
-		plugins_url( 'related-episodes-block.js', __FILE__ ),
+		plugins_url( 'assets/js/related-episodes-block.js', __FILE__ ),
 		[
 			'wp-blocks',
 			'wp-element',
@@ -166,7 +166,7 @@ function register_related_episodes_block() {
 			'wp-components',
 			'wp-block-editor',
 		],
-		filemtime( __DIR__ . '/related-episodes-block.js' ),
+		filemtime( __DIR__ . '/assets/js/related-episodes-block.js' ),
 		true
 	);
 
@@ -260,7 +260,7 @@ function render_related_episodes_block( array $attributes ) : string {
 						</div>
                     <?php endif; ?>
                     <?php if ( ! empty( $tag_labels ) ) : ?>
-					    <div class="related-episode__meta">
+					<div class="related-episode__meta">
 							<span class="related-episode__tags">
 								<?php _e( 'topics: ', 'community-code' ); ?>
 								<?php echo esc_html( implode( ', ', $tag_labels ) ); ?>
