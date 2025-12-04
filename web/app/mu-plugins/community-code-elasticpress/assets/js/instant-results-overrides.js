@@ -34,17 +34,17 @@
 	);
 } )( window.wp );
 
-// Expand the Tags facet by default (click its toggle if collapsed).
-window.addEventListener( 'DOMContentLoaded', () => {
-	setTimeout( () => {
+// Expand the Tags facet by default and set default post types (post + episodes only).
+(() => {
+	const applyTweaks = () => {
+		// Expand tags.
 		const buttons = Array.from( document.querySelectorAll( '.ep-search-panel__button' ) );
 		const tagButton = buttons.find( ( btn ) => btn.textContent.toLowerCase().includes( 'tag' ) );
 		if ( tagButton && tagButton.getAttribute( 'aria-expanded' ) === 'false' ) {
 			tagButton.click();
 		}
-	}, 300 );
 
-	setTimeout( () => {
+		// Post type defaults.
 		const ensureChecked = ( value ) => {
 			document
 				.querySelectorAll( `input[type="checkbox"][value="${ value }"]` )
@@ -69,5 +69,18 @@ window.addEventListener( 'DOMContentLoaded', () => {
 		ensureChecked( 'episodes' );
 		ensureUnchecked( 'attachment' );
 		ensureUnchecked( 'media' );
-	}, 500 );
-} );
+	};
+
+	// Apply once DOM is ready.
+	window.addEventListener( 'DOMContentLoaded', () => {
+		setTimeout( applyTweaks, 400 );
+	});
+
+	// Also watch for modal render and apply when elements appear.
+	const observer = new MutationObserver( () => {
+		if ( document.querySelector( '.ep-search' ) ) {
+			applyTweaks();
+		}
+	});
+	observer.observe( document.body, { childList: true, subtree: true } );
+})();
