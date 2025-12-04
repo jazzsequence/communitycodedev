@@ -569,21 +569,21 @@ function render_related_episodes_block( array $attributes ) : string {
 					</a></h3>
 					<div class="related-episode__meta">
 						<?php if ( ! empty( $tag_labels ) ) : ?>
-							<span class="related-episode__tags has-small-font-size">
+							<span class="related-episode__tags">
 								<?php _e( 'topics: ', 'community-code' ); ?>
 								<?php echo esc_html( implode( ', ', $tag_labels ) ); ?>
 							</span>
 						<?php endif; ?>
 					</div>
 					<?php if ( $date_display ) : ?>
-						<div class="has-text-align-right wp-block-post-date">
+						<div class="datetime has-text-align-right wp-block-post-date">
 							<time datetime="<?php echo esc_attr( get_the_date( 'c', $related_post->ID ) ); ?>">
 								<a href="<?php echo esc_url( get_permalink( $related_post->ID ) ); ?>"><?php echo esc_html( $date_display ); ?></a>
 							</time>
 						</div>
 					<?php elseif ( ! empty( $tag_labels ) ) : ?>
 						<div class="related-episode__meta">
-							<span class="related-episode__tags has-small-font-size">
+							<span class="related-episode__tags">
 								<?php _e( 'topics: ', 'community-code' ); ?>
 								<?php echo esc_html( implode( ', ', $tag_labels ) ); ?>
 							</span>
