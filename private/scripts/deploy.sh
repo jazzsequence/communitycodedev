@@ -22,7 +22,7 @@ while true; do
   echo "Currently running workflow:"
   echo "$running_workflow"
   echo "Waiting for $running_workflow to complete..."
-  echo "Use ⌘ + C to bail if the workflow we're waiting for is not the workflow that's running."
+  echo "Use ^ + C to bail if the workflow we're waiting for is not the workflow that's running."
 
   # Wait for each running workflow to complete before checking again.
   if ! terminus workflow:wait "$TERMINUS_SITE.dev" "$running_workflow" --max=200; then
