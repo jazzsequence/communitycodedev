@@ -567,6 +567,13 @@ function render_related_episodes_block( array $attributes ) : string {
 					<h3 class="wp-block-post-title has-large-font-size"><a href="<?php echo esc_url( get_permalink( $related_post->ID ) ); ?>">
 						<?php echo esc_html( get_the_title( $related_post->ID ) ); ?>
 					</a></h3>
+					<?php if ( $date_display ) : ?>
+						<div class="datetime has-text-align-right wp-block-post-date">
+							<time datetime="<?php echo esc_attr( get_the_date( 'c', $related_post->ID ) ); ?>">
+								<a href="<?php echo esc_url( get_permalink( $related_post->ID ) ); ?>"><?php echo esc_html( $date_display ); ?></a>
+							</time>
+						</div>
+                    <?php endif; ?>
 					<div class="related-episode__meta">
 						<?php if ( ! empty( $tag_labels ) ) : ?>
 							<span class="related-episode__tags">
@@ -575,20 +582,6 @@ function render_related_episodes_block( array $attributes ) : string {
 							</span>
 						<?php endif; ?>
 					</div>
-					<?php if ( $date_display ) : ?>
-						<div class="datetime has-text-align-right wp-block-post-date">
-							<time datetime="<?php echo esc_attr( get_the_date( 'c', $related_post->ID ) ); ?>">
-								<a href="<?php echo esc_url( get_permalink( $related_post->ID ) ); ?>"><?php echo esc_html( $date_display ); ?></a>
-							</time>
-						</div>
-					<?php elseif ( ! empty( $tag_labels ) ) : ?>
-						<div class="related-episode__meta">
-							<span class="related-episode__tags">
-								<?php _e( 'topics: ', 'community-code' ); ?>
-								<?php echo esc_html( implode( ', ', $tag_labels ) ); ?>
-							</span>
-						</div>
-					<?php endif; ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>
