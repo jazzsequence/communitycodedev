@@ -44,4 +44,4 @@ terminus env:deploy "$TERMINUS_SITE.live" --note="Deploy to Live: ${LAST_COMMIT_
 
 # Sync ElasticPress indexes after deploy to live.
 echo "Syncing ElasticPress indexes on live..."
-terminus wp "$TERMINUS_SITE.live" -- elasticpress sync --show-errors
+composer ep:sync
