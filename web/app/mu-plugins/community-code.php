@@ -488,25 +488,25 @@ function register_related_episodes_block() {
 	register_block_type(
 		'community-code/related-episodes',
 		[
-			'title'           => __( 'Related Episodes (ElasticPress)', 'community-code' ),
-			'description'     => __( 'Show ElasticPress related episodes using transcript content.', 'community-code' ),
-			'category'        => 'widgets',
-			'icon'            => 'controls-repeat',
-			'supports'        => [
+			'title' => __( 'Related Episodes (ElasticPress)', 'community-code' ),
+			'description' => __( 'Show ElasticPress related episodes using transcript content.', 'community-code' ),
+			'category' => 'widgets',
+			'icon' => 'controls-repeat',
+			'supports' => [
 				'align' => [ 'wide', 'full' ],
-				'html'  => false,
+				'html' => false,
 			],
-			'attributes'      => [
+			'attributes' => [
 				'number' => [
-					'type'    => 'number',
+					'type' => 'number',
 					'default' => 3,
 				],
-				'align'  => [
+				'align' => [
 					'type' => 'string',
 				],
 			],
 			'render_callback' => __NAMESPACE__ . '\\render_related_episodes_block',
-			'editor_script'   => $handle,
+			'editor_script' => $handle,
 		]
 	);
 }
@@ -560,8 +560,8 @@ function render_related_episodes_block( array $attributes ) : string {
 			<?php foreach ( $posts as $related_post ) : ?>
 				<?php
 				$date_display = get_the_date( '', $related_post->ID );
-				$tags         = get_the_terms( $related_post->ID, 'post_tag' );
-				$tag_labels   = is_array( $tags ) ? wp_list_pluck( $tags, 'name' ) : [];
+				$tags = get_the_terms( $related_post->ID, 'post_tag' );
+				$tag_labels = is_array( $tags ) ? wp_list_pluck( $tags, 'name' ) : [];
 				?>
 				<li>
 					<h3 class="wp-block-post-title has-large-font-size"><a href="<?php echo esc_url( get_permalink( $related_post->ID ) ); ?>">
