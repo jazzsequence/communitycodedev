@@ -69,6 +69,8 @@ wp-cli.local.yml
 # mu-plugins is version controlled. Exceptions to this rule are made to specific
 # files managed by Composer.
 web/app/mu-plugins/*/
+!web/app/mu-plugins/community-code-elasticpress/
+!web/app/mu-plugins/community-code-elasticpress/**
 
 # Plugins
 # Ignore the plugins directory by default. WordPress plugins should be managed
