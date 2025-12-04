@@ -22,7 +22,8 @@ function init() {
 	add_filter( 'ep_post_sync_args_post_prepare_meta', __NAMESPACE__ . '\\normalize_ep_thumbnail_scheme', 20, 2 );
 	add_filter( 'ep_prepare_meta_allowed_protected_keys', __NAMESPACE__ . '\\allow_yoast_meta', 10, 2 );
 	add_filter( 'ep_prepare_meta_allowed_keys', __NAMESPACE__ . '\\allow_yoast_meta_public', 10, 2 );
-    add_filter( 'ep_instant_results_args_schema', __NAMESPACE__ . '\\add_yoast_field_to_instant_results' );
+	add_filter( 'ep_instant_results_args_schema', __NAMESPACE__ . '\\add_yoast_field_to_instant_results' );
+	add_filter( 'ep_search_hit', __NAMESPACE__ . '\\prefer_yoast_description_in_hit', 10, 2 );
 }
 
 /**
@@ -166,6 +167,25 @@ function add_yoast_field_to_instant_results( array $schema ) : array {
 	];
 
 	return $schema;
+}
+
+/**
+ * Ensure Instant Results hit data uses Yoast description for excerpt when available.
+ *
+ * @param array $hit   Elasticsearch hit data.
+ * @param array $post  Post data.
+ * @return array
+ */
+function prefer_yoast_description_in_hit( array $hit, array $post ) : array {
+	$yoast = $hit['_source']['yoast_description'] ?? '';
+
+	if ( $yoast ) {
+		// Override the default excerpt/description fields Instant Results uses.
+		$hit['_source']['post_content_plain'] = $yoast;
+		$hit['_source']['post_excerpt']       = $yoast;
+	}
+
+	return $hit;
 }
 
 /**
