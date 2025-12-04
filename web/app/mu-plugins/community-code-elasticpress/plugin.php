@@ -22,6 +22,7 @@ function init() {
 	add_filter( 'ep_post_sync_args_post_prepare_meta', __NAMESPACE__ . '\\normalize_ep_thumbnail_scheme', 20, 2 );
 	add_filter( 'ep_prepare_meta_allowed_protected_keys', __NAMESPACE__ . '\\allow_yoast_meta', 10, 2 );
 	add_filter( 'ep_prepare_meta_allowed_keys', __NAMESPACE__ . '\\allow_yoast_meta_public', 10, 2 );
+    add_filter( 'ep_instant_results_args_schema', __NAMESPACE__ . '\\add_yoast_field_to_instant_results' );
 }
 
 /**
@@ -149,6 +150,22 @@ function get_yoast_description_value( int $post_id ) : string {
 	}
 
 	return '';
+}
+
+/**
+ * Include yoast_description in Instant Results response schema.
+ *
+ * @param array $schema Args schema.
+ * @return array
+ */
+function add_yoast_field_to_instant_results( array $schema ) : array {
+	$schema['fields']['yoast_description'] = [
+		'type'        => 'string',
+		'description' => __( 'Yoast meta description.', 'community-code' ),
+		'default'     => '',
+	];
+
+	return $schema;
 }
 
 /**
