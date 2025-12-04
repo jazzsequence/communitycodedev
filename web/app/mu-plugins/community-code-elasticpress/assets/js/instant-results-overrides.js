@@ -43,4 +43,31 @@ window.addEventListener( 'DOMContentLoaded', () => {
 			tagButton.click();
 		}
 	}, 300 );
+
+	setTimeout( () => {
+		const ensureChecked = ( value ) => {
+			document
+				.querySelectorAll( `input[type="checkbox"][value="${ value }"]` )
+				.forEach( ( input ) => {
+					if ( ! input.checked ) {
+						input.click();
+					}
+				} );
+		};
+
+		const ensureUnchecked = ( value ) => {
+			document
+				.querySelectorAll( `input[type="checkbox"][value="${ value }"]` )
+				.forEach( ( input ) => {
+					if ( input.checked ) {
+						input.click();
+					}
+				} );
+		};
+
+		ensureChecked( 'post' );
+		ensureChecked( 'episodes' );
+		ensureUnchecked( 'attachment' );
+		ensureUnchecked( 'media' );
+	}, 500 );
 } );

@@ -26,6 +26,7 @@ function init() {
 	add_filter( 'ep_search_hit', __NAMESPACE__ . '\\prefer_yoast_description_in_hit', 10, 2 );
 	add_filter( 'ep_instant_results_args_schema', __NAMESPACE__ . '\\set_instant_results_defaults' );
 	add_filter( 'ep_facet_include_taxonomies', __NAMESPACE__ . '\\prioritize_post_tag_facet' );
+	add_filter( 'ep_searchable_post_types', __NAMESPACE__ . '\\limit_searchable_post_types' );
 }
 
 /**
@@ -219,6 +220,17 @@ function prioritize_post_tag_facet( array $taxonomies ) : array {
 	}
 
 	return $taxonomies;
+}
+
+/**
+ * Limit searchable post types to posts and episodes (hides attachments/media from Instant Results facets).
+ *
+ * @param array $post_types Searchable post types.
+ * @return array
+ */
+function limit_searchable_post_types( array $post_types ) : array {
+	$allowed = [ 'post', 'episodes' ];
+	return array_values( array_intersect( $allowed, $post_types ) );
 }
 
 /**
