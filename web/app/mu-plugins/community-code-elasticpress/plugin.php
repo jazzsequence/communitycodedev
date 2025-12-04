@@ -15,7 +15,7 @@ namespace Community_Code\ElasticPress;
  */
 function init() {
 	add_action( 'init', __NAMESPACE__ . '\\register_related_episodes_block' );
-	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_instant_results_overrides' );
+	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_instant_results_overrides', 20 );
 
 	add_filter( 'ep_post_sync_args', __NAMESPACE__ . '\\include_episode_transcript_in_index', 15, 2 );
 	add_filter( 'ep_post_sync_args', __NAMESPACE__ . '\\add_yoast_description_field', 16, 2 );
