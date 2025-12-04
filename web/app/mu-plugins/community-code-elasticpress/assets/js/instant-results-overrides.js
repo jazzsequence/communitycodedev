@@ -33,3 +33,14 @@
 		}
 	);
 } )( window.wp );
+
+// Expand the Tags facet by default (click its toggle if collapsed).
+window.addEventListener( 'DOMContentLoaded', () => {
+	setTimeout( () => {
+		const buttons = Array.from( document.querySelectorAll( '.ep-search-panel__button' ) );
+		const tagButton = buttons.find( ( btn ) => btn.textContent.toLowerCase().includes( 'tag' ) );
+		if ( tagButton && tagButton.getAttribute( 'aria-expanded' ) === 'false' ) {
+			tagButton.click();
+		}
+	}, 300 );
+} );
