@@ -119,7 +119,7 @@ function register_episodes() {
 		'hierarchical' => false,
 		'menu_position' => 2,
 		'supports' => [ 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments', 'custom-fields' ],
-        'taxonomies' => [ 'post_tag' ],
+		'taxonomies' => [ 'post_tag' ],
 		'show_in_rest' => true,
 		'menu_icon' => 'dashicons-microphone',
 		'feeds' => true,
@@ -328,11 +328,11 @@ function modified_activity_widget() {
 					ucwords( str_replace( '_', ' ', $post_type ) )
 				);
 			}
-            ?>
-		    </ul>
-        </div>
-    </div>
-    <?php
+			?>
+			</ul>
+		</div>
+	</div>
+	<?php
 	wp_reset_postdata();
 }
 
@@ -567,24 +567,24 @@ function render_related_episodes_block( array $attributes ) : string {
 					<h3 class="wp-block-post-title has-large-font-size"><a href="<?php echo esc_url( get_permalink( $related_post->ID ) ); ?>">
 						<?php echo esc_html( get_the_title( $related_post->ID ) ); ?>
 					</a></h3>
+					<div class="related-episode__meta">
+						<?php if ( ! empty( $tag_labels ) ) : ?>
+							<span class="related-episode__tags has-small-font-size">
+								<?php _e( 'topics: ', 'community-code' ); ?>
+								<?php echo esc_html( implode( ', ', $tag_labels ) ); ?>
+							</span>
+						<?php endif; ?>
+					</div>
 					<?php if ( $date_display ) : ?>
-                        <div class="has-text-align-right wp-block-post-date">
-                            <time datetime="<?php echo esc_attr( get_the_date( 'c', $related_post->ID ) ); ?>">
-                                <a href="<?php echo esc_url( get_permalink( $related_post->ID ) ); ?>"><?php echo esc_html( $date_display ); ?></a>
-                            </time>
-                        </div>
-						<div class="related-episode__meta">
-							<?php if ( ! empty( $tag_labels ) ) : ?>
-								<span class="related-episode__tags">
-                                    <?php _e( 'topics: ', 'community-code' ); ?>
-									<?php echo esc_html( implode( ', ', $tag_labels ) ); ?>
-								</span>
-							<?php endif; ?>
+						<div class="has-text-align-right wp-block-post-date">
+							<time datetime="<?php echo esc_attr( get_the_date( 'c', $related_post->ID ) ); ?>">
+								<a href="<?php echo esc_url( get_permalink( $related_post->ID ) ); ?>"><?php echo esc_html( $date_display ); ?></a>
+							</time>
 						</div>
 					<?php elseif ( ! empty( $tag_labels ) ) : ?>
 						<div class="related-episode__meta">
-							<span class="related-episode__tags">
-                                <?php _e( 'topics: ', 'community-code' ); ?>
+							<span class="related-episode__tags has-small-font-size">
+								<?php _e( 'topics: ', 'community-code' ); ?>
 								<?php echo esc_html( implode( ', ', $tag_labels ) ); ?>
 							</span>
 						</div>
