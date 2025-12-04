@@ -15,7 +15,6 @@ namespace Community_Code\ElasticPress;
  */
 function init() {
 	add_action( 'init', __NAMESPACE__ . '\\register_related_episodes_block' );
-	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_instant_results_overrides', 20 );
 
 	add_filter( 'ep_post_sync_args', __NAMESPACE__ . '\\include_episode_transcript_in_index', 15, 2 );
 	add_filter( 'ep_post_sync_args', __NAMESPACE__ . '\\add_yoast_description_field', 16, 2 );
@@ -188,16 +187,6 @@ function prefer_yoast_description_in_hit( array $hit, array $post ) : array {
 }
 
 /**
- * Set Instant Results defaults: only posts + episodes by default.
- *
- * @param array $schema Args schema.
- * @return array
- */
-function set_instant_results_defaults( array $schema ) : array {
-	return $schema;
-}
-
-/**
  * Ensure EP thumbnails use the site's scheme (prevents http thumbnails in https UIs).
  *
  * @param array $post_args Post args being sent to Elasticsearch.
@@ -253,19 +242,6 @@ function allow_yoast_meta( array $keys, $post ) : array {
 function allow_yoast_meta_public( array $keys, $post ) : array {
 	$keys[] = '_yoast_wpseo_metadesc';
 	return array_values( array_unique( $keys ) );
-}
-
-/**
- * Enqueue Instant Results overrides (front-end).
- */
-function enqueue_instant_results_overrides() {
-	wp_enqueue_script(
-		'community-code-instant-results-overrides',
-		plugins_url( 'assets/js/instant-results-overrides.js', __FILE__ ),
-		[ 'elasticpress-instant-results', 'wp-hooks', 'wp-element', 'wp-i18n' ],
-		filemtime( __DIR__ . '/assets/js/instant-results-overrides.js' ),
-		true
-	);
 }
 
 /**
