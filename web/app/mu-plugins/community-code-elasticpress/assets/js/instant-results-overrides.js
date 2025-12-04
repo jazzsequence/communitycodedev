@@ -14,9 +14,10 @@
 
 			const meta = hit?._source?.meta || {};
 			const yoastMeta = meta._yoast_wpseo_metadesc;
-			const yoastDesc = Array.isArray( yoastMeta )
-				? yoastMeta[0]?.raw || yoastMeta[0]?.value || yoastMeta[0]
-				: yoastMeta;
+			const yoastDesc = hit?._source?.yoast_description
+				|| ( Array.isArray( yoastMeta )
+					? yoastMeta[0]?.raw || yoastMeta[0]?.value || yoastMeta[0]
+					: yoastMeta );
 
 			if ( yoastDesc ) {
 				return el.createElement( OriginalComponent, {

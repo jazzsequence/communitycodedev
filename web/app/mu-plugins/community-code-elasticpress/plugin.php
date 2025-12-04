@@ -18,6 +18,7 @@ function init() {
 	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_instant_results_overrides' );
 
 	add_filter( 'ep_post_sync_args', __NAMESPACE__ . '\\include_episode_transcript_in_index', 15, 2 );
+	add_filter( 'ep_post_sync_args', __NAMESPACE__ . '\\add_yoast_description_field', 16, 2 );
 	add_filter( 'ep_post_sync_args_post_prepare_meta', __NAMESPACE__ . '\\normalize_ep_thumbnail_scheme', 20, 2 );
 	add_filter( 'ep_prepare_meta_allowed_protected_keys', __NAMESPACE__ . '\\allow_yoast_meta', 10, 2 );
 }
@@ -94,6 +95,54 @@ function fetch_transcript_body( string $url ) : string {
 	}
 
 	return $body;
+}
+
+/**
+ * Add Yoast description into the indexed document for posts/episodes.
+ *
+ * @param array $post_args Post args being sent to Elasticsearch.
+ * @param int   $post_id   Post ID.
+ * @return array
+ */
+function add_yoast_description_field( array $post_args, int $post_id ) : array {
+	$post_type = get_post_type( $post_id );
+	if ( ! in_array( $post_type, [ 'post', 'episodes' ], true ) ) {
+		return $post_args;
+	}
+
+	$desc = get_yoast_description_value( $post_id );
+	if ( ! $desc ) {
+		return $post_args;
+	}
+
+	$post_args['yoast_description'] = $desc;
+
+	return $post_args;
+}
+
+/**
+ * Fetch Yoast meta description (with fallback to og_description) for a post.
+ *
+ * @param int $post_id Post ID.
+ * @return string
+ */
+function get_yoast_description_value( int $post_id ) : string {
+	$desc = get_post_meta( $post_id, '_yoast_wpseo_metadesc', true );
+	if ( $desc ) {
+		return $desc;
+	}
+
+	$head_json = get_post_meta( $post_id, '_yoast_wpseo_head_json', true );
+	if ( is_string( $head_json ) ) {
+		$decoded = json_decode( $head_json, true );
+		if ( is_array( $decoded ) && ! empty( $decoded['og_description'] ) ) {
+			return (string) $decoded['og_description'];
+		}
+	} elseif ( is_array( $head_json ) && ! empty( $head_json['og_description'] ) ) {
+		return (string) $head_json['og_description'];
+	}
+
+	return '';
 }
 
 /**
