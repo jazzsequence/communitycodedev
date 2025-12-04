@@ -213,10 +213,6 @@ function allow_yoast_meta_public( array $keys, $post ) : array {
  * Enqueue Instant Results overrides (front-end).
  */
 function enqueue_instant_results_overrides() {
-	if ( ! wp_script_is( 'elasticpress-instant-results', 'registered' ) ) {
-		return;
-	}
-
 	wp_enqueue_script(
 		'community-code-instant-results-overrides',
 		plugins_url( 'assets/js/instant-results-overrides.js', __FILE__ ),
