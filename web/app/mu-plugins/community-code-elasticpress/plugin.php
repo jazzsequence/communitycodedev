@@ -259,14 +259,14 @@ function render_related_episodes_block( array $attributes ) : string {
 							</time>
 						</div>
                     <?php endif; ?>
-					<div class="related-episode__meta">
-						<?php if ( ! empty( $tag_labels ) ) : ?>
+                    <?php if ( ! empty( $tag_labels ) ) : ?>
+					    <div class="related-episode__meta">
 							<span class="related-episode__tags">
 								<?php _e( 'topics: ', 'community-code' ); ?>
 								<?php echo esc_html( implode( ', ', $tag_labels ) ); ?>
 							</span>
-						<?php endif; ?>
-					</div>
+                        </div>
+                    <?php endif; ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>
