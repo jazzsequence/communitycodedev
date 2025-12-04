@@ -24,9 +24,6 @@ function init() {
 	add_filter( 'ep_prepare_meta_allowed_keys', __NAMESPACE__ . '\\allow_yoast_meta_public', 10, 2 );
 	add_filter( 'ep_instant_results_args_schema', __NAMESPACE__ . '\\add_yoast_field_to_instant_results' );
 	add_filter( 'ep_search_hit', __NAMESPACE__ . '\\prefer_yoast_description_in_hit', 10, 2 );
-	add_filter( 'ep_instant_results_args_schema', __NAMESPACE__ . '\\set_instant_results_defaults' );
-	add_filter( 'ep_facet_include_taxonomies', __NAMESPACE__ . '\\prioritize_post_tag_facet' );
-	add_filter( 'ep_searchable_post_types', __NAMESPACE__ . '\\limit_searchable_post_types' );
 }
 
 /**
@@ -197,40 +194,7 @@ function prefer_yoast_description_in_hit( array $hit, array $post ) : array {
  * @return array
  */
 function set_instant_results_defaults( array $schema ) : array {
-	if ( isset( $schema['post_type'] ) ) {
-		$schema['post_type']['default'] = [ 'post', 'episodes' ];
-	}
-
 	return $schema;
-}
-
-/**
- * Move post_tag to the front of taxonomy facets so it opens by default.
- *
- * @param array $taxonomies Taxonomy objects keyed by slug.
- * @return array
- */
-function prioritize_post_tag_facet( array $taxonomies ) : array {
-	if ( isset( $taxonomies['post_tag'] ) ) {
-		$post_tag = $taxonomies['post_tag'];
-		unset( $taxonomies['post_tag'] );
-
-		// Re-add post_tag first to influence facet order (index < 2 opens by default).
-		$taxonomies = array_merge( [ 'post_tag' => $post_tag ], $taxonomies );
-	}
-
-	return $taxonomies;
-}
-
-/**
- * Limit searchable post types to posts and episodes (hides attachments/media from Instant Results facets).
- *
- * @param array $post_types Searchable post types.
- * @return array
- */
-function limit_searchable_post_types( array $post_types ) : array {
-	$allowed = [ 'post', 'episodes' ];
-	return array_values( array_intersect( $allowed, $post_types ) );
 }
 
 /**
