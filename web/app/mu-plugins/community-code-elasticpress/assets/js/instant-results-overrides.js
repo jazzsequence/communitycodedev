@@ -4,7 +4,7 @@
 
 	/**
 	 * Override the Instant Results result component to prefer Yoast meta description
-	 * for episodes. Falls back to the default excerpt when not available.
+	 * for posts and episodes. Falls back to the default excerpt when not available.
 	 */
 	hooks.addFilter(
 		'ep.InstantResults.Result',
@@ -12,18 +12,16 @@
 		( OriginalComponent ) => ( props ) => {
 			const { hit, excerpt } = props;
 
-			if (
-				hit &&
-				hit._source &&
-				hit._source.post_type === 'episodes' &&
-				hit._source.meta &&
-				hit._source.meta._yoast_wpseo_metadesc &&
-				Array.isArray( hit._source.meta._yoast_wpseo_metadesc ) &&
-				hit._source.meta._yoast_wpseo_metadesc[0]
-			) {
+			const meta = hit?._source?.meta || {};
+			const yoastMeta = meta._yoast_wpseo_metadesc;
+			const yoastDesc = Array.isArray( yoastMeta )
+				? yoastMeta[0]?.raw || yoastMeta[0]?.value || yoastMeta[0]
+				: yoastMeta;
+
+			if ( yoastDesc ) {
 				return el.createElement( OriginalComponent, {
 					...props,
-					excerpt: hit._source.meta._yoast_wpseo_metadesc[0],
+					excerpt: yoastDesc,
 				} );
 			}
 
