@@ -19,6 +19,7 @@ function init() {
 
 	add_filter( 'ep_post_sync_args', __NAMESPACE__ . '\\include_episode_transcript_in_index', 15, 2 );
 	add_filter( 'ep_post_sync_args_post_prepare_meta', __NAMESPACE__ . '\\normalize_ep_thumbnail_scheme', 20, 2 );
+	add_filter( 'ep_prepare_meta_allowed_protected_keys', __NAMESPACE__ . '\\allow_yoast_meta', 10, 2 );
 }
 
 /**
@@ -127,6 +128,18 @@ function normalize_ep_thumbnail_scheme( array $post_args, int $post_id ) : array
 	}
 
 	return $post_args;
+}
+
+/**
+ * Allow Yoast meta description to be indexed (normally private meta is skipped).
+ *
+ * @param array   $keys  Allowed protected keys.
+ * @param WP_Post $post  Post object.
+ * @return array
+ */
+function allow_yoast_meta( array $keys, $post ) : array {
+	$keys[] = '_yoast_wpseo_metadesc';
+	return array_values( array_unique( $keys ) );
 }
 
 /**
