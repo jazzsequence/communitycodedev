@@ -120,10 +120,9 @@ function add_yoast_description_field( array $post_args, int $post_id ) : array {
 
 	$post_args['yoast_description'] = $desc;
 
-	// If post_content_plain is empty (e.g., link-only posts), use the Yoast description so Instant Results has text.
-	if ( empty( $post_args['post_content_plain'] ) ) {
-		$post_args['post_content_plain'] = $desc;
-	}
+	// Force the excerpt source to the Yoast description so Instant Results uses it.
+	$post_args['post_content_plain'] = $desc;
+	$post_args['post_excerpt'] = $desc;
 
 	return $post_args;
 }
