@@ -168,3 +168,5 @@ Thumbs.db
 #Ignore vscode AI rules
 .github/instructions/codacy.instructions.md
 .codacy
+communitycode.dev-*.json
+.claude
