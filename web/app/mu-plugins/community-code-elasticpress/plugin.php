@@ -16,6 +16,7 @@ namespace Community_Code\ElasticPress;
 function init() {
 	add_action( 'init', __NAMESPACE__ . '\\register_related_episodes_block' );
 	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_instant_results_overrides', 20 );
+	add_action( 'pre_get_posts', __NAMESPACE__ . '\\integrate_ep_on_archives' );
 
 	add_filter( 'ep_post_sync_args', __NAMESPACE__ . '\\add_yoast_description_field', 11, 2 );
 	add_filter( 'ep_post_sync_args', __NAMESPACE__ . '\\include_episode_transcript_in_index', 15, 2 );
@@ -24,6 +25,44 @@ function init() {
 	add_filter( 'ep_prepare_meta_allowed_keys', __NAMESPACE__ . '\\allow_yoast_meta_public', 10, 2 );
 	add_filter( 'ep_instant_results_args_schema', __NAMESPACE__ . '\\add_yoast_field_to_instant_results' );
 	add_filter( 'ep_search_hit', __NAMESPACE__ . '\\prefer_yoast_description_in_hit', 10, 2 );
+}
+
+/**
+ * Enable ElasticPress integration on main archive queries for better performance.
+ *
+ * @param WP_Query $query The WP_Query instance.
+ */
+function integrate_ep_on_archives( $query ) {
+	// Admin queries - only integrate if it's a main query
+	if ( is_admin() ) {
+		if ( ! $query->is_main_query() ) {
+			return;
+		}
+	}
+
+	// Front-end queries
+	if ( ! is_admin() ) {
+		// Blog page (posts index)
+		if ( $query->is_home() && $query->is_main_query() ) {
+			$query->set( 'ep_integrate', true );
+		}
+
+		// Episodes archive page
+		if ( $query->is_post_type_archive( 'episodes' ) && $query->is_main_query() ) {
+			$query->set( 'ep_integrate', true );
+		}
+
+		// Query Block queries (like homepage episodes list)
+		// These are not main queries, so we check for Query Block context
+		if ( ! $query->is_main_query() && $query->get( 'post_type' ) === 'episodes' ) {
+			$query->set( 'ep_integrate', true );
+		}
+
+		// Query Block for posts
+		if ( ! $query->is_main_query() && $query->get( 'post_type' ) === 'post' ) {
+			$query->set( 'ep_integrate', true );
+		}
+	}
 }
 
 /**
