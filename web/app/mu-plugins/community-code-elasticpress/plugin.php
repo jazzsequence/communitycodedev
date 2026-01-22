@@ -25,6 +25,7 @@ function init() {
 	add_filter( 'ep_instant_results_args_schema', __NAMESPACE__ . '\\add_yoast_field_to_instant_results' );
 	add_filter( 'ep_search_fields', __NAMESPACE__ . '\\add_transcript_to_search_fields' );
 	add_filter( 'ep_related_posts_fields', __NAMESPACE__ . '\\add_transcript_to_related_posts_fields' );
+	add_filter( 'ep_post_mapping', __NAMESPACE__ . '\\add_transcript_field_mapping' );
 }
 
 /**
@@ -229,6 +230,21 @@ function add_transcript_to_search_fields( array $fields ) : array {
 function add_transcript_to_related_posts_fields( array $fields ) : array {
 	$fields[] = 'transcript_content';
 	return $fields;
+}
+
+/**
+ * Add transcript_content field to ElasticSearch mapping for full-text search.
+ *
+ * @param array $mapping ElasticSearch mapping array.
+ * @return array
+ */
+function add_transcript_field_mapping( array $mapping ) : array {
+	$mapping['properties']['transcript_content'] = [
+		'type' => 'text',
+		'analyzer' => 'standard',
+	];
+
+	return $mapping;
 }
 
 /**
