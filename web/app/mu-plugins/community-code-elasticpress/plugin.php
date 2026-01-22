@@ -239,7 +239,7 @@ function add_transcript_to_related_posts_fields( array $fields ) : array {
  * @return array
  */
 function add_transcript_field_mapping( array $mapping ) : array {
-	$mapping['properties']['transcript_content'] = [
+	$mapping['mappings']['properties']['transcript_content'] = [
 		'type' => 'text',
 		'analyzer' => 'standard',
 	];
