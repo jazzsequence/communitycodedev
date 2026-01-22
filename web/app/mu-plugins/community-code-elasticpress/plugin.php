@@ -26,7 +26,7 @@ function init() {
 	add_filter( 'ep_search_fields', __NAMESPACE__ . '\\add_transcript_to_search_fields' );
 	add_filter( 'ep_related_posts_fields', __NAMESPACE__ . '\\add_transcript_to_related_posts_fields' );
 	add_filter( 'ep_post_mapping', __NAMESPACE__ . '\\add_transcript_field_mapping' );
-	add_filter( 'ep_formatted_args', __NAMESPACE__ . '\\customize_related_posts_query', 10, 2 );
+	add_filter( 'ep_formatted_args', __NAMESPACE__ . '\\customize_related_posts_query', 10, 3 );
 }
 
 /**
@@ -264,17 +264,27 @@ function add_transcript_field_mapping( array $mapping ) : array {
  * Customize More Like This query parameters for better related episode matching.
  *
  * @param array    $formatted_args Formatted ES query.
- * @param WP_Query $query          The WP_Query object.
+ * @param array    $args           WP_Query args.
+ * @param WP_Query $wp_query       The WP_Query object.
  * @return array
  */
-function customize_related_posts_query( array $formatted_args, $query ) : array {
+function customize_related_posts_query( array $formatted_args, array $args, $wp_query ) : array {
 	// Only modify More Like This queries (used by related posts)
 	if ( empty( $formatted_args['query']['more_like_this'] ) ) {
 		return $formatted_args;
 	}
 
 	// Only apply to episodes post type queries
-	$post_types = isset( $formatted_args['post_type'] ) ? (array) $formatted_args['post_type'] : [];
+	if ( ! $wp_query instanceof \WP_Query ) {
+		return $formatted_args;
+	}
+
+	$query_post_type = $wp_query->get( 'post_type' );
+	if ( empty( $query_post_type ) ) {
+		return $formatted_args;
+	}
+
+	$post_types = (array) $query_post_type;
 	if ( ! in_array( 'episodes', $post_types, true ) ) {
 		return $formatted_args;
 	}
