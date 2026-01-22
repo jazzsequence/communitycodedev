@@ -16,8 +16,8 @@ namespace Community_Code\ElasticPress;
 function init() {
 	add_action( 'init', __NAMESPACE__ . '\\register_related_episodes_block' );
 
+	add_filter( 'ep_post_sync_args', __NAMESPACE__ . '\\add_yoast_description_field', 11, 2 );
 	add_filter( 'ep_post_sync_args', __NAMESPACE__ . '\\include_episode_transcript_in_index', 15, 2 );
-	add_filter( 'ep_post_sync_args', __NAMESPACE__ . '\\add_yoast_description_field', 16, 2 );
 	add_filter( 'ep_post_sync_args_post_prepare_meta', __NAMESPACE__ . '\\normalize_ep_thumbnail_scheme', 20, 2 );
 	add_filter( 'ep_prepare_meta_allowed_protected_keys', __NAMESPACE__ . '\\allow_yoast_meta', 10, 2 );
 	add_filter( 'ep_prepare_meta_allowed_keys', __NAMESPACE__ . '\\allow_yoast_meta_public', 10, 2 );
@@ -47,7 +47,9 @@ function include_episode_transcript_in_index( array $post_args, int $post_id ) :
 		return $post_args;
 	}
 
-	$post_args['post_content'] .= "\n\n" . wp_strip_all_tags( $transcript_body );
+	$transcript_text = "\n\n" . wp_strip_all_tags( $transcript_body );
+	$post_args['post_content'] .= $transcript_text;
+	$post_args['post_content_plain'] .= $transcript_text;
 
 	return $post_args;
 }
