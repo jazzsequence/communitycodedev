@@ -281,7 +281,7 @@ function customize_related_posts_query( array $formatted_args, $query ) : array 
 
 	// Adjust More Like This parameters for better transcript-based matching
 	$formatted_args['query']['more_like_this']['min_term_freq'] = 1;  // Lower threshold (default: 2)
-	$formatted_args['query']['more_like_this']['min_doc_freq'] = 1;   // Lower threshold (default: 5)
+	$formatted_args['query']['more_like_this']['min_doc_freq'] = 2;   // Lower threshold (default: 5)
 	$formatted_args['query']['more_like_this']['max_query_terms'] = 50; // Increase from default 25
 
 	// Boost transcript content field for similarity matching
