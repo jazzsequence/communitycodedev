@@ -26,6 +26,7 @@ function init() {
 	add_filter( 'ep_search_fields', __NAMESPACE__ . '\\add_transcript_to_search_fields' );
 	add_filter( 'ep_related_posts_fields', __NAMESPACE__ . '\\add_transcript_to_related_posts_fields' );
 	add_filter( 'ep_post_mapping', __NAMESPACE__ . '\\add_transcript_field_mapping' );
+	add_filter( 'ep_formatted_args', __NAMESPACE__ . '\\customize_related_posts_query', 10, 2 );
 }
 
 /**
@@ -228,7 +229,19 @@ function add_transcript_to_search_fields( array $fields ) : array {
  * @return array
  */
 function add_transcript_to_related_posts_fields( array $fields ) : array {
+	// Ensure we have the default ElasticPress fields
+	if ( empty( $fields ) ) {
+		$fields = [
+			'post_title',
+			'post_content',
+			'terms.post_tag.name',
+			'terms.category.name',
+		];
+	}
+
+	// Add transcript content for richer similarity matching
 	$fields[] = 'transcript_content';
+
 	return $fields;
 }
 
@@ -245,6 +258,47 @@ function add_transcript_field_mapping( array $mapping ) : array {
 	];
 
 	return $mapping;
+}
+
+/**
+ * Customize More Like This query parameters for better related episode matching.
+ *
+ * @param array    $formatted_args Formatted ES query.
+ * @param WP_Query $query          The WP_Query object.
+ * @return array
+ */
+function customize_related_posts_query( array $formatted_args, $query ) : array {
+	// Only modify More Like This queries (used by related posts)
+	if ( empty( $formatted_args['query']['more_like_this'] ) ) {
+		return $formatted_args;
+	}
+
+	// Only apply to episodes post type queries
+	$post_types = isset( $formatted_args['post_type'] ) ? (array) $formatted_args['post_type'] : [];
+	if ( ! in_array( 'episodes', $post_types, true ) ) {
+		return $formatted_args;
+	}
+
+	// Adjust More Like This parameters for better transcript-based matching
+	$formatted_args['query']['more_like_this']['min_term_freq'] = 1;  // Lower threshold (default: 2)
+	$formatted_args['query']['more_like_this']['min_doc_freq'] = 1;   // Lower threshold (default: 5)
+	$formatted_args['query']['more_like_this']['max_query_terms'] = 50; // Increase from default 25
+
+	// Boost transcript content field for similarity matching
+	if ( isset( $formatted_args['query']['more_like_this']['fields'] ) ) {
+		$fields = $formatted_args['query']['more_like_this']['fields'];
+
+		// Add boosting to transcript_content if present
+		foreach ( $fields as $key => $field ) {
+			if ( $field === 'transcript_content' ) {
+				$fields[ $key ] = 'transcript_content^2'; // 2x weight on transcript matches
+			}
+		}
+
+		$formatted_args['query']['more_like_this']['fields'] = $fields;
+	}
+
+	return $formatted_args;
 }
 
 /**
