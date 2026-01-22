@@ -33,7 +33,8 @@ function init() {
  * @return array
  */
 function include_episode_transcript_in_index( array $post_args, int $post_id ) : array {
-	if ( get_post_type( $post_id ) !== 'episodes' ) {
+	$post = get_post( $post_id );
+	if ( ! $post || $post->post_type !== 'episodes' ) {
 		return $post_args;
 	}
 
@@ -65,7 +66,7 @@ function get_episode_transcript_url( int $post_id ) : string {
 		return '';
 	}
 
-	$data = \powerpress_get_enclosure_data( $post_id, 'podcast' );
+	$data = \powerpress_get_enclosure_data( $post_id, 'episodes' );
 	if ( empty( $data['pci_transcript_url'] ) ) {
 		return '';
 	}
@@ -109,8 +110,8 @@ function fetch_transcript_body( string $url ) : string {
  * @return array
  */
 function add_yoast_description_field( array $post_args, int $post_id ) : array {
-	$post_type = get_post_type( $post_id );
-	if ( ! in_array( $post_type, [ 'post', 'episodes' ], true ) ) {
+	$post = get_post( $post_id );
+	if ( ! $post || ! in_array( $post->post_type, [ 'post', 'episodes' ], true ) ) {
 		return $post_args;
 	}
 
