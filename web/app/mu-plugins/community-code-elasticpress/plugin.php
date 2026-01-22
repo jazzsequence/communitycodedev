@@ -15,7 +15,6 @@ namespace Community_Code\ElasticPress;
  */
 function init() {
 	add_action( 'init', __NAMESPACE__ . '\\register_related_episodes_block' );
-	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_instant_results_overrides', 20 );
 	add_action( 'pre_get_posts', __NAMESPACE__ . '\\integrate_ep_on_archives' );
 
 	add_filter( 'ep_post_sync_args', __NAMESPACE__ . '\\add_yoast_description_field', 11, 2 );
@@ -24,7 +23,8 @@ function init() {
 	add_filter( 'ep_prepare_meta_allowed_protected_keys', __NAMESPACE__ . '\\allow_yoast_meta', 10, 2 );
 	add_filter( 'ep_prepare_meta_allowed_keys', __NAMESPACE__ . '\\allow_yoast_meta_public', 10, 2 );
 	add_filter( 'ep_instant_results_args_schema', __NAMESPACE__ . '\\add_yoast_field_to_instant_results' );
-	add_filter( 'ep_search_hit', __NAMESPACE__ . '\\prefer_yoast_description_in_hit', 10, 2 );
+	add_filter( 'ep_search_fields', __NAMESPACE__ . '\\add_transcript_to_search_fields' );
+	add_filter( 'ep_related_posts_fields', __NAMESPACE__ . '\\add_transcript_to_related_posts_fields' );
 }
 
 /**
@@ -66,7 +66,7 @@ function integrate_ep_on_archives( $query ) {
 }
 
 /**
- * Append transcript text to the indexed post content for episodes so EP related content can use it.
+ * Index episode transcripts in a custom field for search without affecting display.
  *
  * @param array $post_args Post args being sent to Elasticsearch.
  * @param int   $post_id   Post ID.
@@ -88,9 +88,8 @@ function include_episode_transcript_in_index( array $post_args, int $post_id ) :
 		return $post_args;
 	}
 
-	$transcript_text = "\n\n" . wp_strip_all_tags( $transcript_body );
-	$post_args['post_content'] .= $transcript_text;
-	$post_args['post_content_plain'] .= $transcript_text;
+	// Store transcript in custom field - searchable but not displayed in excerpts
+	$post_args['transcript_content'] = wp_strip_all_tags( $transcript_body );
 
 	return $post_args;
 }
@@ -211,22 +210,25 @@ function add_yoast_field_to_instant_results( array $schema ) : array {
 }
 
 /**
- * Ensure Instant Results hit data uses Yoast description for excerpt when available.
+ * Add transcript_content to searchable fields for regular search.
  *
- * @param array $hit   Elasticsearch hit data.
- * @param array $post  Post data.
+ * @param array $fields Search fields.
  * @return array
  */
-function prefer_yoast_description_in_hit( array $hit, array $post ) : array {
-	$yoast = $hit['_source']['yoast_description'] ?? '';
+function add_transcript_to_search_fields( array $fields ) : array {
+	$fields[] = 'transcript_content';
+	return $fields;
+}
 
-	if ( $yoast ) {
-		// Override the default excerpt/description fields Instant Results uses.
-		$hit['_source']['post_content_plain'] = $yoast;
-		$hit['_source']['post_excerpt']       = $yoast;
-	}
-
-	return $hit;
+/**
+ * Add transcript_content to related posts fields for better episode matching.
+ *
+ * @param array $fields Related posts fields.
+ * @return array
+ */
+function add_transcript_to_related_posts_fields( array $fields ) : array {
+	$fields[] = 'transcript_content';
+	return $fields;
 }
 
 /**
@@ -283,19 +285,6 @@ function allow_yoast_meta( array $keys, $post ) : array {
 function allow_yoast_meta_public( array $keys, $post ) : array {
 	$keys[] = '_yoast_wpseo_metadesc';
 	return array_values( array_unique( $keys ) );
-}
-
-/**
- * Enqueue Instant Results overrides (front-end).
- */
-function enqueue_instant_results_overrides() {
-	wp_enqueue_script(
-		'community-code-instant-results-overrides',
-		plugins_url( 'assets/js/instant-results-overrides.js', __FILE__ ),
-		[ 'elasticpress-instant-results', 'wp-hooks', 'wp-element', 'wp-i18n' ],
-		filemtime( __DIR__ . '/assets/js/instant-results-overrides.js' ),
-		true
-	);
 }
 
 /**
