@@ -468,15 +468,17 @@ function render_related_episodes_block( array $attributes ) : string {
 								<a href="<?php echo esc_url( get_permalink( $related_post->ID ) ); ?>"><?php echo esc_html( $date_display ); ?></a>
 							</time>
 						</div>
-                    <?php endif; ?>
-                    <?php if ( ! empty( $tag_labels ) ) : ?>
-					<div class="related-episode__meta">
+					<?php endif; ?>
+					<?php if ( ! empty( $tag_labels ) ) : ?>
+						<div class="related-episode__meta">
 							<span class="related-episode__tags">
 								<?php _e( 'topics: ', 'community-code' ); ?>
 								<?php echo esc_html( implode( ', ', $tag_labels ) ); ?>
 							</span>
-                        </div>
-                    <?php endif; ?>
+						</div>
+					<?php else : ?>
+						<div class="related-episode__meta" style="margin-bottom: 0;"></div>
+					<?php endif; ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>
