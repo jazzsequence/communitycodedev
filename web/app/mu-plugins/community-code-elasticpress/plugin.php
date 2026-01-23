@@ -477,7 +477,7 @@ function render_related_episodes_block( array $attributes ) : string {
 							</span>
 						</div>
 					<?php else : ?>
-						<div class="related-episode__meta" style="margin-bottom: 0;"></div>
+						<div class="related-episode__meta"></div>
 					<?php endif; ?>
 				</li>
 			<?php endforeach; ?>
