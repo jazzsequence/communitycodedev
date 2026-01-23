@@ -274,25 +274,13 @@ function customize_related_posts_query( array $formatted_args, array $args, $wp_
 		return $formatted_args;
 	}
 
-	// Only apply to episodes post type queries
-	if ( ! $wp_query instanceof \WP_Query ) {
-		return $formatted_args;
-	}
-
-	$query_post_type = $wp_query->get( 'post_type' );
-	if ( empty( $query_post_type ) ) {
-		return $formatted_args;
-	}
-
-	$post_types = (array) $query_post_type;
-	if ( ! in_array( 'episodes', $post_types, true ) ) {
-		return $formatted_args;
-	}
-
 	// Adjust More Like This parameters for better transcript-based matching
-	$formatted_args['query']['more_like_this']['min_term_freq'] = 1;  // Lower threshold (default: 2)
-	$formatted_args['query']['more_like_this']['min_doc_freq'] = 2;   // Lower threshold (default: 5)
-	$formatted_args['query']['more_like_this']['max_query_terms'] = 50; // Increase from default 25
+	// Note: Currently applied to all MLT queries since the related episodes block
+	// already filters to episodes-only via ep_find_related_args before this runs
+	$formatted_args['query']['more_like_this']['max_query_terms'] = 50; // Increase from EP default of 12
+
+	// Remove date sorting - let ElasticSearch sort by relevance score
+	unset( $formatted_args['sort'] );
 
 	// Boost transcript content field for similarity matching
 	if ( isset( $formatted_args['query']['more_like_this']['fields'] ) ) {
