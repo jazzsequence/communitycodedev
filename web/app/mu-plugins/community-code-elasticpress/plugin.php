@@ -26,7 +26,7 @@ function init() {
 	add_filter( 'ep_search_fields', __NAMESPACE__ . '\\add_transcript_to_search_fields' );
 	add_filter( 'ep_related_posts_fields', __NAMESPACE__ . '\\add_transcript_to_related_posts_fields' );
 	add_filter( 'ep_post_mapping', __NAMESPACE__ . '\\add_transcript_field_mapping' );
-	add_filter( 'ep_formatted_args', __NAMESPACE__ . '\\customize_related_posts_query', 10, 3 );
+	add_filter( 'ep_formatted_args', __NAMESPACE__ . '\\customize_related_posts_query', 999, 3 );
 }
 
 /**
