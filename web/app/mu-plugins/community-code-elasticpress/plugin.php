@@ -278,7 +278,7 @@ function customize_related_posts_query( array $formatted_args, array $args, $wp_
 	// Note: Currently applied to all MLT queries since the related episodes block
 	// already filters to episodes-only via ep_find_related_args before this runs
 	$formatted_args['query']['more_like_this']['max_query_terms'] = 50; // Increase from EP default of 12
-	$formatted_args['query']['more_like_this']['minimum_should_match'] = '18%'; // Lower from ES default of 30%
+	$formatted_args['query']['more_like_this']['minimum_should_match'] = '16%'; // Lower from ES default of 30%
 
 	// Remove date sorting - let ElasticSearch sort by relevance score
 	unset( $formatted_args['sort'] );
