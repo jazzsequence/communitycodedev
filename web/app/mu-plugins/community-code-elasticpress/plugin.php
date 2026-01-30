@@ -143,73 +143,6 @@ function fetch_transcript_body( string $url ) : string {
 	return $body;
 }
 
-/**
- * Add Yoast description into the indexed document for posts/episodes.
- *
- * @param array $post_args Post args being sent to Elasticsearch.
- * @param int   $post_id   Post ID.
- * @return array
- */
-function add_yoast_description_field( array $post_args, int $post_id ) : array {
-	$post = get_post( $post_id );
-	if ( ! $post || ! in_array( $post->post_type, [ 'post', 'episodes' ], true ) ) {
-		return $post_args;
-	}
-
-	$desc = get_yoast_description_value( $post_id );
-	if ( ! $desc ) {
-		return $post_args;
-	}
-
-	$post_args['yoast_description'] = $desc;
-
-	// Force the excerpt source to the Yoast description so Instant Results uses it.
-	$post_args['post_content_plain'] = $desc;
-	$post_args['post_excerpt'] = $desc;
-
-	return $post_args;
-}
-
-/**
- * Fetch Yoast meta description (with fallback to og_description) for a post.
- *
- * @param int $post_id Post ID.
- * @return string
- */
-function get_yoast_description_value( int $post_id ) : string {
-	$desc = get_post_meta( $post_id, '_yoast_wpseo_metadesc', true );
-	if ( $desc ) {
-		return $desc;
-	}
-
-	$head_json = get_post_meta( $post_id, '_yoast_wpseo_head_json', true );
-	if ( is_string( $head_json ) ) {
-		$decoded = json_decode( $head_json, true );
-		if ( is_array( $decoded ) && ! empty( $decoded['og_description'] ) ) {
-			return (string) $decoded['og_description'];
-		}
-	} elseif ( is_array( $head_json ) && ! empty( $head_json['og_description'] ) ) {
-		return (string) $head_json['og_description'];
-	}
-
-	return '';
-}
-
-/**
- * Include yoast_description in Instant Results response schema.
- *
- * @param array $schema Args schema.
- * @return array
- */
-function add_yoast_field_to_instant_results( array $schema ) : array {
-	$schema['fields']['yoast_description'] = [
-		'type'        => 'string',
-		'description' => __( 'Yoast meta description.', 'community-code' ),
-		'default'     => '',
-	];
-
-	return $schema;
-}
 
 /**
  * Add transcript_content to searchable fields for regular search.
@@ -298,6 +231,74 @@ function customize_related_posts_query( array $formatted_args, array $args, $wp_
 	}
 
 	return $formatted_args;
+}
+
+/**
+ * Add Yoast description into the indexed document for posts/episodes.
+ *
+ * @param array $post_args Post args being sent to Elasticsearch.
+ * @param int   $post_id   Post ID.
+ * @return array
+ */
+function add_yoast_description_field( array $post_args, int $post_id ) : array {
+	$post = get_post( $post_id );
+	if ( ! $post || ! in_array( $post->post_type, [ 'post', 'episodes' ], true ) ) {
+		return $post_args;
+	}
+
+	$desc = get_yoast_description_value( $post_id );
+	if ( ! $desc ) {
+		return $post_args;
+	}
+
+	$post_args['yoast_description'] = $desc;
+
+	// Force the excerpt source to the Yoast description so Instant Results uses it.
+	$post_args['post_content_plain'] = $desc;
+	$post_args['post_excerpt'] = $desc;
+
+	return $post_args;
+}
+
+/**
+ * Fetch Yoast meta description (with fallback to og_description) for a post.
+ *
+ * @param int $post_id Post ID.
+ * @return string
+ */
+function get_yoast_description_value( int $post_id ) : string {
+	$desc = get_post_meta( $post_id, '_yoast_wpseo_metadesc', true );
+	if ( $desc ) {
+		return $desc;
+	}
+
+	$head_json = get_post_meta( $post_id, '_yoast_wpseo_head_json', true );
+	if ( is_string( $head_json ) ) {
+		$decoded = json_decode( $head_json, true );
+		if ( is_array( $decoded ) && ! empty( $decoded['og_description'] ) ) {
+			return (string) $decoded['og_description'];
+		}
+	} elseif ( is_array( $head_json ) && ! empty( $head_json['og_description'] ) ) {
+		return (string) $head_json['og_description'];
+	}
+
+	return '';
+}
+
+/**
+ * Include yoast_description in Instant Results response schema.
+ *
+ * @param array $schema Args schema.
+ * @return array
+ */
+function add_yoast_field_to_instant_results( array $schema ) : array {
+	$schema['fields']['yoast_description'] = [
+		'type'        => 'string',
+		'description' => __( 'Yoast meta description.', 'community-code' ),
+		'default'     => '',
+	];
+
+	return $schema;
 }
 
 /**
