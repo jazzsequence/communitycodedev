@@ -207,9 +207,13 @@ function customize_related_posts_query( array $formatted_args, array $args, $wp_
 		return $formatted_args;
 	}
 
-	// Adjust More Like This parameters for better transcript-based matching
-	// Note: Currently applied to all MLT queries since the related episodes block
-	// already filters to episodes-only via ep_find_related_args before this runs
+	/**
+     * Adjust More Like This parameters for better transcript-based matching
+     *
+	 * Note: Currently applied to all MLT queries since the related episodes
+     * block already filters to episodes-only via ep_find_related_args before
+     * this runs.
+     */
 	$formatted_args['query']['more_like_this']['max_query_terms'] = 50; // Increase from EP default of 12
 	$formatted_args['query']['more_like_this']['minimum_should_match'] = '16%'; // Lower from ES default of 30%
 
