@@ -339,10 +339,10 @@ function modified_activity_widget() {
  * Fix feed GUIDs for episodes when PowerPress blanks them out.
  *
  * @param string $guid The original GUID.
- * @param int $post_id The post ID.
+ * @param WP_Post $post The post object.
  * @return string The modified GUID.
  */
-function feed_guid_fix( $guid, $post_id ) {
+function feed_guid_fix( $guid, $post ) {
     // Only touch actual feed requests
     if ( ! is_feed() ) {
         return $guid;
@@ -352,13 +352,13 @@ function feed_guid_fix( $guid, $post_id ) {
 
     // If something (PowerPress) blanked it, fall back to a stable per-episode identifier.
     if ($guid === '') {
-        $permalink = get_permalink($post_id);
+        $permalink = get_permalink($post);
         if ($permalink) {
             return $permalink; // stable + already matches your <link> element
         }
 
         // last resort: still unique + stable
-        return home_url('/?p=' . (int) $post_id);
+        return home_url('/?p=' . (int) $post->ID);
     }
 
     return $guid;
