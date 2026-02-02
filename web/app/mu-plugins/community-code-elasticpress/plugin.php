@@ -35,6 +35,14 @@ function init() {
  * @param WP_Query $query The WP_Query instance.
  */
 function integrate_ep_on_archives( $query ) {
+	/*
+     * Never integrate ElasticPress on feed queries.
+	 * This causes PowerPress podcast feeds to have blank GUIDs.
+     */
+	if ( $query->is_feed() ) {
+		return;
+	}
+
 	// Admin queries - only integrate if it's a main query
 	if ( is_admin() ) {
 		if ( ! $query->is_main_query() ) {
