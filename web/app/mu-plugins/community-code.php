@@ -33,6 +33,7 @@ function init() {
 		$post_types[] = 'episodes'; // Allow PowerPress fields on episodes
 		return $post_types;
 	});
+    add_filter('the_guid', __NAMESPACE__ . '\\feed_guid_fix', 9999, 2);
 }
 
 /**
@@ -332,6 +333,35 @@ function modified_activity_widget() {
 	</div>
 	<?php
 	wp_reset_postdata();
+}
+
+/**
+ * Fix feed GUIDs for episodes when PowerPress blanks them out.
+ *
+ * @param string $guid The original GUID.
+ * @param int $post_id The post ID.
+ * @return string The modified GUID.
+ */
+function feed_guid_fix( $guid, $post_id ) {
+    // Only touch actual feed requests
+    if ( ! is_feed() ) {
+        return $guid;
+    }
+
+    $guid = is_string($guid) ? trim($guid) : '';
+
+    // If something (PowerPress) blanked it, fall back to a stable per-episode identifier.
+    if ($guid === '') {
+        $permalink = get_permalink($post_id);
+        if ($permalink) {
+            return $permalink; // stable + already matches your <link> element
+        }
+
+        // last resort: still unique + stable
+        return home_url('/?p=' . (int) $post_id);
+    }
+
+    return $guid;
 }
 
 init();
