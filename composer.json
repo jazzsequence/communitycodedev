@@ -152,7 +152,7 @@
             "@lint:bash"
         ],
         "lint:php": [
-            "find ./web/app/mu-plugins/community-code.php -name '*.php' -print0 | xargs -0 -n1 php -l"
+            "find ./web/app/mu-plugins -name '*.php' -not -path '*/pantheon-mu-plugin/*' -not -path '*/bedrock-disallow-indexing/*' -not -name 'bedrock-autoloader.php' -not -name 'filters.php' -print0 | xargs -0 -n1 php -l"
         ],
         "lint:phpcs": ["vendor/bin/phpcs -s ."],
         "lint:phpcbf": ["vendor/bin/phpcbf ."],
