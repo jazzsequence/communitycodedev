@@ -162,6 +162,50 @@ if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_P
 }
 
 /**
+ * Local wrapper for pantheon_get_secret for local development.
+ *
+ * On Pantheon, uses the native pantheon_get_secret function.
+ * Locally, reads from secrets.json file pulled via Pantheon Secrets terminus plugin.
+ *
+ * @param string $key Secret key to retrieve.
+ * @return string|null Secret value or null if not found.
+ */
+if ( ! function_exists( 'pantheon_get_secret' ) ) {
+	function pantheon_get_secret( $key ) {
+		$secrets_file = dirname( __DIR__ ) . '/secrets.json';
+
+		// If secrets.json doesn't exist, return null
+		if ( ! file_exists( $secrets_file ) ) {
+			error_log( sprintf( 'pantheon_get_secret: secrets.json not found at %s', $secrets_file ) );
+			return null;
+		}
+
+		// Read and decode secrets.json
+		$secrets_json = file_get_contents( $secrets_file );
+		$secrets = json_decode( $secrets_json, true );
+
+		// Check for JSON decode errors
+		if ( json_last_error() !== JSON_ERROR_NONE ) {
+			error_log( sprintf( 'pantheon_get_secret: JSON decode error - %s', json_last_error_msg() ) );
+			return null;
+		}
+
+		// Handle Pantheon Secrets JSON structure: Secrets.{key}.Value
+		if ( isset( $secrets['Secrets'][ $key ]['Value'] ) ) {
+			return $secrets['Secrets'][ $key ]['Value'];
+		}
+
+		// Fallback to simple key-value structure
+		if ( isset( $secrets[ $key ] ) ) {
+			return $secrets[ $key ];
+		}
+
+		error_log( sprintf( 'pantheon_get_secret: Key "%s" not found in secrets.json', $key ) );
+		return null;
+	}
+}
+
+/**
  * Object Cache Pro
  */
 $token = getenv( 'OCP_LICENSE' ); // Get the license from the Pantheon environment variables.
