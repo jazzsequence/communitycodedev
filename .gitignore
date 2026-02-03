@@ -16,6 +16,7 @@ CLAUDE.md
 # It's unlikely that you would need to change any of these rules.
 web/app/upgrade
 web/app/uploads/*
+web/wp-content/*
 !web/app/uploads/.gitkeep
 web/app/cache/*
 
@@ -57,6 +58,12 @@ web/readme.html
 
 # Any local WP-CLI rules should not be version controlled.
 wp-cli.local.yml
+
+# Local only files
+.lando.yml
+secrets.json
+config/mysql.cnf
+web/app/mu-plugins/local-media-proxy.php
 
 # :::::::::::::::::::::: Pantheon Additions ::::::::::::::::::::::
 
