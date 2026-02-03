@@ -1,0 +1,39 @@
+/**
+ * Variables
+ * Color palette and design tokens defined in theme.json
+ * These are available as CSS custom properties via var(--wp--preset--*)
+ */
+
+// Colors are defined in theme.json and available as:
+// --wp--preset--color--terminal-blue
+// --wp--preset--color--warm-magenta
+// --wp--preset--color--soft-cyan
+// --wp--preset--color--community-orange
+// --wp--preset--color--deep-base
+// --wp--preset--color--elevated-surface
+// --wp--preset--color--muted-text
+// --wp--preset--color--bright-text
+// --wp--preset--color--border
+
+// Fonts are defined in theme.json and available as:
+// --wp--preset--font-family--victor-mono
+// --wp--preset--font-family--source-sans-3
+
+// Transitions
+$transition-base: all 0.2s ease;
+$transition-medium: all 0.3s ease;
+
+// Border Radius
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 10px;
+
+// Shadows
+$shadow-card-hover: 0 4px 12px rgba(38, 139, 210, 0.15);
+$focus-outline: 2px solid rgba(38, 139, 210, 0.2);
+
+// Spacing (using WordPress spacing scale when available)
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 2rem;

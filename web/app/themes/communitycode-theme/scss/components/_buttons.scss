@@ -1,0 +1,16 @@
+/**
+ * Buttons & CTAs
+ */
+
+.wp-element-button,
+.wp-block-button__link {
+	background-color: var(--wp--preset--color--terminal-blue);
+	color: var(--wp--preset--color--bright-text);
+	border: 2px solid var(--wp--preset--color--terminal-blue);
+	transition: $transition-base;
+
+	&:hover {
+		background-color: transparent;
+		color: var(--wp--preset--color--terminal-blue);
+	}
+}

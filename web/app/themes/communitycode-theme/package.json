@@ -1,0 +1,18 @@
+{
+  "name": "communitycode-theme",
+  "version": "1.0.0",
+  "description": "Community + Code podcast theme with dark terminal aesthetic",
+  "author": "Chris Reynolds",
+  "license": "MIT",
+  "scripts": {
+    "build": "sass scss/style.scss:style.css --style=compressed --no-source-map",
+    "dev": "sass scss/style.scss:style.css --watch --style=expanded",
+    "lint:scss": "stylelint 'scss/**/*.scss'",
+    "lint:scss:fix": "stylelint 'scss/**/*.scss' --fix"
+  },
+  "devDependencies": {
+    "sass": "^1.80.0",
+    "stylelint": "^16.10.0",
+    "stylelint-config-standard-scss": "^13.1.0"
+  }
+}

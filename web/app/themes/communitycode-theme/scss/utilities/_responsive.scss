@@ -1,0 +1,79 @@
+/**
+ * Responsive Utilities
+ */
+
+// Home Page Adjustments
+.home {
+	.wp-block-post-title {
+		display: none;
+	}
+
+	main#wp--skip-link--target,
+	main .wp-block-group-is-layout-constrained {
+		margin-top: 0 !important;
+	}
+
+	main div.wp-block-group.alignfull.has-global-padding.is-layout-constrained.wp-block-group-is-layout-constrained {
+		padding-top: 0 !important;
+	}
+}
+
+// Episode Archive Padding
+.wp-block-group.alignfull.episodes.has-global-padding.is-layout-constrained.wp-container-core-group-is-layout-ebee8dc1.wp-block-group-is-layout-constrained {
+	padding-top: var(--wp--preset--spacing--50) !important;
+}
+
+// Hero Section
+div.community-code-hero {
+	padding-bottom: 2em !important;
+}
+
+// About Section
+.wp-block-group.alignfull.is-style-section-5.about-chris-reynolds.has-global-padding.is-layout-constrained.wp-block-group-is-layout-constrained.is-style-section-5--8 {
+	padding-top: var(--wp--preset--spacing--50) !important;
+}
+
+// Header Height
+.wp-block-group.alignfull.is-layout-flow.wp-block-group-is-layout-flow {
+	max-height: 75px;
+}
+
+// Mobile - Hide Site Title and Search
+header p.site-title,
+header div.wp-block-group .wp-block-search {
+	display: none;
+}
+
+.wp-container-core-columns-is-layout-8696e7c0 {
+	gap: 0em !important;
+}
+
+// ================================
+// Desktop (600px+)
+// ================================
+@media (min-width: 600px) {
+	.wp-container-core-columns-is-layout-8696e7c0 {
+		gap: 2em !important;
+	}
+
+	header p.site-title,
+	header div.wp-block-group .wp-block-search {
+		display: flex;
+	}
+
+	header div.wp-block-group .wp-block-search {
+		display: block;
+	}
+
+	div.community-code-hero {
+		padding-bottom: 0 !important;
+	}
+
+	body.home main div.wp-block-group.alignfull.has-global-padding.is-layout-constrained.wp-block-group-is-layout-constrained {
+		padding-top: 0 !important;
+	}
+
+	.wp-block-group.alignfull.is-layout-flow.wp-block-group-is-layout-flow {
+		max-height: 105px;
+	}
+}
