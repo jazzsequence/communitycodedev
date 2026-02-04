@@ -10,10 +10,11 @@
 		height: 380px;
 	}
 
-	.wp-block-post-content {
-		background-color: var(--wp--preset--color--elevated-surface);
-		padding: $spacing-xl;
-		border-radius: $border-radius-md;
-		border-left: 4px solid var(--wp--preset--color--warm-magenta);
+	// Remove bottom margin from columns blocks
+	// Note: !important needed to override WordPress core styles
+	/* stylelint-disable declaration-no-important */
+	.wp-block-columns {
+		margin-bottom: 0 !important;
 	}
+	/* stylelint-enable declaration-no-important */
 }

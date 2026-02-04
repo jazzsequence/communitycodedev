@@ -8,7 +8,7 @@
 h1,
 h2,
 h3 {
-	font-family: var(--wp--preset--font-family--victor-mono);
+	font-family: var( --wp--preset--font-family--victor-mono );
 	font-weight: 600;
 }
 
@@ -16,39 +16,48 @@ h3 {
 // Link color is lighter blue for better contrast, border is muted gray
 // NO border by default, dotted border appears on hover
 a {
-	color: var(--wp--preset--color--link-blue);
+	color: var( --wp--preset--color--link-blue );
 	text-decoration: none;
 	border-bottom: 1px solid transparent;
 	transition: $transition-base;
 
 	&:hover,
 	&:focus {
-		color: var(--wp--preset--color--bright-text);
-		border-bottom: 1px dotted var(--wp--preset--color--muted-text);
+		color: var( --wp--preset--color--bright-text );
+		border-bottom: 1px dotted var( --wp--preset--color--muted-text );
+	}
+
+	// Never show border on links containing only images
+	&:has(img) {
+		border-bottom: none;
+
+		&:hover,
+		&:focus {
+			border-bottom: none;
+		}
 	}
 }
 
 // Code blocks
 code,
 pre {
-	background-color: var(--wp--preset--color--elevated-surface);
-	color: var(--wp--preset--color--soft-cyan);
-	border: 1px solid var(--wp--preset--color--border);
-	font-family: var(--wp--preset--font-family--victor-mono);
+	background-color: var( --wp--preset--color--elevated-surface );
+	color: var( --wp--preset--color--soft-cyan );
+	border: 1px solid var( --wp--preset--color--border );
+	font-family: var( --wp--preset--font-family--victor-mono );
 }
 
 pre {
 	padding: $spacing-md;
 	border-radius: $border-radius-sm;
-	border-left: 4px solid var(--wp--preset--color--terminal-blue);
+	border-left: 4px solid var( --wp--preset--color--terminal-blue );
 }
 
 // Blockquotes
 blockquote {
-	border-left: 4px solid var(--wp--preset--color--warm-magenta);
-	padding-left: $spacing-lg;
-	color: var(--wp--preset--color--muted-text);
-	background-color: var(--wp--preset--color--elevated-surface);
+	border-left: 4px solid var( --wp--preset--color--warm-magenta );
+	color: var( --wp--preset--color--muted-text );
+	background-color: var( --wp--preset--color--elevated-surface );
 	padding: $spacing-md $spacing-lg;
 	border-radius: $border-radius-sm;
 }

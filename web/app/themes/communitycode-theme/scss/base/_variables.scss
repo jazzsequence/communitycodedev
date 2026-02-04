@@ -13,7 +13,7 @@
 // --wp--preset--color--accent-4 (Muted Text #839496)
 // --wp--preset--color--accent-5 (Community Orange #CB4B16)
 // --wp--preset--color--accent-6 (Link Blue #7AC2F0)
-//
+
 // Custom semantic names (for actual site colors):
 // --wp--preset--color--deep-base (Dark background #002B36 - used as global background)
 // --wp--preset--color--bright-text (White #FFFFFF - used as global text)
@@ -40,8 +40,8 @@ $border-radius-md: 8px;
 $border-radius-lg: 10px;
 
 // Shadows
-$shadow-card-hover: 0 4px 12px rgba(38, 139, 210, 0.15);
-$focus-outline: 2px solid rgba(38, 139, 210, 0.2);
+$shadow-card-hover: 0 4px 12px rgba( 38, 139, 210, 0.15 );
+$focus-outline: 2px solid rgba( 38, 139, 210, 0.2 );
 
 // Spacing (using WordPress spacing scale when available)
 $spacing-sm: 0.5rem;

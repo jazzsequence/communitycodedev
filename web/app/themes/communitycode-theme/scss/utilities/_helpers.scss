@@ -4,21 +4,21 @@
 
 // Horizontal Rules
 hr {
-	border-color: var(--wp--preset--color--border);
+	border-color: var( --wp--preset--color--border );
 	opacity: 0.5;
 }
 
 // Tables
 table {
-	border-color: var(--wp--preset--color--border);
+	border-color: var( --wp--preset--color--border );
 }
 
 th {
-	background-color: var(--wp--preset--color--elevated-surface);
-	color: var(--wp--preset--color--bright-text);
-	border-color: var(--wp--preset--color--border);
+	background-color: var( --wp--preset--color--elevated-surface );
+	color: var( --wp--preset--color--bright-text );
+	border-color: var( --wp--preset--color--border );
 }
 
 td {
-	border-color: var(--wp--preset--color--border);
+	border-color: var( --wp--preset--color--border );
 }

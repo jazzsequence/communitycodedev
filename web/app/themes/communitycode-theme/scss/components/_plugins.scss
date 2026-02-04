@@ -1,6 +1,9 @@
 /**
  * Plugin Styles
  * Mailpoet, ElasticPress, etc.
+ *
+ * Note: !important is required in this file to override inline styles
+ * added by plugin JavaScript. This is a legitimate use case.
  */
 
 @use "../base/variables" as *;
@@ -9,27 +12,49 @@
 // Mailpoet Newsletter
 // ================================
 
+/* stylelint-disable declaration-no-important */
+
 .mailpoet_form_html a {
-	color: #fff !important;
+	color: #ffffff !important;
 }
 
-.mailpoet_page-template-default .wp-block-group.has-accent-4-color.has-text-color.has-link-color.has-small-font-size.is-layout-flex.wp-container-core-group-is-layout-4efaea1e.wp-block-group-is-layout-flex {
+// Hide unwanted mailpoet wrapper with complex selector
+.mailpoet_page-template-default
+.wp-block-group.has-accent-4-color.has-link-color.is-layout-flex {
 	display: none;
 }
 
-.mailpoet_form {
-	background-color: var(--wp--preset--color--elevated-surface) !important;
-	border: 2px solid var(--wp--preset--color--border);
-	border-radius: $border-radius-md;
+// Remove borders from WordPress block wrappers around MailPoet
+.wp-block-group.newsletter-section,
+.newsletter-section,
+.wp-block-mailpoet-subscription-form-block {
+	border: none !important;
+	background: transparent !important;
+}
+
+// The outer div wrapper should have the border
+#mailpoet_form_1 {
+	background-color: var( --wp--preset--color--elevated-surface ) !important;
+	border: 2px solid var( --wp--preset--color--border ) !important;
+	border-radius: $border-radius-md !important;
+	overflow: hidden !important;
+}
+
+// Remove border from the inner form element to prevent double border
+#mailpoet_form_1 form.mailpoet_form {
+	border: none !important;
+	border-radius: $border-radius-md !important;
+	background-color: var( --wp--preset--color--elevated-surface ) !important;
+	box-shadow: none !important;
 }
 
 .mailpoet_text {
-	background-color: var(--wp--preset--color--deep-base) !important;
-	color: var(--wp--preset--color--bright-text) !important;
-	border-color: var(--wp--preset--color--border) !important;
+	background-color: var( --wp--preset--color--deep-base ) !important;
+	color: var( --wp--preset--color--bright-text ) !important;
+	border-color: var( --wp--preset--color--border ) !important;
 
 	&:focus {
-		border-color: var(--wp--preset--color--terminal-blue) !important;
+		border-color: var( --wp--preset--color--terminal-blue ) !important;
 		outline: $focus-outline;
 	}
 }
@@ -41,52 +66,52 @@
 // ================================
 
 .ep-search-modal__content {
-	background-color: #000 !important;
+	background-color: #000000 !important;
 }
 
 input.ep-search-input {
 	border-radius: $border-radius-lg;
-	border: 1px solid var(--wp--preset--color--border);
+	border: 1px solid var( --wp--preset--color--border );
 	padding: 0 5px;
-	font-family: var(--wp--preset--font-family--source-sans-3);
-	background-color: var(--wp--preset--color--elevated-surface);
-	color: var(--wp--preset--color--bright-text);
+	font-family: var( --wp--preset--font-family--source-sans-3 );
+	background-color: var( --wp--preset--color--elevated-surface );
+	color: var( --wp--preset--color--bright-text );
 }
 
 .ep-search-tokens,
 button.ep-search-icon-button,
 span.ep-search-result__type {
 	background: transparent;
-	border: 1px solid var(--wp--preset--color--border);
+	border: 1px solid var( --wp--preset--color--border );
 	border-radius: 5px;
 	padding: 4px 8px;
-	color: var(--wp--preset--color--bright-text);
+	color: var( --wp--preset--color--bright-text );
 }
 
 div.ep-search-panel {
-	border-color: var(--wp--preset--color--border);
+	border-color: var( --wp--preset--color--border );
 	border-radius: $border-radius-lg;
 }
 
 button.ep-search-pagination-button {
 	background: transparent;
-	border: 1px solid var(--wp--preset--color--border);
+	border: 1px solid var( --wp--preset--color--border );
 	padding: 5px 10px;
 	border-radius: $border-radius-lg;
-	color: var(--wp--preset--color--bright-text);
+	color: var( --wp--preset--color--bright-text );
 	font-size: 0.9em;
 }
 
 select#ep-sort {
 	background: transparent;
-	color: var(--wp--preset--color--bright-text);
+	color: var( --wp--preset--color--bright-text );
 	padding: 4px 8px;
 	font-size: 0.8em;
 	border-radius: 5px;
 }
 
 section.wp-block-elasticpress-related-posts {
-	font-weight: bold;
+	font-weight: 700;
 }
 
 .ep-search-result__thumbnail img {
@@ -99,61 +124,61 @@ section.wp-block-elasticpress-related-posts {
 }
 
 #ep-instant-results footer.ep-search-result__footer {
-	font-size: var(--wp--preset--font-size--small);
+	font-size: var( --wp--preset--font-size--small );
 }
 
 .ep-search-result--has-thumbnail {
-	grid-template-columns: minmax(180px, 34%) auto;
+	grid-template-columns: minmax( 180px, 34% ) auto;
 }
+
+/* stylelint-enable declaration-no-important */
 
 // ================================
 // Community + Code Related Episodes
 // ================================
 
-.wp-block-community-code-related-episodes {
-	h3.wp-block-post-title {
-		float: left;
-		display: block;
-		margin-bottom: 0;
-		margin-top: 0.2em;
+.wp-block-community-code-related-episodes h3.wp-block-post-title {
+	float: left;
+	display: block;
+	margin-bottom: 0;
+	margin-top: 0.2em;
+}
 
-		a {
-			color: var(--wp--preset--color--bright-text);
+.wp-block-community-code-related-episodes h3.wp-block-post-title a {
+	color: var( --wp--preset--color--bright-text );
 
-			&:hover {
-				color: var(--wp--preset--color--terminal-blue);
-			}
-		}
+	&:hover {
+		color: var( --wp--preset--color--terminal-blue );
 	}
+}
 
-	.datetime {
-		vertical-align: middle;
-		float: right;
-		display: inline-block;
-		margin-top: 0.8em;
-		font-size: var(--wp--preset--font-size--small);
-	}
+.wp-block-community-code-related-episodes .datetime {
+	vertical-align: middle;
+	float: right;
+	display: inline-block;
+	margin-top: 0.8em;
+	font-size: var( --wp--preset--font-size--small );
+}
 
-	ul {
-		list-style: none;
-		padding-left: 0;
-	}
+.wp-block-community-code-related-episodes ul {
+	list-style: none;
+	padding-left: 0;
+}
 
-	li {
-		border-bottom: 1px solid var(--wp--preset--color--border);
-		padding: $spacing-md 0;
-	}
+.wp-block-community-code-related-episodes li {
+	border-bottom: 1px solid var( --wp--preset--color--border );
+	padding: $spacing-md 0;
 }
 
 .related-episode__meta {
 	display: block;
 	clear: both;
-	font-size: var(--wp--preset--font-size--small);
+	font-size: var( --wp--preset--font-size--small );
 	margin-bottom: 1em;
 }
 
 .related-episode__tags {
-	color: var(--wp--preset--color--muted-text);
+	color: var( --wp--preset--color--muted-text );
 }
 
 // ================================

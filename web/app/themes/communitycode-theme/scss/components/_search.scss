@@ -5,13 +5,13 @@
 @use "../base/variables" as *;
 
 .wp-block-search__input {
-	background-color: var(--wp--preset--color--elevated-surface);
-	color: var(--wp--preset--color--bright-text);
-	border: 1px solid var(--wp--preset--color--border);
+	background-color: var( --wp--preset--color--elevated-surface );
+	color: var( --wp--preset--color--bright-text );
+	border: 1px solid var( --wp--preset--color--border );
 	text-transform: none;
 
 	&:focus {
-		border-color: var(--wp--preset--color--terminal-blue);
+		border-color: var( --wp--preset--color--terminal-blue );
 		outline: $focus-outline;
 	}
 }
