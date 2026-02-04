@@ -449,9 +449,19 @@ function render_related_episodes_block( array $attributes ) : string {
 		return $args;
 	};
 
+	// Request one extra to account for filtering out current post
 	add_filter( 'ep_find_related_args', $scoped_filter );
-	$posts = $feature->find_related( get_the_ID(), $count );
+	$posts = $feature->find_related( get_the_ID(), $count + 1 );
 	remove_filter( 'ep_find_related_args', $scoped_filter );
+
+	// Exclude current episode from results (in case EP isn't working locally)
+	$current_post_id = get_the_ID();
+	$posts = array_filter( $posts, static function( $post ) use ( $current_post_id ) {
+		return $post->ID !== $current_post_id;
+	} );
+
+	// Limit to requested count after filtering
+	$posts = array_slice( $posts, 0, $count );
 
 	if ( empty( $posts ) ) {
 		return '';
@@ -581,9 +591,19 @@ function render_related_posts_block( array $attributes ) : string {
 		return $args;
 	};
 
+	// Request one extra to account for filtering out current post
 	add_filter( 'ep_find_related_args', $scoped_filter );
-	$posts = $feature->find_related( get_the_ID(), $count );
+	$posts = $feature->find_related( get_the_ID(), $count + 1 );
 	remove_filter( 'ep_find_related_args', $scoped_filter );
+
+	// Exclude current post from results (in case EP isn't working locally)
+	$current_post_id = get_the_ID();
+	$posts = array_filter( $posts, static function( $post ) use ( $current_post_id ) {
+		return $post->ID !== $current_post_id;
+	} );
+
+	// Limit to requested count after filtering
+	$posts = array_slice( $posts, 0, $count );
 
 	if ( empty( $posts ) ) {
 		return '';
