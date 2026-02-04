@@ -56,3 +56,13 @@
 .wp-block-post .wp-block-columns {
 	margin-bottom: 0;
 }
+
+// Archive page layout with horizontal margins
+.blog,
+.archive,
+.post-type-archive {
+	main {
+		padding-left: $spacing-xl;
+		padding-right: $spacing-xl;
+	}
+}

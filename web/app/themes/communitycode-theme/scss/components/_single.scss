@@ -1,5 +1,5 @@
 /**
- * Single Episode Page
+ * Single Episode Page & Single Posts
  */
 
 @use "../base/variables" as *;
@@ -17,4 +17,49 @@
 		margin-bottom: 0 !important;
 	}
 	/* stylelint-enable declaration-no-important */
+}
+
+// Related Posts block - match Related Episodes styling from _plugins.scss
+.wp-block-community-code-related-posts h3.wp-block-post-title {
+	float: left;
+	display: block;
+	margin-bottom: 0;
+	margin-top: 0.2em;
+}
+
+.wp-block-community-code-related-posts h3.wp-block-post-title a {
+	color: var( --wp--preset--color--bright-text );
+
+	&:hover {
+		color: var( --wp--preset--color--terminal-blue );
+	}
+}
+
+.wp-block-community-code-related-posts .datetime {
+	vertical-align: middle;
+	float: right;
+	display: inline-block;
+	margin-top: 0.8em;
+	font-size: var( --wp--preset--font-size--small );
+}
+
+.wp-block-community-code-related-posts ul {
+	list-style: none;
+	padding-left: 0;
+}
+
+.wp-block-community-code-related-posts li {
+	border-bottom: 1px solid var( --wp--preset--color--border );
+	padding: $spacing-md 0;
+}
+
+.related-post__meta {
+	display: block;
+	clear: both;
+	font-size: var( --wp--preset--font-size--small );
+	margin-bottom: 1em;
+}
+
+.related-post__tags {
+	color: var( --wp--preset--color--muted-text );
 }
