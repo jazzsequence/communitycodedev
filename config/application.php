@@ -161,46 +161,46 @@ if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_P
 	$_SERVER['HTTPS'] = 'on';
 }
 
-/**
- * Local wrapper for pantheon_get_secret for local development.
- *
- * On Pantheon, uses the native pantheon_get_secret function.
- * Locally, reads from secrets.json file pulled via Pantheon Secrets terminus plugin.
- *
- * @param string $key Secret key to retrieve.
- * @return string|null Secret value or null if not found.
- */
 if ( ! function_exists( 'pantheon_get_secret' ) ) {
+	/**
+	 * Local wrapper for pantheon_get_secret for local development.
+	 *
+	 * On Pantheon, uses the native pantheon_get_secret function.
+	 * Locally, reads from secrets.json file pulled via Pantheon Secrets terminus plugin.
+	 *
+	 * @param string $key Secret key to retrieve.
+	 * @return string|null Secret value or null if not found.
+	 */
 	function pantheon_get_secret( $key ) {
 		$secrets_file = dirname( __DIR__ ) . '/secrets.json';
 
-		// If secrets.json doesn't exist, return null
+		// If secrets.json doesn't exist, return null.
 		if ( ! file_exists( $secrets_file ) ) {
-			error_log( sprintf( 'pantheon_get_secret: secrets.json not found at %s', $secrets_file ) );
+			error_log( sprintf( 'pantheon_get_secret: secrets.json not found at %s', $secrets_file ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 			return null;
 		}
 
-		// Read and decode secrets.json
+		// Read and decode secrets.json.
 		$secrets_json = file_get_contents( $secrets_file );
 		$secrets = json_decode( $secrets_json, true );
 
-		// Check for JSON decode errors
+		// Check for JSON decode errors.
 		if ( json_last_error() !== JSON_ERROR_NONE ) {
-			error_log( sprintf( 'pantheon_get_secret: JSON decode error - %s', json_last_error_msg() ) );
+			error_log( sprintf( 'pantheon_get_secret: JSON decode error - %s', json_last_error_msg() ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 			return null;
 		}
 
-		// Handle Pantheon Secrets JSON structure: Secrets.{key}.Value
+		// Handle Pantheon Secrets JSON structure: Secrets.{key}.Value.
 		if ( isset( $secrets['Secrets'][ $key ]['Value'] ) ) {
 			return $secrets['Secrets'][ $key ]['Value'];
 		}
 
-		// Fallback to simple key-value structure
+		// Fallback to simple key-value structure.
 		if ( isset( $secrets[ $key ] ) ) {
 			return $secrets[ $key ];
 		}
 
-		error_log( sprintf( 'pantheon_get_secret: Key "%s" not found in secrets.json', $key ) );
+		error_log( sprintf( 'pantheon_get_secret: Key "%s" not found in secrets.json', $key ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 		return null;
 	}
 }
@@ -221,7 +221,7 @@ if ( isset( $_ENV['LANDO'] ) && 'ON' === $_ENV['LANDO'] ) {
 	}
 }
 
-// Build Redis configuration based on environment
+// Build Redis configuration based on environment.
 $redis_config = [
 	'token' => $token,
 	'maxttl' => 86400 * 7,
@@ -232,17 +232,17 @@ $redis_config = [
 	'prefix' => 'ocppantheon',
 ];
 
-// Environment-specific configuration
+// Environment-specific configuration.
 $redis_config['host'] = getenv( 'CACHE_HOST' ) ?: '127.0.0.1';
 $redis_config['port'] = getenv( 'CACHE_PORT' ) ?: 6379;
 $redis_config['database'] = getenv( 'CACHE_DB' ) ?: 0;
 $redis_config['password'] = getenv( 'CACHE_PASSWORD' ) ?: null;
 
-// Lando-specific tweaks (Lando provides CACHE_* env vars via Pantheon recipe)
+// Lando-specific tweaks (Lando provides CACHE_* env vars via Pantheon recipe).
 if ( isset( $_ENV['LANDO'] ) && 'ON' === $_ENV['LANDO'] ) {
-	$redis_config['debug'] = true; // Enable debug for local development
+	$redis_config['debug'] = true; // Enable debug for local development.
 	$redis_config['save_commands'] = false;
-	// Use simpler serializer/compression for Lando
+	// Use simpler serializer/compression for Lando.
 	$redis_config['serializer'] = 'php';
 	$redis_config['compression'] = 'none';
 	$redis_config['async_flush'] = false;
@@ -251,7 +251,7 @@ if ( isset( $_ENV['LANDO'] ) && 'ON' === $_ENV['LANDO'] ) {
 		'enabled' => false,
 	];
 } else {
-	// Pantheon production settings
+	// Pantheon production settings.
 	$redis_config['debug'] = false;
 	$redis_config['save_commands'] = false;
 	$redis_config['serializer'] = 'igbinary';
