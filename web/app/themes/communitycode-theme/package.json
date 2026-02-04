@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "build": "npm run lint:scss && sass scss/style.scss:style.tmp.css --style=compressed --no-source-map && cat scss/_header.txt style.tmp.css > style.css && rm style.tmp.css",
-    "watch:scss": "sass scss/style.scss:style.css --watch --style=expanded",
+    "compile": "sass scss/style.scss:style.tmp.css --style=compressed --no-source-map && cat scss/_header.txt style.tmp.css > style.css && rm style.tmp.css",
+    "watch:scss": "onchange 'scss/**/*.scss' -- npm run compile",
     "watch:lint": "onchange 'scss/**/*.scss' -- npm run lint:scss",
     "watch": "npm-run-all --parallel watch:scss watch:lint",
     "dev": "npm run watch",
