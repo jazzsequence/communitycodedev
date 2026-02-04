@@ -15,6 +15,7 @@ namespace Community_Code\ElasticPress;
  */
 function init() {
 	add_action( 'init', __NAMESPACE__ . '\\register_related_episodes_block' );
+	add_action( 'init', __NAMESPACE__ . '\\register_related_posts_block' );
 	add_action( 'pre_get_posts', __NAMESPACE__ . '\\integrate_ep_on_archives' );
 
 	add_filter( 'ep_post_sync_args', __NAMESPACE__ . '\\add_yoast_description_field', 11, 2 );
@@ -491,6 +492,138 @@ function render_related_episodes_block( array $attributes ) : string {
 						</div>
 					<?php else : ?>
 						<div class="related-episode__meta"></div>
+					<?php endif; ?>
+				</li>
+			<?php endforeach; ?>
+		</ul>
+	</section>
+	<?php
+
+	return ob_get_clean();
+}
+
+/**
+ * Register the Related Posts block (server-rendered).
+ */
+function register_related_posts_block() {
+	if ( ! function_exists( 'register_block_type' ) ) {
+		return;
+	}
+
+	$handle = 'community-code-related-posts-block';
+
+	wp_register_script(
+		$handle,
+		plugins_url( 'assets/js/related-posts-block.js', __FILE__ ),
+		[
+			'wp-blocks',
+			'wp-element',
+			'wp-i18n',
+			'wp-components',
+			'wp-block-editor',
+		],
+		filemtime( __DIR__ . '/assets/js/related-posts-block.js' ),
+		true
+	);
+
+	register_block_type(
+		'community-code/related-posts',
+		[
+			'title' => __( 'Related Posts (ElasticPress)', 'community-code' ),
+			'description' => __( 'Show ElasticPress related posts.', 'community-code' ),
+			'category' => 'widgets',
+			'icon' => 'controls-repeat',
+			'supports' => [
+				'align' => [ 'wide', 'full' ],
+				'html' => false,
+			],
+			'attributes' => [
+				'number' => [
+					'type' => 'number',
+					'default' => 5,
+				],
+				'align' => [
+					'type' => 'string',
+				],
+			],
+			'render_callback' => __NAMESPACE__ . '\\render_related_posts_block',
+			'editor_script' => $handle,
+		]
+	);
+}
+
+/**
+ * Render the Related Posts block.
+ *
+ * @param array $attributes Block attributes.
+ * @return string
+ */
+function render_related_posts_block( array $attributes ) : string {
+	if ( ! is_singular( 'post' ) ) {
+		return '';
+	}
+
+	if ( ! class_exists( '\\ElasticPress\\Features' ) ) {
+		return '';
+	}
+
+	$feature = \ElasticPress\Features::factory()->get_registered_feature( 'related_posts' );
+	if ( empty( $feature ) || ! $feature->is_active() ) {
+		return '';
+	}
+
+	$count = isset( $attributes['number'] ) ? absint( $attributes['number'] ) : 5;
+	$count = $count > 0 ? $count : 5;
+
+	// Constrain related results to posts only for this block.
+	$scoped_filter = static function ( $args ) {
+		$args['post_type'] = [ 'post' ];
+		return $args;
+	};
+
+	add_filter( 'ep_find_related_args', $scoped_filter );
+	$posts = $feature->find_related( get_the_ID(), $count );
+	remove_filter( 'ep_find_related_args', $scoped_filter );
+
+	if ( empty( $posts ) ) {
+		return '';
+	}
+
+	$classes = [ 'wp-block-community-code-related-posts' ];
+	if ( ! empty( $attributes['align'] ) ) {
+		$classes[] = 'align' . $attributes['align'];
+	}
+
+	ob_start();
+	?>
+	<section class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
+		<ul class="alignfull wp-block-post-template is-layout-flow wp-container-core-post-template-is-layout-flow wp-block-post-template-is-layout-flow">
+			<?php foreach ( $posts as $related_post ) : ?>
+				<?php
+				$date_display = get_the_date( '', $related_post->ID );
+				$tags = get_the_terms( $related_post->ID, 'post_tag' );
+				$tag_labels = is_array( $tags ) ? wp_list_pluck( $tags, 'name' ) : [];
+				?>
+				<li>
+					<h3 class="wp-block-post-title has-large-font-size"><a href="<?php echo esc_url( get_permalink( $related_post->ID ) ); ?>">
+						<?php echo esc_html( get_the_title( $related_post->ID ) ); ?>
+					</a></h3>
+					<?php if ( $date_display ) : ?>
+						<div class="datetime has-text-align-right wp-block-post-date">
+							<time datetime="<?php echo esc_attr( get_the_date( 'c', $related_post->ID ) ); ?>">
+								<a href="<?php echo esc_url( get_permalink( $related_post->ID ) ); ?>"><?php echo esc_html( $date_display ); ?></a>
+							</time>
+						</div>
+					<?php endif; ?>
+					<?php if ( ! empty( $tag_labels ) ) : ?>
+						<div class="related-post__meta">
+							<span class="related-post__tags">
+								<?php _e( 'topics: ', 'community-code' ); ?>
+								<?php echo esc_html( implode( ', ', $tag_labels ) ); ?>
+							</span>
+						</div>
+					<?php else : ?>
+						<div class="related-post__meta"></div>
 					<?php endif; ?>
 				</li>
 			<?php endforeach; ?>
