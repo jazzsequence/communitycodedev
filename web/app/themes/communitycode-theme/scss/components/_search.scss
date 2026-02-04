@@ -2,6 +2,8 @@
  * Search
  */
 
+@use "../base/variables" as *;
+
 .wp-block-search__input {
 	background-color: var(--wp--preset--color--elevated-surface);
 	color: var(--wp--preset--color--bright-text);
@@ -14,10 +16,4 @@
 	}
 }
 
-.wp-block-search__button {
-	background-color: var(--wp--preset--color--terminal-blue);
-
-	&:hover {
-		background-color: var(--wp--preset--color--warm-magenta);
-	}
-}
+// .wp-block-search__button styles now handled in _buttons.scss for consistency

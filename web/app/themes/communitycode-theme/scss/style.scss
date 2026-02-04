@@ -1,35 +1,28 @@
-/*!
-Theme Name: Community + Code
-Template: twentytwentyfive
-Author: Chris Reynolds
-Author URI: https://jazzsequence.com
-Description: Custom child theme for Community + Code podcast with dark terminal aesthetic
-Version: 1.0.0
-License: MIT
-Text Domain: communitycode-theme
-*/
-
 /**
  * Community + Code Theme Styles
  * Compiled from SCSS
+ *
+ * Note: WordPress theme header is in _header.txt and prepended during build
  */
 
 // Base
-@import "base/variables";
-@import "base/typography";
+@use "base/variables";
+@use "base/typography";
 
 // Layout
-@import "layout/header";
-@import "layout/footer";
+@use "layout/header";
+@use "layout/footer";
 
 // Components
-@import "components/posts";
-@import "components/single";
-@import "components/buttons";
-@import "components/search";
-@import "components/plugins";
+@use "components/site-title";
+@use "components/hero";
+@use "components/posts";
+@use "components/single";
+@use "components/buttons";
+@use "components/search";
+@use "components/plugins";
 
 // Utilities
-@import "utilities/accessibility";
-@import "utilities/helpers";
-@import "utilities/responsive";
+@use "utilities/accessibility";
+@use "utilities/helpers";
+@use "utilities/responsive";

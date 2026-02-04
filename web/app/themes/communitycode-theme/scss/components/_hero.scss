@@ -1,0 +1,24 @@
+/**
+ * Hero Section Styles
+ */
+
+.community-code-hero {
+	// Override inline background color from editor
+	background-color: var(--wp--preset--color--deep-base) !important;
+
+	// Force Source Sans Pro for "Community + Code" heading in hero
+	h2.wp-block-heading {
+		font-family: var(--wp--preset--font-family--source-sans-3) !important;
+		color: var(--wp--preset--color--bright-text);
+	}
+
+	// Remove all paragraph wrapper styling to prevent double borders
+	.is-style-text-annotation,
+	p.is-style-text-annotation {
+		margin: 0 !important;
+		padding: 0 !important;
+		border: none !important;
+		background: none !important;
+		// Button styles are handled in _buttons.scss
+	}
+}

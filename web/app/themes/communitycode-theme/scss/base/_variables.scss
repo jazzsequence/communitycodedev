@@ -4,16 +4,27 @@
  * These are available as CSS custom properties via var(--wp--preset--*)
  */
 
-// Colors are defined in theme.json and available as:
-// --wp--preset--color--terminal-blue
-// --wp--preset--color--warm-magenta
-// --wp--preset--color--soft-cyan
-// --wp--preset--color--community-orange
-// --wp--preset--color--deep-base
-// --wp--preset--color--elevated-surface
-// --wp--preset--color--muted-text
-// --wp--preset--color--bright-text
-// --wp--preset--color--border
+// Standard WordPress color names (for parent theme compatibility):
+// --wp--preset--color--base (White #FFFFFF)
+// --wp--preset--color--contrast (Deep Base #002B36)
+// --wp--preset--color--accent-1 (Terminal Blue #268BD2)
+// --wp--preset--color--accent-2 (Warm Magenta #D33682)
+// --wp--preset--color--accent-3 (Soft Cyan #2AA198)
+// --wp--preset--color--accent-4 (Muted Text #839496)
+// --wp--preset--color--accent-5 (Community Orange #CB4B16)
+// --wp--preset--color--accent-6 (Link Blue #7AC2F0)
+//
+// Custom semantic names (for actual site colors):
+// --wp--preset--color--deep-base (Dark background #002B36 - used as global background)
+// --wp--preset--color--bright-text (White #FFFFFF - used as global text)
+// --wp--preset--color--terminal-blue (same as accent-1)
+// --wp--preset--color--warm-magenta (same as accent-2)
+// --wp--preset--color--soft-cyan (same as accent-3)
+// --wp--preset--color--link-blue (same as accent-6)
+// --wp--preset--color--community-orange (same as accent-5)
+// --wp--preset--color--muted-text (same as accent-4)
+// --wp--preset--color--elevated-surface (Slightly lighter dark #073642)
+// --wp--preset--color--border (Border gray #586E75)
 
 // Fonts are defined in theme.json and available as:
 // --wp--preset--font-family--victor-mono

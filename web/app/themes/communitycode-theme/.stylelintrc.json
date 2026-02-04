@@ -1,5 +1,5 @@
 {
-  "extends": "stylelint-config-standard-scss",
+  "extends": "@humanmade/stylelint-config",
   "rules": {
     "color-hex-length": "long",
     "declaration-block-no-redundant-longhand-properties": null,

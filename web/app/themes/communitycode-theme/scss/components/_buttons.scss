@@ -1,16 +1,53 @@
 /**
- * Buttons & CTAs
+ * Unified Button Styles
+ *
+ * Single consistent button style across the entire theme.
+ * Applied to: WordPress buttons, MailPoet forms, hero links, etc.
  */
 
+// Base button style
+%button-base {
+	display: inline-block;
+	background-color: var(--wp--preset--color--terminal-blue);
+	color: var(--wp--preset--color--bright-text) !important;
+	text-decoration: none;
+	padding: 0.75rem 1.5rem;
+	border: none;
+	border-radius: 12px;
+	font-weight: 600;
+	font-family: var(--wp--preset--font-family--source-sans-3);
+	transition: all 0.2s ease;
+	cursor: pointer;
+
+	&:hover,
+	&:focus {
+		background-color: var(--wp--preset--color--warm-magenta);
+		color: var(--wp--preset--color--bright-text) !important;
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(211, 54, 130, 0.4);
+	}
+}
+
+// WordPress core buttons
 .wp-element-button,
 .wp-block-button__link {
-	background-color: var(--wp--preset--color--terminal-blue);
-	color: var(--wp--preset--color--bright-text);
-	border: 2px solid var(--wp--preset--color--terminal-blue);
-	transition: $transition-base;
+	@extend %button-base;
+}
 
-	&:hover {
-		background-color: transparent;
-		color: var(--wp--preset--color--terminal-blue);
-	}
+// MailPoet form submit buttons
+.mailpoet_submit {
+	@extend %button-base;
+}
+
+// Hero section subscription links
+.community-code-hero .is-style-text-annotation a {
+	@extend %button-base;
+	padding: 0.5rem 1rem;
+	font-size: 0.9rem;
+}
+
+// Search button
+.wp-block-search__button {
+	@extend %button-base;
+	padding: 0.5rem 1rem;
 }

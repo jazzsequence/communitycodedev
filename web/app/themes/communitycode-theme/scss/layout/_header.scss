@@ -14,13 +14,11 @@ header.wp-block-template-part {
 // Site Title
 p.site-title {
 	a {
-		text-decoration: none;
 		color: var(--wp--preset--color--bright-text);
 
 		&:hover,
 		&:active {
-			text-decoration: underline;
-			color: var(--wp--preset--color--terminal-blue);
+			color: var(--wp--preset--color--link-blue);
 		}
 	}
 }
@@ -36,7 +34,7 @@ p.site-title {
 		color: var(--wp--preset--color--bright-text);
 
 		&:hover {
-			color: var(--wp--preset--color--terminal-blue);
+			color: var(--wp--preset--color--link-blue);
 		}
 	}
 }

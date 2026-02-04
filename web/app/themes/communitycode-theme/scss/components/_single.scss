@@ -2,6 +2,8 @@
  * Single Episode Page
  */
 
+@use "../base/variables" as *;
+
 .single-episodes {
 	.wp-block-embed iframe {
 		width: 645px;

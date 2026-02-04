@@ -2,6 +2,8 @@
  * Post Cards & Archive
  */
 
+@use "../base/variables" as *;
+
 .wp-block-post {
 	background-color: var(--wp--preset--color--elevated-surface);
 	border: 1px solid var(--wp--preset--color--border);

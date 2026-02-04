@@ -3,6 +3,8 @@
  * Mailpoet, ElasticPress, etc.
  */
 
+@use "../base/variables" as *;
+
 // ================================
 // Mailpoet Newsletter
 // ================================
@@ -32,17 +34,7 @@
 	}
 }
 
-.mailpoet_submit {
-	background-color: var(--wp--preset--color--community-orange) !important;
-	color: var(--wp--preset--color--bright-text) !important;
-	border: 2px solid var(--wp--preset--color--community-orange) !important;
-	transition: $transition-base;
-
-	&:hover {
-		background-color: transparent !important;
-		color: var(--wp--preset--color--community-orange) !important;
-	}
-}
+// .mailpoet_submit button styles now handled in _buttons.scss for consistency
 
 // ================================
 // ElasticPress Search Modal

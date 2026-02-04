@@ -1,0 +1,28 @@
+/**
+ * Site Title - Community + Code
+ *
+ * CRITICAL: The site title "Community + Code" MUST always use Source Sans Pro.
+ * This is non-negotiable for brand consistency.
+ */
+
+.site-title {
+	font-family: var(--wp--preset--font-family--source-sans-3) !important;
+	color: var(--wp--preset--color--bright-text);
+
+	a,
+	a:visited {
+		color: var(--wp--preset--color--bright-text);
+		text-decoration: none;
+	}
+
+	a:hover,
+	a:focus {
+		color: var(--wp--preset--color--soft-cyan);
+	}
+}
+
+// Ensure any instance of "Community + Code" text uses Source Sans Pro
+.community-code-brand,
+.site-logo + * {
+	font-family: var(--wp--preset--font-family--source-sans-3) !important;
+}

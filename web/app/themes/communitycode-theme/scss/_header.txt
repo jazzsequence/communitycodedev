@@ -1,0 +1,10 @@
+/**
+ * Theme Name: Community + Code
+ * Template: twentytwentyfive
+ * Author: Chris Reynolds
+ * Author URI: https://jazzsequence.com
+ * Description: Custom child theme for Community + Code podcast with dark terminal aesthetic
+ * Version: 1.0.0
+ * License: MIT
+ * Text Domain: communitycode-theme
+ */
