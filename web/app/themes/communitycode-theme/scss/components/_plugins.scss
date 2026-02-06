@@ -65,15 +65,21 @@
 // ElasticPress Search Modal
 // ================================
 
-/* stylelint-disable declaration-no-important */
-
 .ep-search-modal__content {
 	background-color: var( --wp--preset--color--deep-base ) !important;
 }
 
 .ep-autosuggest {
-	background-color: var( --wp--preset--color--elevated-surface );
-	color: var( --wp--preset--color--bright-text );
+	background-color: var( --wp--preset--color--elevated-surface ) !important;
+	color: var( --wp--preset--color--bright-text ) !important;
+
+	a {
+		color: var( --wp--preset--color--link-blue ) !important;
+
+		&:hover {
+			color: var( --wp--preset--color--bright-text ) !important;
+		}
+	}
 }
 
 ul.autosuggest-list {
