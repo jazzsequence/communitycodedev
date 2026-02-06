@@ -4,7 +4,6 @@
 
 footer.wp-block-template-part {
 	background-color: var( --wp--preset--color--deep-base );
-	border-top: 2px solid var( --wp--preset--color--border );
 	color: var( --wp--preset--color--muted-text );
 }
 
@@ -15,6 +14,10 @@ footer .wp-block-social-links {
 	a {
 		width: 48px;
 		height: 48px;
+
+		&:hover {
+			color: var( --wp--preset--color--link-blue );
+		}
 	}
 
 	svg {
