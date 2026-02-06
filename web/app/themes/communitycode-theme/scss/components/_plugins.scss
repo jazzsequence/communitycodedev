@@ -174,7 +174,6 @@ section.wp-block-elasticpress-related-posts {
 		color: var( --wp--preset--color--muted-text ) !important;
 	}
 
-
 	// Error messages - unified styling with high specificity
 	.nf-form-content .nf-error-msg,
 	.nf-form-errors .nf-error-msg,
@@ -217,43 +216,43 @@ div.nf-error-msg,
 	color: var( --wp--preset--color--warm-magenta ) !important;
 }
 
-	// Error field warning icon/pseudo-element
-	.nf-error.field-wrap .nf-field-element::after {
-		color: var( --wp--preset--color--warm-magenta ) !important;
-		background-color: var( --wp--preset--color--elevated-surface ) !important;
-	}
+// Error field warning icon/pseudo-element
+.nf-error.field-wrap .nf-field-element::after {
+	color: var( --wp--preset--color--warm-magenta ) !important;
+	background-color: var( --wp--preset--color--elevated-surface ) !important;
+}
 
-	// Error state for input fields
-	.nf-error input,
-	.nf-error textarea,
-	.nf-error select {
-		border-color: var( --wp--preset--color--warm-magenta ) !important;
-	}
+// Error state for input fields
+.nf-error input,
+.nf-error textarea,
+.nf-error select {
+	border-color: var( --wp--preset--color--warm-magenta ) !important;
+}
 
-	// Submit button
-	.submit-container input[type="button"],
-	.submit-container button,
-	input[type="submit"] {
-		display: inline-block !important;
-		background-color: var( --wp--preset--color--terminal-blue ) !important;
+// Submit button
+.submit-container input[type="button"],
+.submit-container button,
+input[type="submit"] {
+	display: inline-block !important;
+	background-color: var( --wp--preset--color--terminal-blue ) !important;
+	color: var( --wp--preset--color--bright-text ) !important;
+	text-decoration: none !important;
+	padding: 0.75rem 1.5rem !important;
+	border: none !important;
+	border-radius: 40px !important;
+	font-weight: 600 !important;
+	font-family: var( --wp--preset--font-family--source-sans-3 ) !important;
+	transition: all 200ms ease !important;
+	cursor: pointer !important;
+
+	&:hover,
+	&:focus {
+		background-color: var( --wp--preset--color--warm-magenta ) !important;
 		color: var( --wp--preset--color--bright-text ) !important;
-		text-decoration: none !important;
-		padding: 0.75rem 1.5rem !important;
-		border: none !important;
-		border-radius: 40px !important;
-		font-weight: 600 !important;
-		font-family: var( --wp--preset--font-family--source-sans-3 ) !important;
-		transition: all 200ms ease !important;
-		cursor: pointer !important;
-
-		&:hover,
-		&:focus {
-			background-color: var( --wp--preset--color--warm-magenta ) !important;
-			color: var( --wp--preset--color--bright-text ) !important;
-			transform: translateY( -2px ) !important;
-			box-shadow: 0 4px 12px rgba( 211, 54, 130, 0.4 ) !important;
-		}
+		transform: translateY( -2px ) !important;
+		box-shadow: 0 4px 12px rgba( 211, 54, 130, 0.4 ) !important;
 	}
+}
 
 /* stylelint-enable declaration-no-important */
 
