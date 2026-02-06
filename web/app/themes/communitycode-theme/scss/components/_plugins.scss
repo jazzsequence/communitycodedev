@@ -134,6 +134,85 @@ section.wp-block-elasticpress-related-posts {
 /* stylelint-enable declaration-no-important */
 
 // ================================
+// Ninja Forms
+// ================================
+
+.nf-form-content {
+	input[type="text"],
+	input[type="email"],
+	input[type="url"],
+	input[type="tel"],
+	input[type="number"],
+	input[type="date"],
+	textarea,
+	select {
+		background-color: var( --wp--preset--color--elevated-surface ) !important;
+		color: var( --wp--preset--color--bright-text ) !important;
+		border: 1px solid var( --wp--preset--color--border ) !important;
+		border-radius: $border-radius-lg !important;
+		padding: 0.75rem 1rem !important;
+		font-family: var( --wp--preset--font-family--source-sans-3 ) !important;
+
+		&:focus {
+			border-color: var( --wp--preset--color--terminal-blue ) !important;
+			outline: $focus-outline !important;
+		}
+	}
+
+	textarea {
+		border-radius: $border-radius-md !important;
+	}
+
+	label {
+		color: var( --wp--preset--color--bright-text ) !important;
+		font-weight: 600 !important;
+	}
+
+	.nf-field-description {
+		color: var( --wp--preset--color--muted-text ) !important;
+	}
+
+	.ninja-forms-req-symbol {
+		color: var( --wp--preset--color--warm-magenta ) !important;
+	}
+
+	// Error messages - unified styling
+	.nf-error-msg {
+		color: var( --wp--preset--color--warm-magenta ) !important;
+		font-weight: 600 !important;
+		background-color: rgba( 211, 54, 130, 0.1 ) !important;
+		padding: 0.5rem !important;
+		border-radius: $border-radius-sm !important;
+		border-left: 3px solid var( --wp--preset--color--warm-magenta ) !important;
+	}
+
+	// Error field warning icon/pseudo-element
+	.nf-error.field-wrap .nf-field-element::after {
+		color: var( --wp--preset--color--warm-magenta ) !important;
+	}
+
+	// Error state for input fields
+	.nf-error input,
+	.nf-error textarea,
+	.nf-error select {
+		border-color: var( --wp--preset--color--warm-magenta ) !important;
+	}
+
+	// Submit button
+	.submit-container input[type="button"],
+	.submit-container button,
+	input[type="submit"] {
+		@extend %button-base;
+		cursor: pointer !important;
+
+		&:hover,
+		&:focus {
+			@extend %button-hover;
+		}
+	}
+}
+
+// ================================
 // Community + Code Related Episodes
 // ================================
 
