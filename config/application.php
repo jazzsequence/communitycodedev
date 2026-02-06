@@ -161,6 +161,50 @@ if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_P
 	$_SERVER['HTTPS'] = 'on';
 }
 
+if ( ! function_exists( 'pantheon_get_secret' ) ) {
+	/**
+	 * Local wrapper for pantheon_get_secret for local development.
+	 *
+	 * On Pantheon, uses the native pantheon_get_secret function.
+	 * Locally, reads from secrets.json file pulled via Pantheon Secrets terminus plugin.
+	 *
+	 * @param string $key Secret key to retrieve.
+	 * @return string|null Secret value or null if not found.
+	 */
+	function pantheon_get_secret( $key ) {
+		$secrets_file = dirname( __DIR__ ) . '/secrets.json';
+
+		// If secrets.json doesn't exist, return null.
+		if ( ! file_exists( $secrets_file ) ) {
+			error_log( sprintf( 'pantheon_get_secret: secrets.json not found at %s', $secrets_file ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			return null;
+		}
+
+		// Read and decode secrets.json.
+		$secrets_json = file_get_contents( $secrets_file );
+		$secrets = json_decode( $secrets_json, true );
+
+		// Check for JSON decode errors.
+		if ( json_last_error() !== JSON_ERROR_NONE ) {
+			error_log( sprintf( 'pantheon_get_secret: JSON decode error - %s', json_last_error_msg() ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			return null;
+		}
+
+		// Handle Pantheon Secrets JSON structure: Secrets.{key}.Value.
+		if ( isset( $secrets['Secrets'][ $key ]['Value'] ) ) {
+			return $secrets['Secrets'][ $key ]['Value'];
+		}
+
+		// Fallback to simple key-value structure.
+		if ( isset( $secrets[ $key ] ) ) {
+			return $secrets[ $key ];
+		}
+
+		error_log( sprintf( 'pantheon_get_secret: Key "%s" not found in secrets.json', $key ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+		return null;
+	}
+}
+
 /**
  * Object Cache Pro
  */
@@ -168,48 +212,74 @@ $token = getenv( 'OCP_LICENSE' ); // Get the license from the Pantheon environme
 
 // If working locally, set $token based on the local auth.json file.
 if ( isset( $_ENV['LANDO'] ) && 'ON' === $_ENV['LANDO'] ) {
-	$auth_json = ABSPATH . '/auth.json';
+	$auth_json = $root_dir . '/auth.json';
 	if ( file_exists( $auth_json ) ) {
-		$auth_json = json_decode( file_get_contents( $auth_json ) );
-		$token = $auth_json['http-basic']['objectcache.pro']['password'];
+		$auth_json_contents = json_decode( file_get_contents( $auth_json ) );
+		if ( isset( $auth_json_contents->{'http-basic'}->{'objectcache.pro'}->password ) ) {
+			$token = $auth_json_contents->{'http-basic'}->{'objectcache.pro'}->password;
+		}
 	}
 }
 
-Config::define( 'WP_REDIS_CONFIG', [
+// Build Redis configuration based on environment.
+$redis_config = [
 	'token' => $token,
-	'host' => getenv( 'CACHE_HOST' ) ?: '127.0.0.1',
-	'port' => getenv( 'CACHE_PORT' ) ?: 6379,
-	'database' => getenv( 'CACHE_DB' ) ?: 0,
-	'password' => getenv( 'CACHE_PASSWORD' ) ?: null,
 	'maxttl' => 86400 * 7,
 	'timeout' => 0.5,
 	'read_timeout' => 0.5,
 	'split_alloptions' => true,
 	'prefetch' => true,
-	'debug' => false,
-	'save_commands' => false,
-	'analytics' => [
+	'prefix' => 'ocppantheon',
+];
+
+// Environment-specific configuration.
+$redis_config['host'] = getenv( 'CACHE_HOST' ) ?: '127.0.0.1';
+$redis_config['port'] = getenv( 'CACHE_PORT' ) ?: 6379;
+$redis_config['database'] = getenv( 'CACHE_DB' ) ?: 0;
+$redis_config['password'] = getenv( 'CACHE_PASSWORD' ) ?: null;
+
+// Lando-specific tweaks (Lando provides CACHE_* env vars via Pantheon recipe).
+if ( isset( $_ENV['LANDO'] ) && 'ON' === $_ENV['LANDO'] ) {
+	$redis_config['debug'] = true; // Enable debug for local development.
+	$redis_config['save_commands'] = false;
+	// Use simpler serializer/compression for Lando.
+	$redis_config['serializer'] = 'php';
+	$redis_config['compression'] = 'none';
+	$redis_config['async_flush'] = false;
+	$redis_config['strict'] = false;
+	$redis_config['analytics'] = [
+		'enabled' => false,
+	];
+} else {
+	// Pantheon production settings.
+	$redis_config['debug'] = false;
+	$redis_config['save_commands'] = false;
+	$redis_config['serializer'] = 'igbinary';
+	$redis_config['compression'] = 'zstd';
+	$redis_config['async_flush'] = true;
+	$redis_config['strict'] = true;
+	$redis_config['analytics'] = [
 		'enabled' => true,
 		'persist' => true,
-		'retention' => 3600, // 1 hour
+		'retention' => 3600,
 		'footnote' => true,
-	],
-	'prefix' => 'ocppantheon', // This prefix can be changed. Setting a prefix helps avoid conflict when switching from other plugins like wp-redis.
-	'serializer' => 'igbinary',
-	'compression' => 'zstd',
-	'async_flush' => true,
-	'strict' => true,
-] );
+	];
+}
+
+Config::define( 'WP_REDIS_CONFIG', $redis_config );
 
 /**
  * ElasticSearch
  */
-$ep_prefix = pantheon_get_secret( 'ep_index_prefix' ) ?? 'pantheon-se-demo-1'; // Get the index prefix from Pantheon secrets.
-$ep_host = pantheon_get_secret( 'ep_host' ) ?? ''; // Get the host from Pantheon secrets.
-$ep_token = pantheon_get_secret( 'ep_token' ) ?? ''; // Get the token from Pantheon secrets.
-Config::define( 'EP_INDEX_PREFIX', $ep_prefix );
-Config::define( 'EP_HOST', $ep_host );
-Config::define( 'EP_CREDENTIALS', "$ep_prefix:$ep_token" );
+$ep_prefix = pantheon_get_secret( 'ep_prefix' );
+$ep_host = pantheon_get_secret( 'ep_host' );
+$ep_token = pantheon_get_secret( 'ep_token' );
+
+if ( $ep_prefix && $ep_host && $ep_token ) {
+	Config::define( 'EP_INDEX_PREFIX', $ep_prefix );
+	Config::define( 'EP_HOST', $ep_host );
+	Config::define( 'EP_CREDENTIALS', "$ep_prefix:$ep_token" );
+}
 
 $env_config = __DIR__ . '/environments/' . WP_ENV . '.php';
 

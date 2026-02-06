@@ -1,0 +1,25 @@
+{
+  "name": "communitycode-theme",
+  "version": "1.0.0",
+  "description": "Community + Code podcast theme with dark terminal aesthetic",
+  "author": "Chris Reynolds",
+  "license": "MIT",
+  "scripts": {
+    "build": "npm run lint:scss && sass scss/style.scss:style.tmp.css --style=compressed --no-source-map && cat scss/_header.txt style.tmp.css > style.css && rm style.tmp.css",
+    "compile": "sass scss/style.scss:style.tmp.css --style=compressed --no-source-map && cat scss/_header.txt style.tmp.css > style.css && rm style.tmp.css",
+    "watch:scss": "onchange 'scss/**/*.scss' -- npm run compile",
+    "watch:lint": "onchange 'scss/**/*.scss' -- npm run lint:scss",
+    "watch": "npm-run-all --parallel watch:scss watch:lint",
+    "dev": "npm run watch",
+    "lint:scss": "stylelint 'scss/**/*.scss'",
+    "lint:scss:fix": "stylelint 'scss/**/*.scss' --fix"
+  },
+  "devDependencies": {
+    "@humanmade/stylelint-config": "^1.3.0",
+    "npm-run-all": "^4.1.5",
+    "onchange": "^7.1.0",
+    "sass": "^1.80.0",
+    "stylelint": "^16.10.0",
+    "stylelint-config-standard-scss": "^13.1.0"
+  }
+}

@@ -1,0 +1,43 @@
+/**
+ * Header & Navigation
+ */
+
+header.wp-block-template-part {
+	background-color: var( --wp--preset--color--deep-base );
+	border-bottom: 2px solid var( --wp--preset--color--border );
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+
+	.wp-block-group.alignfull {
+		background-color: var( --wp--preset--color--deep-base );
+	}
+}
+
+// Site Title
+p.site-title {
+	a {
+		color: var( --wp--preset--color--bright-text );
+
+		&:hover,
+		&:active {
+			color: var( --wp--preset--color--link-blue );
+		}
+	}
+}
+
+// Site Logo
+.is-layout-flow > .sitelogo {
+	margin-inline-end: 0;
+}
+
+// Navigation
+.wp-block-navigation {
+	a {
+		color: var( --wp--preset--color--bright-text );
+
+		&:hover {
+			color: var( --wp--preset--color--link-blue );
+		}
+	}
+}

@@ -1,0 +1,68 @@
+/**
+ * Post Cards & Archive
+ */
+
+@use "../base/variables" as *;
+
+.wp-block-post {
+	background-color: var( --wp--preset--color--elevated-surface );
+	border: 1px dotted var( --wp--preset--color--border );
+	border-left: 4px solid var( --wp--preset--color--terminal-blue );
+	padding: $spacing-lg;
+	margin-bottom: $spacing-xl;
+	border-radius: $border-radius-sm;
+	transition: $transition-medium;
+
+	&:hover {
+		border-left-color: var( --wp--preset--color--warm-magenta );
+		border-left-width: 6px;
+		box-shadow: $shadow-card-hover;
+		transform: translateY( -2px );
+	}
+
+	// Remove bottom margin from featured image figures
+	figure {
+		margin-bottom: 0;
+	}
+}
+
+// Post Titles
+.wp-block-post-title {
+	a {
+		color: var( --wp--preset--color--bright-text );
+		text-decoration: none;
+
+		&:hover {
+			color: var( --wp--preset--color--terminal-blue );
+		}
+	}
+}
+
+// Post Meta (dates, author)
+.wp-block-post-date,
+.wp-block-post-author {
+	color: var( --wp--preset--color--muted-text );
+	font-family: var( --wp--preset--font-family--victor-mono );
+	font-size: 0.9rem;
+}
+
+// Tags - use normal link styles
+.wp-block-post-terms a {
+	// Inherit normal link styles from _typography.scss
+}
+
+// Remove bottom margin from columns in post templates
+// Override WordPress :where() global styles (which have 0 specificity)
+.wp-block-post .wp-block-columns {
+	margin-bottom: 0;
+}
+
+// Archive page layout with horizontal margins
+.blog,
+.archive,
+.post-type-archive {
+	main {
+		padding-left: $spacing-xl;
+		padding-right: $spacing-xl;
+	}
+}

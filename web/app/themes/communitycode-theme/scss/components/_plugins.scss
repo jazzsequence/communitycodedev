@@ -1,0 +1,314 @@
+/**
+ * Plugin Styles
+ * Mailpoet, ElasticPress, etc.
+ *
+ * Note: !important is required in this file to override inline styles
+ * added by plugin JavaScript. This is a legitimate use case.
+ */
+
+@use "../base/variables" as *;
+
+// ================================
+// Mailpoet Newsletter
+// ================================
+
+/* stylelint-disable declaration-no-important */
+
+.mailpoet_form_html a {
+	color: #ffffff !important;
+}
+
+// Hide unwanted mailpoet wrapper with complex selector
+.mailpoet_page-template-default
+.wp-block-group.has-accent-4-color.has-link-color.is-layout-flex {
+	display: none;
+}
+
+// Remove borders from WordPress block wrappers around MailPoet
+.wp-block-group.newsletter-section,
+.newsletter-section,
+.wp-block-mailpoet-subscription-form-block {
+	border: none !important;
+	background: transparent !important;
+}
+
+// The outer div wrapper should have the border
+#mailpoet_form_1 {
+	background-color: var( --wp--preset--color--elevated-surface ) !important;
+	border: 2px solid var( --wp--preset--color--border ) !important;
+	border-radius: $border-radius-md !important;
+	overflow: hidden !important;
+}
+
+// Remove border from the inner form element to prevent double border
+#mailpoet_form_1 form.mailpoet_form {
+	border: none !important;
+	border-radius: $border-radius-md !important;
+	background-color: var( --wp--preset--color--elevated-surface ) !important;
+	box-shadow: none !important;
+}
+
+.mailpoet_text {
+	background-color: var( --wp--preset--color--deep-base ) !important;
+	color: var( --wp--preset--color--bright-text ) !important;
+	border-color: var( --wp--preset--color--border ) !important;
+
+	&:focus {
+		border-color: var( --wp--preset--color--terminal-blue ) !important;
+		outline: $focus-outline;
+	}
+}
+
+// .mailpoet_submit button styles now handled in _buttons.scss for consistency
+
+// ================================
+// ElasticPress Search Modal
+// ================================
+
+.ep-search-modal__content {
+	background-color: #000000 !important;
+}
+
+input.ep-search-input {
+	border-radius: $border-radius-lg;
+	border: 1px solid var( --wp--preset--color--border );
+	padding: 0 5px;
+	font-family: var( --wp--preset--font-family--source-sans-3 );
+	background-color: var( --wp--preset--color--elevated-surface );
+	color: var( --wp--preset--color--bright-text );
+}
+
+.ep-search-tokens,
+button.ep-search-icon-button,
+span.ep-search-result__type {
+	background: transparent;
+	border: 1px solid var( --wp--preset--color--border );
+	border-radius: 5px;
+	padding: 4px 8px;
+	color: var( --wp--preset--color--bright-text );
+}
+
+div.ep-search-panel {
+	border-color: var( --wp--preset--color--border );
+	border-radius: $border-radius-lg;
+}
+
+button.ep-search-pagination-button {
+	background: transparent;
+	border: 1px solid var( --wp--preset--color--border );
+	padding: 5px 10px;
+	border-radius: $border-radius-lg;
+	color: var( --wp--preset--color--bright-text );
+	font-size: 0.9em;
+}
+
+select#ep-sort {
+	background: transparent;
+	color: var( --wp--preset--color--bright-text );
+	padding: 4px 8px;
+	font-size: 0.8em;
+	border-radius: 5px;
+}
+
+section.wp-block-elasticpress-related-posts {
+	font-weight: 700;
+}
+
+.ep-search-result__thumbnail img {
+	aspect-ratio: auto !important;
+	width: auto;
+	height: auto;
+	max-width: 100%;
+	max-height: 220px;
+	margin: 0 auto;
+}
+
+#ep-instant-results footer.ep-search-result__footer {
+	font-size: var( --wp--preset--font-size--small );
+}
+
+.ep-search-result--has-thumbnail {
+	grid-template-columns: minmax( 180px, 34% ) auto;
+}
+
+/* stylelint-enable declaration-no-important */
+
+// ================================
+// Ninja Forms
+// ================================
+
+/* stylelint-disable declaration-no-important */
+
+.nf-form-content {
+	input[type="text"],
+	input[type="email"],
+	input[type="url"],
+	input[type="tel"],
+	input[type="number"],
+	input[type="date"],
+	textarea,
+	select {
+		background-color: var( --wp--preset--color--elevated-surface ) !important;
+		color: var( --wp--preset--color--bright-text ) !important;
+		border: 1px solid var( --wp--preset--color--border ) !important;
+		border-radius: $border-radius-lg !important;
+		padding: 0.75rem 1rem !important;
+		font-family: var( --wp--preset--font-family--source-sans-3 ) !important;
+
+		&:focus {
+			border-color: var( --wp--preset--color--terminal-blue ) !important;
+			outline: $focus-outline !important;
+		}
+	}
+
+	textarea {
+		border-radius: $border-radius-md !important;
+	}
+
+	label {
+		color: var( --wp--preset--color--bright-text ) !important;
+		font-weight: 600 !important;
+	}
+
+	.nf-field-description {
+		color: var( --wp--preset--color--muted-text ) !important;
+	}
+
+	// Error messages - unified styling with high specificity
+	.nf-form-content .nf-error-msg,
+	.nf-form-errors .nf-error-msg,
+	div.nf-form-errors .nf-error-msg,
+	.nf-error-msg.nf-error-field-errors,
+	.nf-error-msg.nf-error-required-error,
+	div.nf-error-msg {
+		color: var( --wp--preset--color--warm-magenta ) !important;
+		font-weight: 600 !important;
+		background-color: rgba( 211, 54, 130, 0.1 ) !important;
+		padding: 0.5rem !important;
+		border-radius: $border-radius-sm !important;
+		border-left: 3px solid var( --wp--preset--color--warm-magenta ) !important;
+	}
+
+	// Form-level error container
+	.nf-form-errors,
+	div.nf-form-errors {
+		background-color: var( --wp--preset--color--elevated-surface ) !important;
+		border-left: 3px solid var( --wp--preset--color--warm-magenta ) !important;
+		border-radius: $border-radius-sm !important;
+		padding: 0.5rem !important;
+	}
+}
+
+// Ninja Forms errors outside .nf-form-content wrapper
+.nf-error-msg,
+div.nf-error-msg,
+.nf-form-errors .nf-error-msg {
+	color: var( --wp--preset--color--warm-magenta ) !important;
+	font-weight: 600 !important;
+	background-color: rgba( 211, 54, 130, 0.1 ) !important;
+	padding: 0.5rem !important;
+	border-radius: $border-radius-sm !important;
+	border-left: 3px solid var( --wp--preset--color--warm-magenta ) !important;
+}
+
+// Required field symbol (both in form header and field labels)
+.ninja-forms-req-symbol {
+	color: var( --wp--preset--color--warm-magenta ) !important;
+}
+
+// Error field warning icon/pseudo-element
+.nf-error.field-wrap .nf-field-element::after {
+	color: var( --wp--preset--color--warm-magenta ) !important;
+	background-color: var( --wp--preset--color--elevated-surface ) !important;
+}
+
+// Error state for input fields
+.nf-error input,
+.nf-error textarea,
+.nf-error select {
+	border-color: var( --wp--preset--color--warm-magenta ) !important;
+}
+
+// Submit button
+.submit-container input[type="button"],
+.submit-container button,
+input[type="submit"] {
+	display: inline-block !important;
+	background-color: var( --wp--preset--color--terminal-blue ) !important;
+	color: var( --wp--preset--color--bright-text ) !important;
+	text-decoration: none !important;
+	padding: 0.75rem 1.5rem !important;
+	border: none !important;
+	border-radius: 40px !important;
+	font-weight: 600 !important;
+	font-family: var( --wp--preset--font-family--source-sans-3 ) !important;
+	transition: all 200ms ease !important;
+	cursor: pointer !important;
+
+	&:hover,
+	&:focus {
+		background-color: var( --wp--preset--color--warm-magenta ) !important;
+		color: var( --wp--preset--color--bright-text ) !important;
+		transform: translateY( -2px ) !important;
+		box-shadow: 0 4px 12px rgba( 211, 54, 130, 0.4 ) !important;
+	}
+}
+
+/* stylelint-enable declaration-no-important */
+
+// ================================
+// Community + Code Related Episodes
+// ================================
+
+.wp-block-community-code-related-episodes h3.wp-block-post-title {
+	float: left;
+	display: block;
+	margin-bottom: 0;
+	margin-top: 0.2em;
+}
+
+.wp-block-community-code-related-episodes h3.wp-block-post-title a {
+	color: var( --wp--preset--color--bright-text );
+
+	&:hover {
+		color: var( --wp--preset--color--terminal-blue );
+	}
+}
+
+.wp-block-community-code-related-episodes .datetime {
+	vertical-align: middle;
+	float: right;
+	display: inline-block;
+	margin-top: 0.8em;
+	font-size: var( --wp--preset--font-size--small );
+}
+
+.wp-block-community-code-related-episodes ul {
+	list-style: none;
+	padding-left: 0;
+}
+
+.wp-block-community-code-related-episodes li {
+	border-bottom: 1px solid var( --wp--preset--color--border );
+	padding: $spacing-md 0;
+}
+
+.related-episode__meta {
+	display: block;
+	clear: both;
+	font-size: var( --wp--preset--font-size--small );
+	margin-bottom: 1em;
+}
+
+.related-episode__tags {
+	color: var( --wp--preset--color--muted-text );
+}
+
+// ================================
+// Altis Overrides
+// ================================
+
+global-block.wp-core-block.altis-global-block:nth-of-type(2),
+ab-test-block.wp-core-block.altis-global-block:nth-of-type(2) {
+	display: none;
+}

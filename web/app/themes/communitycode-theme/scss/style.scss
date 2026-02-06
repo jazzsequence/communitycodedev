@@ -1,0 +1,28 @@
+/**
+ * Community + Code Theme Styles
+ * Compiled from SCSS
+ *
+ * Note: WordPress theme header is in _header.txt and prepended during build
+ */
+
+// Base
+@use "base/variables";
+@use "base/typography";
+
+// Layout
+@use "layout/header";
+@use "layout/footer";
+
+// Components
+@use "components/site-title";
+@use "components/hero";
+@use "components/posts";
+@use "components/single";
+@use "components/buttons";
+@use "components/search";
+@use "components/plugins";
+
+// Utilities
+@use "utilities/accessibility";
+@use "utilities/helpers";
+@use "utilities/responsive";

@@ -1,0 +1,50 @@
+/**
+ * Variables
+ * Color palette and design tokens defined in theme.json
+ * These are available as CSS custom properties via var(--wp--preset--*)
+ */
+
+// Standard WordPress color names (for parent theme compatibility):
+// --wp--preset--color--base (White #FFFFFF)
+// --wp--preset--color--contrast (Deep Base #002B36)
+// --wp--preset--color--accent-1 (Terminal Blue #268BD2)
+// --wp--preset--color--accent-2 (Warm Magenta #D33682)
+// --wp--preset--color--accent-3 (Soft Cyan #2AA198)
+// --wp--preset--color--accent-4 (Muted Text #839496)
+// --wp--preset--color--accent-5 (Community Orange #CB4B16)
+// --wp--preset--color--accent-6 (Link Blue #7AC2F0)
+
+// Custom semantic names (for actual site colors):
+// --wp--preset--color--deep-base (Dark background #002B36 - used as global background)
+// --wp--preset--color--bright-text (White #FFFFFF - used as global text)
+// --wp--preset--color--terminal-blue (same as accent-1)
+// --wp--preset--color--warm-magenta (same as accent-2)
+// --wp--preset--color--soft-cyan (same as accent-3)
+// --wp--preset--color--link-blue (same as accent-6)
+// --wp--preset--color--community-orange (same as accent-5)
+// --wp--preset--color--muted-text (same as accent-4)
+// --wp--preset--color--elevated-surface (Slightly lighter dark #073642)
+// --wp--preset--color--border (Border gray #586E75)
+
+// Fonts are defined in theme.json and available as:
+// --wp--preset--font-family--victor-mono
+// --wp--preset--font-family--source-sans-3
+
+// Transitions
+$transition-base: all 0.2s ease;
+$transition-medium: all 0.3s ease;
+
+// Border Radius
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 10px;
+
+// Shadows
+$shadow-card-hover: 0 4px 12px rgba( 38, 139, 210, 0.15 );
+$focus-outline: 2px solid rgba( 38, 139, 210, 0.2 );
+
+// Spacing (using WordPress spacing scale when available)
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 2rem;

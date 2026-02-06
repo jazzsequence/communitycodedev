@@ -1,0 +1,11 @@
+{
+  "extends": "@humanmade/stylelint-config",
+  "rules": {
+    "color-hex-length": "long",
+    "declaration-block-no-redundant-longhand-properties": null,
+    "no-descending-specificity": null,
+    "selector-class-pattern": null,
+    "scss/at-import-partial-extension": null,
+    "scss/double-slash-comment-empty-line-before": null
+  }
+}

@@ -1,0 +1,16 @@
+/**
+ * Hero Section Styles
+ */
+
+.community-code-hero {
+	// Remove all paragraph wrapper styling to prevent double borders on subscription buttons
+	// Uses high specificity to override parent theme styles
+	.is-style-text-annotation,
+	p.is-style-text-annotation {
+		margin: 0;
+		padding: 0;
+		border: none;
+		background: none;
+		// Button styles are handled in _buttons.scss
+	}
+}

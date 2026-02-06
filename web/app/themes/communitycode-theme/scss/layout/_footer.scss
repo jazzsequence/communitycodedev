@@ -1,0 +1,46 @@
+/**
+ * Footer
+ */
+
+footer.wp-block-template-part {
+	background-color: var( --wp--preset--color--deep-base );
+	color: var( --wp--preset--color--muted-text );
+
+	// Footer navigation links
+	.wp-block-navigation a {
+		text-decoration: none;
+
+		&:hover,
+		&:focus {
+			color: var( --wp--preset--color--bright-text );
+			text-decoration: none;
+		}
+	}
+}
+
+// Social links in footer
+// Note: !important required to override WordPress core brand colors
+/* stylelint-disable declaration-no-important */
+footer .footer-social-icons {
+	gap: 0;
+
+	.wp-social-link {
+		background-color: transparent !important;
+	}
+
+	a {
+		width: 48px;
+		height: 48px;
+	}
+
+	a:hover svg {
+		fill: var( --wp--preset--color--link-blue ) !important;
+	}
+
+	svg {
+		width: 32px;
+		height: 32px;
+		fill: var( --wp--preset--color--base ) !important;
+	}
+}
+/* stylelint-enable declaration-no-important */
