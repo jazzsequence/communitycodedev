@@ -72,12 +72,16 @@
 .ep-autosuggest {
 	background-color: var( --wp--preset--color--elevated-surface ) !important;
 	color: var( --wp--preset--color--bright-text ) !important;
+	border-color: var( --wp--preset--color--border ) !important;
 
 	a {
 		color: var( --wp--preset--color--link-blue ) !important;
+		border-bottom: 1px solid transparent !important;
 
 		&:hover {
 			color: var( --wp--preset--color--bright-text ) !important;
+			background-color: transparent !important;
+			border-bottom: 1px dotted var( --wp--preset--color--muted-text ) !important;
 		}
 	}
 }
