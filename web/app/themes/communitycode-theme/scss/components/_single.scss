@@ -62,3 +62,8 @@
 .related-post__tags {
 	color: var( --wp--preset--color--muted-text );
 }
+
+// Post navigation
+nav.post-navigation {
+	border-top: 1px solid var( --wp--preset--color--accent-6 );
+}
