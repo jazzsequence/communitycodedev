@@ -4,7 +4,6 @@
 
 .community-code-hero {
 	// Remove all paragraph wrapper styling to prevent double borders on subscription buttons
-	// Uses high specificity to override parent theme styles
 	.is-style-text-annotation,
 	p.is-style-text-annotation {
 		margin: 0;
