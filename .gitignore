@@ -176,4 +176,6 @@ Thumbs.db
 .github/instructions/codacy.instructions.md
 .codacy
 communitycode.dev-*.json
-.claude
+.claude*
+.mcp.json
+.swarm
