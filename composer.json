@@ -74,7 +74,7 @@
         "humanmade/two-factor": "*",
         "oscarotero/env": "^2.1",
         "pantheon-systems/pantheon-hud": "*",
-        "pantheon-systems/pantheon-mu-plugin": "*",
+        "pantheon-systems/pantheon-mu-plugin": "dev-SITE-5401-cli-https-fix",
         "pantheon-upstreams/upstream-configuration": "dev-main",
         "rhubarbgroup/object-cache-pro": "*",
         "roots/bedrock-autoloader": "*",
