@@ -32,17 +32,22 @@ a fascinating conversation they just had.
 Processing" below). The episode name is the guest's full name, taken directly
 from the transcript.
 
-**If a folder is mounted and no transcript is provided:** Check
-`~/Documents/Community + Code/` for a guest episode folder — transcripts may
-be there and can be read directly. Episode folders are named by guest name only
+**If a folder is mounted and no transcript is provided:** First, look in the
+mounted folder for a guest episode subfolder — transcripts may be there and can
+be read directly. Episode folders are named by guest name only (e.g.,
+`Fons Vandamme/`). If you also have access to the host filesystem, you may
+additionally check `~/Documents/Community + Code/` as a fallback location
 (e.g., `~/Documents/Community + Code/Fons Vandamme/`).
 
 **If no transcript is attached or found:** The conversation is likely a
 technical or editorial question about the communitycode.dev WordPress site.
-When the site repo is accessible, read relevant source files from
-`~/pantheon-local-copies/communitycodedev` before answering — don't just reason
-about a generic WordPress site when the actual code is available. Look at the
-theme, plugins, and configuration files relevant to the question.
+When the site repo is accessible, prefer reading relevant source files from the
+current working copy (the project/repo root that contains this skill file)
+before answering — don't just reason about a generic WordPress site when the
+actual code is available. If the current working copy is not available but you
+do have access to the host filesystem, you may optionally use
+`~/pantheon-local-copies/communitycodedev` as a fallback. Look at the theme,
+plugins, and configuration files relevant to the question.
 
 ---
 
@@ -254,7 +259,7 @@ The webcam file follows the pattern:
 `[Guest Name]-webcam-00h_00m_00s_273ms-StreamYard` (with `.mp4` or similar
 extension). Find it with:
 ```bash
-ls ~/Documents/Community\ +\ Code/[Guest\ Name]/*-webcam-*
+ls ~/Documents/Community\ +\ Code/"<Guest Name>"/*-webcam-*
 ```
 
 ### Extraction process
@@ -268,6 +273,7 @@ ls ~/Documents/Community\ +\ Code/[Guest\ Name]/*-webcam-*
    typically yields 100–200 candidate frames for a 1-hour session — enough
    coverage without being excessive:
    ```bash
+   mkdir -p /tmp/cc_thumbs
    ffmpeg -i "[webcam file]" -vf "fps=1/20" /tmp/cc_thumbs/frame_%04d.png
    ```
    Use `/tmp/cc_thumbs/` as the working directory for raw candidates.
@@ -287,7 +293,7 @@ ls ~/Documents/Community\ +\ Code/[Guest\ Name]/*-webcam-*
 5. **Export final candidates** as numbered PNGs to the episode folder:
    ```bash
    cp /tmp/cc_thumbs/frame_XXXX.png \
-     ~/Documents/Community\ +\ Code/[Guest\ Name]/thumbnail-01.png
+     ~/Documents/Community\ +\ Code/"<Guest Name>"/thumbnail-01.png
    ```
    Name them `thumbnail-01.png` through `thumbnail-NN.png` in order of how
    strongly they meet the criteria (best candidates first).
