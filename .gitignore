@@ -49,6 +49,9 @@ web/readme.html
 !.env.example
 !.env.pantheon
 
+# DDEV
+.ddev
+
 # Generally you should only ignore the root vendor directory. These files are
 # managed by Composer and should not be version controlled. It may be necessary
 # to explicitly allow /vendor directories within plugins or themes that are not
