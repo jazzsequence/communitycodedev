@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1243e220b62ff019ea14ee6d66671bad",
+    "content-hash": "a7dc43427475f94351d00e439dc34485",
     "packages": [
         {
             "name": "10up/elasticpress",
@@ -573,16 +573,16 @@
         },
         {
             "name": "pantheon-systems/pantheon-mu-plugin",
-            "version": "dev-SITE-5401-cli-https-fix",
+            "version": "dev-SITE-5401-elasticpress-https-fix",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pantheon-systems/pantheon-mu-plugin.git",
-                "reference": "4e54b221f13e04d951294e3be4a355e8ba918c2b"
+                "reference": "0edb36b71d29a9295f25a0df3b5ff20c4a4d26af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pantheon-systems/pantheon-mu-plugin/zipball/4e54b221f13e04d951294e3be4a355e8ba918c2b",
-                "reference": "4e54b221f13e04d951294e3be4a355e8ba918c2b",
+                "url": "https://api.github.com/repos/pantheon-systems/pantheon-mu-plugin/zipball/0edb36b71d29a9295f25a0df3b5ff20c4a4d26af",
+                "reference": "0edb36b71d29a9295f25a0df3b5ff20c4a4d26af",
                 "shasum": ""
             },
             "require": {
@@ -602,9 +602,9 @@
             "description": "Pantheon mu-plugin for WordPress sites.",
             "support": {
                 "issues": "https://github.com/pantheon-systems/pantheon-mu-plugin/issues",
-                "source": "https://github.com/pantheon-systems/pantheon-mu-plugin/tree/SITE-5401-cli-https-fix"
+                "source": "https://github.com/pantheon-systems/pantheon-mu-plugin/tree/SITE-5401-elasticpress-https-fix"
             },
-            "time": "2026-03-09T15:37:16+00:00"
+            "time": "2026-03-27T01:04:50+00:00"
         },
         {
             "name": "pantheon-upstreams/upstream-configuration",
