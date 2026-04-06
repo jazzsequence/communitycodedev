@@ -100,7 +100,7 @@ function include_episode_transcript_in_index( array $post_args, int $post_id ) :
 	}
 
 	// Store transcript in custom field - searchable but not displayed in excerpts
-	$post_args['transcript_content'] = wp_strip_all_tags( $transcript_body );
+	$post_args['transcript_content'] = strip_vtt_formatting( wp_strip_all_tags( $transcript_body ) );
 
 	return $post_args;
 }
@@ -171,6 +171,31 @@ function fetch_transcript_body( string $url ) : string {
 	return $body;
 }
 
+
+/**
+ * Strip VTT cue timestamps and metadata, leaving only spoken content.
+ *
+ * Removes the WEBVTT header, timestamp lines (e.g. 00:00:01.000 --> 00:00:05.000),
+ * and cue identifiers so ElasticPress only indexes meaningful words.
+ *
+ * @param string $vtt Raw VTT text (after wp_strip_all_tags).
+ * @return string Plain spoken content.
+ */
+function strip_vtt_formatting( string $vtt ) : string {
+	// Remove WEBVTT header and NOTE/STYLE/REGION blocks.
+	$vtt = preg_replace( '/^WEBVTT.*$/m', '', $vtt );
+
+	// Remove timestamp cue lines: 00:00:00.000 --> 00:00:00.000 (with optional position metadata).
+	$vtt = preg_replace( '/^\d{2}:\d{2}:\d{2}[\.,]\d{3}\s*-->\s*\d{2}:\d{2}:\d{2}[\.,]\d{3}.*$/m', '', $vtt );
+
+	// Remove standalone numeric cue identifiers.
+	$vtt = preg_replace( '/^\d+\s*$/m', '', $vtt );
+
+	// Collapse excess whitespace.
+	$vtt = preg_replace( '/\n{2,}/', ' ', $vtt );
+
+	return trim( $vtt );
+}
 
 /**
  * Add transcript_content to searchable fields for regular search.
