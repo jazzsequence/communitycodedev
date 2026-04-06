@@ -454,6 +454,11 @@ function render_related_episodes_block( array $attributes ) : string {
 	$posts = $feature->find_related( get_the_ID(), $count + 1 );
 	remove_filter( 'ep_find_related_args', $scoped_filter );
 
+	// If find_related returns false (e.g., for previews), treat as empty array
+	if ( ! is_array( $posts ) ) {
+		return '';
+	}
+
 	// Exclude current episode from results (in case EP isn't working locally)
 	$current_post_id = get_the_ID();
 	$posts = array_filter( $posts, static function( $post ) use ( $current_post_id ) {
