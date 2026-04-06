@@ -132,12 +132,14 @@ function get_episode_transcript_url( int $post_id ) : string {
  */
 function fetch_transcript_body( string $url ) : string {
 	// Try to read from disk first to avoid Cloudflare bot challenges on loopback requests.
-	$upload_dir = wp_upload_dir();
-	$base_url   = trailingslashit( $upload_dir['baseurl'] );
-	$base_path  = trailingslashit( $upload_dir['basedir'] );
+	$upload_dir      = wp_upload_dir();
+	$base_url        = trailingslashit( $upload_dir['baseurl'] );
+	$base_path       = trailingslashit( $upload_dir['basedir'] );
+	$url_normalized  = preg_replace( '#^https?://#', '', $url );
+	$base_normalized = preg_replace( '#^https?://#', '', $base_url );
 
-	if ( str_starts_with( $url, $base_url ) ) {
-		$local_path = $base_path . substr( $url, strlen( $base_url ) );
+	if ( str_starts_with( $url_normalized, $base_normalized ) ) {
+		$local_path = $base_path . substr( $url_normalized, strlen( $base_normalized ) );
 		if ( file_exists( $local_path ) && is_readable( $local_path ) ) {
 			$body = file_get_contents( $local_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			if ( $body && strlen( $body ) > 300000 ) {
