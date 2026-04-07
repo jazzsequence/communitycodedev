@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9a80b404e369bb3f4a648ac844bdd5cd",
+    "content-hash": "b381e86f3d405497b4435a2216dc2441",
     "packages": [
         {
             "name": "10up/elasticpress",
-            "version": "5.3.2",
+            "version": "5.3.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/10up/ElasticPress.git",
-                "reference": "5124ac8461970be1aee6820f128b2b7d26772658"
+                "reference": "f952f7ba3ebe4ca6fe84c8aec45e2b0bdd10a3f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/10up/ElasticPress/zipball/5124ac8461970be1aee6820f128b2b7d26772658",
-                "reference": "5124ac8461970be1aee6820f128b2b7d26772658",
+                "url": "https://api.github.com/repos/10up/ElasticPress/zipball/f952f7ba3ebe4ca6fe84c8aec45e2b0bdd10a3f8",
+                "reference": "f952f7ba3ebe4ca6fe84c8aec45e2b0bdd10a3f8",
                 "shasum": ""
             },
             "require": {
@@ -78,9 +78,9 @@
             ],
             "support": {
                 "issues": "https://github.com/10up/ElasticPress/issues",
-                "source": "https://github.com/10up/ElasticPress/tree/5.3.2"
+                "source": "https://github.com/10up/ElasticPress/tree/5.3.2.2"
             },
-            "time": "2025-11-21T18:01:27+00:00"
+            "time": "2026-03-26T12:45:05+00:00"
         },
         {
             "name": "composer/installers",
@@ -528,6 +528,45 @@
             "time": "2024-12-03T01:02:28+00:00"
         },
         {
+            "name": "pantheon-systems/pantheon-advanced-page-cache",
+            "version": "2.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pantheon-systems/pantheon-advanced-page-cache.git",
+                "reference": "68b43e7564ce9acd131757f1a3f6685b30323228"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pantheon-systems/pantheon-advanced-page-cache/zipball/68b43e7564ce9acd131757f1a3f6685b30323228",
+                "reference": "68b43e7564ce9acd131757f1a3f6685b30323228",
+                "shasum": ""
+            },
+            "require-dev": {
+                "behat/behat": "^3.1",
+                "behat/mink-extension": "^2.2",
+                "behat/mink-goutte-driver": "^1.2",
+                "pantheon-systems/pantheon-wordpress-upstream-tests": "dev-master",
+                "pantheon-systems/pantheon-wp-coding-standards": "^3.0",
+                "pantheon-systems/wpunit-helpers": "^2.0",
+                "phpcompatibility/php-compatibility": "^9.3",
+                "phpunit/phpunit": "^9",
+                "yoast/phpunit-polyfills": "^4.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Pantheon",
+                    "email": "noreply@pantheon.io"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/pantheon-systems/pantheon-advanced-page-cache/issues",
+                "source": "https://github.com/pantheon-systems/pantheon-advanced-page-cache/tree/2.1.2"
+            },
+            "time": "2025-12-16T18:05:36+00:00"
+        },
+        {
             "name": "pantheon-systems/pantheon-hud",
             "version": "0.4.5",
             "source": {
@@ -605,6 +644,49 @@
                 "source": "https://github.com/pantheon-systems/pantheon-mu-plugin/tree/1.5.5"
             },
             "time": "2026-04-02T17:36:36+00:00"
+        },
+        {
+            "name": "pantheon-systems/wp-native-php-sessions",
+            "version": "1.4.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pantheon-systems/wp-native-php-sessions.git",
+                "reference": "aa99229bdcdb1e366296fcf23afe1aa372c5d986"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pantheon-systems/wp-native-php-sessions/zipball/aa99229bdcdb1e366296fcf23afe1aa372c5d986",
+                "reference": "aa99229bdcdb1e366296fcf23afe1aa372c5d986",
+                "shasum": ""
+            },
+            "require-dev": {
+                "pantheon-systems/pantheon-wordpress-upstream-tests": "dev-master",
+                "pantheon-systems/pantheon-wp-coding-standards": "^3.0",
+                "pantheon-systems/wpunit-helpers": "^2.0",
+                "phpunit/phpunit": "^9",
+                "yoast/phpunit-polyfills": "^4.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Pantheon",
+                    "email": "noreply@pantheon.io"
+                },
+                {
+                    "name": "Daniel Bachhuber",
+                    "email": "daniel@handbuilt.co"
+                }
+            ],
+            "description": "native PHP sessions stored in the database for WordPress.",
+            "support": {
+                "issues": "https://github.com/pantheon-systems/wp-native-php-sessions/issues",
+                "source": "https://github.com/pantheon-systems/wp-native-php-sessions/tree/1.4.5"
+            },
+            "time": "2025-12-04T16:01:44+00:00"
         },
         {
             "name": "pantheon-upstreams/upstream-configuration",
@@ -1492,7 +1574,7 @@
             "time": "2025-12-27T19:49:13+00:00"
         },
         {
-            "name": "wpackagist-plugin/akismet",
+            "name": "wp-plugin/akismet",
             "version": "5.6",
             "source": {
                 "type": "svn",
@@ -1504,13 +1586,26 @@
                 "url": "https://downloads.wordpress.org/plugin/akismet.5.6.zip"
             },
             "require": {
-                "composer/installers": "^1.0 || ^2.0"
+                "composer/installers": "~1.0|~2.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/akismet/"
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "Automattic"
+                }
+            ],
+            "description": "The best anti-spam protection to block spam comments and spam in a contact form. The most trusted antispam solution for WordPress and WooCommerce.",
+            "homepage": "https://akismet.com/",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/akismet/#developers",
+                "issues": "https://wordpress.org/support/plugin/akismet",
+                "source": "https://plugins.svn.wordpress.org/akismet"
+            },
+            "time": "2026-04-06T18:41:14+00:00"
         },
         {
-            "name": "wpackagist-plugin/altis-accelerate",
+            "name": "wp-plugin/altis-accelerate",
             "version": "3.5.5",
             "source": {
                 "type": "svn",
@@ -1522,13 +1617,25 @@
                 "url": "https://downloads.wordpress.org/plugin/altis-accelerate.3.5.5.zip"
             },
             "require": {
-                "composer/installers": "^1.0 || ^2.0"
+                "composer/installers": "~1.0|~2.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/altis-accelerate/"
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "Human Made"
+                }
+            ],
+            "description": "Stop guessing. Start converting. The native A/B testing and personalization platform for the WordPress Block Editor.",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/altis-accelerate/#developers",
+                "issues": "https://wordpress.org/support/plugin/altis-accelerate",
+                "source": "https://plugins.svn.wordpress.org/altis-accelerate"
+            },
+            "time": "2026-03-31T18:35:49+00:00"
         },
         {
-            "name": "wpackagist-plugin/autoblue",
+            "name": "wp-plugin/autoblue",
             "version": "1.0.0",
             "source": {
                 "type": "svn",
@@ -1540,13 +1647,26 @@
                 "url": "https://downloads.wordpress.org/plugin/autoblue.1.0.0.zip"
             },
             "require": {
-                "composer/installers": "^1.0 || ^2.0"
+                "composer/installers": "~1.0|~2.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/autoblue/"
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "Daniel Post"
+                }
+            ],
+            "description": "With Autoblue, you can automatically share new posts to Bluesky from your WordPress site.",
+            "homepage": "https://autoblue.co",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/autoblue/#developers",
+                "issues": "https://wordpress.org/support/plugin/autoblue",
+                "source": "https://plugins.svn.wordpress.org/autoblue"
+            },
+            "time": "2026-03-23T19:23:21+00:00"
         },
         {
-            "name": "wpackagist-plugin/block-accessibility-checks",
+            "name": "wp-plugin/block-accessibility-checks",
             "version": "2.3.0",
             "source": {
                 "type": "svn",
@@ -1558,13 +1678,25 @@
                 "url": "https://downloads.wordpress.org/plugin/block-accessibility-checks.2.3.0.zip"
             },
             "require": {
-                "composer/installers": "^1.0 || ^2.0"
+                "composer/installers": "~1.0|~2.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/block-accessibility-checks/"
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "Troy Chaplin"
+                }
+            ],
+            "description": "Prevent WCAG accessibility errors in your content with real-time validation for blocks, meta fields, and document structure.",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/block-accessibility-checks/#developers",
+                "issues": "https://wordpress.org/support/plugin/block-accessibility-checks",
+                "source": "https://plugins.svn.wordpress.org/block-accessibility-checks"
+            },
+            "time": "2026-03-23T19:23:21+00:00"
         },
         {
-            "name": "wpackagist-plugin/imagify",
+            "name": "wp-plugin/imagify",
             "version": "2.2.7",
             "source": {
                 "type": "svn",
@@ -1576,13 +1708,26 @@
                 "url": "https://downloads.wordpress.org/plugin/imagify.2.2.7.zip"
             },
             "require": {
-                "composer/installers": "^1.0 || ^2.0"
+                "composer/installers": "~1.0|~2.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/imagify/"
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "WP Media"
+                }
+            ],
+            "description": "Optimize images in 1‑click: compress, resize & convert to WebP/AVIF - free up to 20MB/month. Enjoy the easiest WordPress image optimizer to set up.",
+            "homepage": "https://wordpress.org/plugins/imagify/",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/imagify/#developers",
+                "issues": "https://wordpress.org/support/plugin/imagify",
+                "source": "https://plugins.svn.wordpress.org/imagify"
+            },
+            "time": "2026-04-07T15:40:57+00:00"
         },
         {
-            "name": "wpackagist-plugin/integromat-connector",
+            "name": "wp-plugin/integromat-connector",
             "version": "1.6.6",
             "source": {
                 "type": "svn",
@@ -1594,67 +1739,87 @@
                 "url": "https://downloads.wordpress.org/plugin/integromat-connector.1.6.6.zip"
             },
             "require": {
-                "composer/installers": "^1.0 || ^2.0"
+                "composer/installers": "~1.0|~2.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/integromat-connector/"
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "Make"
+                }
+            ],
+            "description": "Make Connector. Make lets you design, build, and automate by connecting with WordPress in just a few clicks.",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/integromat-connector/#developers",
+                "issues": "https://wordpress.org/support/plugin/integromat-connector",
+                "source": "https://plugins.svn.wordpress.org/integromat-connector"
+            },
+            "time": "2026-03-23T19:23:21+00:00"
         },
         {
-            "name": "wpackagist-plugin/mailpoet",
-            "version": "5.22.1",
+            "name": "wp-plugin/mailpoet",
+            "version": "5.23.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/mailpoet/",
-                "reference": "tags/5.22.1"
+                "reference": "tags/5.23.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.22.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.23.0.zip"
             },
             "require": {
-                "composer/installers": "^1.0 || ^2.0"
+                "composer/installers": "~1.0|~2.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/mailpoet/"
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "MailPoet"
+                }
+            ],
+            "description": "Send beautiful newsletters from WordPress. Collect subscribers with signup forms, automate your emails for WooCommerce, blog post notifications & more",
+            "homepage": "https://www.mailpoet.com",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/mailpoet/#developers",
+                "issues": "https://wordpress.org/support/plugin/mailpoet",
+                "source": "https://plugins.svn.wordpress.org/mailpoet"
+            },
+            "time": "2026-04-07T12:55:46+00:00"
         },
         {
-            "name": "wpackagist-plugin/ninja-forms",
-            "version": "3.14.1",
+            "name": "wp-plugin/ninja-forms",
+            "version": "3.14.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/ninja-forms/",
-                "reference": "tags/3.14.1"
+                "reference": "tags/3.14.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.14.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.14.2.zip"
             },
             "require": {
-                "composer/installers": "^1.0 || ^2.0"
+                "composer/installers": "~1.0|~2.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/ninja-forms/"
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "Kevin Stover"
+                }
+            ],
+            "description": "The 100% beginner friendly WordPress form builder. Drag & drop form fields to build beautiful, professional contact forms in minutes.",
+            "homepage": "http://ninjaforms.com/?utm_source=WordPress&utm_medium=readme",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/ninja-forms/#developers",
+                "issues": "https://wordpress.org/support/plugin/ninja-forms",
+                "source": "https://plugins.svn.wordpress.org/ninja-forms"
+            },
+            "time": "2026-03-23T19:23:21+00:00"
         },
         {
-            "name": "wpackagist-plugin/pantheon-advanced-page-cache",
-            "version": "2.1.2",
-            "source": {
-                "type": "svn",
-                "url": "https://plugins.svn.wordpress.org/pantheon-advanced-page-cache/",
-                "reference": "tags/2.1.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/pantheon-advanced-page-cache.2.1.2.zip"
-            },
-            "require": {
-                "composer/installers": "^1.0 || ^2.0"
-            },
-            "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/pantheon-advanced-page-cache/"
-        },
-        {
-            "name": "wpackagist-plugin/powerpress",
+            "name": "wp-plugin/powerpress",
             "version": "11.15.17",
             "source": {
                 "type": "svn",
@@ -1666,13 +1831,26 @@
                 "url": "https://downloads.wordpress.org/plugin/powerpress.11.15.17.zip"
             },
             "require": {
-                "composer/installers": "^1.0 || ^2.0"
+                "composer/installers": "~1.0|~2.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/powerpress/"
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "blubrry"
+                }
+            ],
+            "description": "No. 1 Podcasting plugin for WordPress.",
+            "homepage": "https://blubrry.com/services/powerpress-plugin/",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/powerpress/#developers",
+                "issues": "https://wordpress.org/support/plugin/powerpress",
+                "source": "https://plugins.svn.wordpress.org/powerpress"
+            },
+            "time": "2026-03-23T19:23:21+00:00"
         },
         {
-            "name": "wpackagist-plugin/progress-planner",
+            "name": "wp-plugin/progress-planner",
             "version": "1.9.0",
             "source": {
                 "type": "svn",
@@ -1684,13 +1862,26 @@
                 "url": "https://downloads.wordpress.org/plugin/progress-planner.1.9.0.zip"
             },
             "require": {
-                "composer/installers": "^1.0 || ^2.0"
+                "composer/installers": "~1.0|~2.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/progress-planner/"
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "Progress Planner"
+                }
+            ],
+            "description": "Powering your website’s progress! Track, motivate, and enhance your website management with daily activity tracking and weekly progress reports.",
+            "homepage": "https://prpl.fyi/home",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/progress-planner/#developers",
+                "issues": "https://wordpress.org/support/plugin/progress-planner",
+                "source": "https://plugins.svn.wordpress.org/progress-planner"
+            },
+            "time": "2026-03-23T19:23:21+00:00"
         },
         {
-            "name": "wpackagist-plugin/wp-mail-smtp",
+            "name": "wp-plugin/wp-mail-smtp",
             "version": "4.7.1",
             "source": {
                 "type": "svn",
@@ -1702,31 +1893,26 @@
                 "url": "https://downloads.wordpress.org/plugin/wp-mail-smtp.4.7.1.zip"
             },
             "require": {
-                "composer/installers": "^1.0 || ^2.0"
+                "composer/installers": "~1.0|~2.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/wp-mail-smtp/"
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "Syed Balkhi"
+                }
+            ],
+            "description": "Make email delivery easy for WordPress. Connect with SMTP, Gmail, Outlook, SendGrid, Mailgun, SES, Zoho, + more. Rated #1 WordPress SMTP Email plugin.",
+            "homepage": "https://wpmailsmtp.com/",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/wp-mail-smtp/#developers",
+                "issues": "https://wordpress.org/support/plugin/wp-mail-smtp",
+                "source": "https://plugins.svn.wordpress.org/wp-mail-smtp"
+            },
+            "time": "2026-03-23T19:23:21+00:00"
         },
         {
-            "name": "wpackagist-plugin/wp-native-php-sessions",
-            "version": "1.4.5",
-            "source": {
-                "type": "svn",
-                "url": "https://plugins.svn.wordpress.org/wp-native-php-sessions/",
-                "reference": "tags/1.4.5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wp-native-php-sessions.1.4.5.zip"
-            },
-            "require": {
-                "composer/installers": "^1.0 || ^2.0"
-            },
-            "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/wp-native-php-sessions/"
-        },
-        {
-            "name": "wpackagist-theme/twentytwentyfive",
+            "name": "wp-theme/twentytwentyfive",
             "version": "1.4",
             "source": {
                 "type": "svn",
@@ -1738,23 +1924,31 @@
                 "url": "https://downloads.wordpress.org/theme/twentytwentyfive.1.4.zip"
             },
             "require": {
-                "composer/installers": "^1.0 || ^2.0"
+                "composer/installers": "~1.0|~2.0"
             },
             "type": "wordpress-theme",
-            "homepage": "https://wordpress.org/themes/twentytwentyfive/"
+            "notification-url": "https://wp-packages.org/downloads",
+            "description": "Twenty Twenty-Five emphasizes simplicity and adaptability. It offers flexible design options, supported by a variety of patterns for different page types, such as services and landing pages, making it ideal for building personal blogs, professional portfolios, online magazines, or business websites. Its templates cater to various blog styles, from text-focused to image-heavy layouts. Additionally, it supports international typography and diverse color palettes, ensuring accessibility and customization for users worldwide.",
+            "homepage": "https://wordpress.org/themes/twentytwentyfive/",
+            "support": {
+                "changelog": "https://wordpress.org/themes/twentytwentyfive/#developers",
+                "issues": "https://wordpress.org/support/theme/twentytwentyfive",
+                "source": "https://themes.svn.wordpress.org/twentytwentyfive"
+            },
+            "time": "2026-03-23T19:23:21+00:00"
         },
         {
             "name": "yoast/wordpress-seo",
-            "version": "27.1.1",
+            "version": "27.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Yoast-dist/wordpress-seo.git",
-                "reference": "71b23b6338451d59de8600431e09e4640cf36b26"
+                "reference": "b16c83a15a2574e87f48f914cffe31348355f763"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Yoast-dist/wordpress-seo/zipball/71b23b6338451d59de8600431e09e4640cf36b26",
-                "reference": "71b23b6338451d59de8600431e09e4640cf36b26",
+                "url": "https://api.github.com/repos/Yoast-dist/wordpress-seo/zipball/b16c83a15a2574e87f48f914cffe31348355f763",
+                "reference": "b16c83a15a2574e87f48f914cffe31348355f763",
                 "shasum": ""
             },
             "require": {
@@ -1774,7 +1968,7 @@
                 "wpackagist-plugin/google-site-kit": "dev-trunk",
                 "wpackagist-plugin/woocommerce": "dev-trunk",
                 "yoast/wp-test-utils": "^1.2.1",
-                "yoast/yoastcs": "^3.3.0"
+                "yoast/yoastcs": "^3.4.0"
             },
             "suggest": {
                 "ext-bcmath": "For more accurate calculations",
@@ -1825,7 +2019,7 @@
                 "source": "https://github.com/Yoast/wordpress-seo",
                 "wiki": "https://github.com/Yoast/wordpress-seo/wiki"
             },
-            "time": "2026-03-03T14:06:55+00:00"
+            "time": "2026-03-31T08:33:35+00:00"
         }
     ],
     "packages-dev": [
@@ -2623,18 +2817,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "ed005b7ebb25c82bb29af88d634357073f3b7a33"
+                "reference": "7c570124dcf5c6834d78348d6817f32cd6b537d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/ed005b7ebb25c82bb29af88d634357073f3b7a33",
-                "reference": "ed005b7ebb25c82bb29af88d634357073f3b7a33",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/7c570124dcf5c6834d78348d6817f32cd6b537d7",
+                "reference": "7c570124dcf5c6834d78348d6817f32cd6b537d7",
                 "shasum": ""
             },
             "conflict": {
                 "3f/pygmentize": "<1.2",
                 "adaptcms/adaptcms": "<=1.3",
-                "admidio/admidio": "<5.0.6",
+                "admidio/admidio": "<5.0.8",
                 "adodb/adodb-php": "<=5.22.9",
                 "aheinze/cockpit": "<2.2",
                 "aimeos/ai-admin-graphql": ">=2022.04.1,<2022.10.10|>=2023.04.1,<2023.10.6|>=2024.04.1,<2024.07.2",
@@ -2676,15 +2870,18 @@
                 "athlon1600/php-proxy": "<=5.1",
                 "athlon1600/php-proxy-app": "<=3",
                 "athlon1600/youtube-downloader": "<=4",
+                "aureuserp/aureuserp": "<1.3.0.0-beta1",
                 "austintoddj/canvas": "<=3.4.2",
-                "auth0/auth0-php": ">=3.3,<8.18",
-                "auth0/login": "<7.20",
-                "auth0/symfony": "<=5.5",
-                "auth0/wordpress": "<=5.4",
+                "auth0/auth0-php": ">=3.3,<=8.18",
+                "auth0/login": "<=7.20",
+                "auth0/symfony": "<=5.7",
+                "auth0/wordpress": "<=5.5",
                 "automad/automad": "<2.0.0.0-alpha5",
                 "automattic/jetpack": "<9.8",
+                "avideo/avideo": "<=26",
                 "awesome-support/awesome-support": "<=6.0.7",
-                "aws/aws-sdk-php": "<3.368",
+                "aws/aws-sdk-php": "<=3.371.3",
+                "ayacoo/redirect-tab": "<2.1.2|>=3,<3.1.7|>=4,<4.0.5",
                 "azuracast/azuracast": "<=0.23.3",
                 "b13/seo_basics": "<0.8.2",
                 "backdrop/backdrop": "<=1.32",
@@ -2697,7 +2894,7 @@
                 "barrelstrength/sprout-forms": "<3.9",
                 "barryvdh/laravel-translation-manager": "<0.6.8",
                 "barzahlen/barzahlen-php": "<2.0.1",
-                "baserproject/basercms": "<=5.1.1",
+                "baserproject/basercms": "<=5.2.2",
                 "bassjobsen/bootstrap-3-typeahead": ">4.0.2",
                 "bbpress/bbpress": "<2.6.5",
                 "bcit-ci/codeigniter": "<3.1.3",
@@ -2740,13 +2937,13 @@
                 "cesnet/simplesamlphp-module-proxystatistics": "<3.1",
                 "chriskacerguis/codeigniter-restserver": "<=2.7.1",
                 "chrome-php/chrome": "<1.14",
-                "ci4-cms-erp/ci4ms": "<0.28.5",
+                "ci4-cms-erp/ci4ms": "<=0.31.1",
                 "civicrm/civicrm-core": ">=4.2,<4.2.9|>=4.3,<4.3.3",
                 "ckeditor/ckeditor": "<4.25",
                 "clickstorm/cs-seo": ">=6,<6.8|>=7,<7.5|>=8,<8.4|>=9,<9.3",
                 "co-stack/fal_sftp": "<0.2.6",
-                "cockpit-hq/cockpit": "<2.11.4",
-                "code16/sharp": "<9.11.1",
+                "cockpit-hq/cockpit": "<2.13.5",
+                "code16/sharp": "<9.20",
                 "codeception/codeception": "<3.1.3|>=4,<4.1.22",
                 "codeigniter/framework": "<3.1.10",
                 "codeigniter4/framework": "<4.6.2",
@@ -2770,11 +2967,15 @@
                 "corveda/phpsandbox": "<1.3.5",
                 "cosenary/instagram": "<=2.3",
                 "couleurcitron/tarteaucitron-wp": "<0.3",
-                "cpsit/typo3-mailqueue": "<0.4.3|>=0.5,<0.5.1",
-                "craftcms/cms": "<=4.17.3|>=5,<=5.9.8",
+                "cpsit/typo3-mailqueue": "<0.4.5|>=0.5,<0.5.2",
+                "craftcms/aws-s3": ">=2.0.2,<=2.2.4",
+                "craftcms/azure-blob": ">=2.0.0.0-beta1,<=2.1",
+                "craftcms/cms": "<=4.17.7|>=5,<=5.9.13",
                 "craftcms/commerce": ">=4,<4.11|>=5,<5.6",
                 "craftcms/composer": ">=4.0.0.0-RC1-dev,<=4.10|>=5.0.0.0-RC1-dev,<=5.5.1",
                 "craftcms/craft": ">=3.5,<=4.16.17|>=5.0.0.0-RC1-dev,<=5.8.21",
+                "craftcms/google-cloud": ">=2.0.0.0-beta1,<=2.2",
+                "craftcms/webhooks": ">=3,<3.2",
                 "croogo/croogo": "<=4.0.7",
                 "cuyz/valinor": "<0.12",
                 "czim/file-handling": "<1.5|>=2,<2.3",
@@ -2792,7 +2993,7 @@
                 "derhansen/sf_event_mgt": "<4.3.1|>=5,<5.1.1|>=7,<7.4",
                 "desperado/xml-bundle": "<=0.1.7",
                 "dev-lancer/minecraft-motd-parser": "<=1.0.5",
-                "devcode-it/openstamanager": "<=2.9.8",
+                "devcode-it/openstamanager": "<=2.10.1",
                 "devgroup/dotplant": "<2020.09.14-dev",
                 "digimix/wp-svg-upload": "<=1",
                 "directmailteam/direct-mail": "<6.0.3|>=7,<7.0.3|>=8,<9.5.2",
@@ -2809,9 +3010,10 @@
                 "doctrine/mongodb-odm": "<1.0.2",
                 "doctrine/mongodb-odm-bundle": "<3.0.1",
                 "doctrine/orm": ">=1,<1.2.4|>=2,<2.4.8|>=2.5,<2.5.1|>=2.8.3,<2.8.4",
-                "dolibarr/dolibarr": "<21.0.3",
+                "dolibarr/dolibarr": "<=22.0.4",
                 "dompdf/dompdf": "<2.0.4",
                 "doublethreedigital/guest-entries": "<3.1.2",
+                "dreamfactory/df-core": "<1.0.4",
                 "drupal-pattern-lab/unified-twig-extensions": "<=0.1",
                 "drupal/access_code": "<2.0.5",
                 "drupal/acquia_dam": "<1.1.5",
@@ -2895,7 +3097,7 @@
                 "filament/actions": ">=3.2,<3.2.123",
                 "filament/filament": ">=4,<4.3.1",
                 "filament/infolists": ">=3,<3.2.115",
-                "filament/tables": ">=3,<3.2.115",
+                "filament/tables": ">=3,<3.2.115|>=4,<4.8.5|>=5,<5.3.5",
                 "filegator/filegator": "<7.8",
                 "filp/whoops": "<2.1.13",
                 "fineuploader/php-traditional-server": "<=1.2.2",
@@ -2930,7 +3132,7 @@
                 "friendsoftypo3/openid": ">=4.5,<4.5.31|>=4.7,<4.7.16|>=6,<6.0.11|>=6.1,<6.1.6",
                 "froala/wysiwyg-editor": "<=4.3",
                 "frosh/adminer-platform": "<2.2.1",
-                "froxlor/froxlor": "<=2.3.3",
+                "froxlor/froxlor": "<=2.3.4",
                 "frozennode/administrator": "<=5.0.12",
                 "fuel/core": "<1.8.1",
                 "funadmin/funadmin": "<=7.1.0.0-RC4",
@@ -2940,7 +3142,7 @@
                 "geshi/geshi": "<=1.0.9.1",
                 "getformwork/formwork": "<=2.3.3",
                 "getgrav/grav": "<1.11.0.0-beta1",
-                "getkirby/cms": "<3.9.8.3-dev|>=3.10,<3.10.1.2-dev|>=4,<4.7.1|>=5,<=5.2.1",
+                "getkirby/cms": "<=5.2.1",
                 "getkirby/kirby": "<3.9.8.3-dev|>=3.10,<3.10.1.2-dev|>=4,<4.7.1",
                 "getkirby/panel": "<2.5.14",
                 "getkirby/starterkit": "<=3.7.0.2",
@@ -2949,7 +3151,7 @@
                 "globalpayments/php-sdk": "<2",
                 "goalgorilla/open_social": "<12.3.11|>=12.4,<12.4.10|>=13.0.0.0-alpha1,<13.0.0.0-alpha11",
                 "gogentooss/samlbase": "<1.2.7",
-                "google/protobuf": "<3.4",
+                "google/protobuf": "<4.33.6",
                 "gos/web-socket-bundle": "<1.10.4|>=2,<2.6.1|>=3,<3.3",
                 "gp247/core": "<1.1.24",
                 "gree/jose": "<2.2.1",
@@ -2969,6 +3171,7 @@
                 "hjue/justwriting": "<=1",
                 "hov/jobfair": "<1.0.13|>=2,<2.0.2",
                 "httpsoft/http-message": "<1.0.12",
+                "hybridauth/hybridauth": "<=3.12.2",
                 "hyn/multi-tenant": ">=5.6,<5.7.2",
                 "ibexa/admin-ui": ">=4.2,<4.2.3|>=4.6,<4.6.25|>=5,<5.0.3",
                 "ibexa/admin-ui-assets": ">=4.6.0.0-alpha1,<4.6.21",
@@ -2997,10 +3200,12 @@
                 "innologi/typo3-appointments": "<2.0.6",
                 "intelliants/subrion": "<4.2.2",
                 "inter-mediator/inter-mediator": "==5.5",
+                "invoiceninja/invoiceninja": "<5.13.4",
                 "ipl/web": "<0.10.1",
                 "islandora/crayfish": "<4.1",
                 "islandora/islandora": ">=2,<2.4.1",
                 "ivankristianto/phpwhois": "<=4.3",
+                "j0k3r/graby": "<=2.5",
                 "jackalope/jackalope-doctrine-dbal": "<1.7.4",
                 "jambagecom/div2007": "<0.10.2",
                 "james-heinrich/getid3": "<1.9.21",
@@ -3009,6 +3214,7 @@
                 "jbartels/wec-map": "<3.0.3",
                 "jcbrand/converse.js": "<3.3.3",
                 "joelbutcher/socialstream": "<5.6|>=6,<6.2",
+                "johnbillion/query-monitor": "<3.20.4",
                 "johnbillion/wp-crontrol": "<1.16.2|>=1.17,<1.19.2",
                 "joomla/application": "<1.0.13",
                 "joomla/archive": "<1.1.12|>=2,<2.0.1",
@@ -3027,6 +3233,7 @@
                 "jweiland/events2": "<8.3.8|>=9,<9.0.6",
                 "jweiland/kk-downloader": "<1.2.2",
                 "kazist/phpwhois": "<=4.2.6",
+                "kelvinmo/simplejwt": "<=1.1",
                 "kelvinmo/simplexrd": "<3.1.1",
                 "kevinpapst/kimai2": "<1.16.7",
                 "khodakhah/nodcms": "<=3",
@@ -3036,7 +3243,7 @@
                 "knplabs/knp-snappy": "<=1.4.2",
                 "kohana/core": "<3.3.3",
                 "koillection/koillection": "<1.6.12",
-                "krayin/laravel-crm": "<=1.3",
+                "krayin/laravel-crm": "<=2.2",
                 "kreait/firebase-php": ">=3.2,<3.8.1",
                 "kumbiaphp/kumbiapp": "<=1.1.1",
                 "la-haute-societe/tcpdf": "<6.2.22",
@@ -3055,13 +3262,13 @@
                 "lavalite/cms": "<=10.1",
                 "lavitto/typo3-form-to-database": "<2.2.5|>=3,<3.2.2|>=4,<4.2.3|>=5,<5.0.2",
                 "lcobucci/jwt": ">=3.4,<3.4.6|>=4,<4.0.4|>=4.1,<4.1.5",
-                "league/commonmark": "<=2.8",
+                "league/commonmark": "<=2.8.1",
                 "league/flysystem": "<1.1.4|>=2,<2.1.1",
                 "league/oauth2-server": ">=8.3.2,<8.4.2|>=8.5,<8.5.3",
                 "leantime/leantime": "<3.3",
                 "lexik/jwt-authentication-bundle": "<2.10.7|>=2.11,<2.11.3",
                 "libreform/libreform": ">=2,<=2.0.8",
-                "librenms/librenms": "<26.2",
+                "librenms/librenms": "<26.3",
                 "liftkit/database": "<2.13.2",
                 "lightsaml/lightsaml": "<1.3.5",
                 "limesurvey/limesurvey": "<6.15.4",
@@ -3087,7 +3294,7 @@
                 "maikuolan/phpmussel": ">=1,<1.6",
                 "mainwp/mainwp": "<=4.4.3.3",
                 "manogi/nova-tiptap": "<=3.2.6",
-                "mantisbt/mantisbt": "<2.27.2",
+                "mantisbt/mantisbt": "<2.28.1",
                 "marcwillmann/turn": "<0.3.3",
                 "marshmallow/nova-tiptap": "<5.7",
                 "matomo/matomo": "<1.11",
@@ -3118,6 +3325,7 @@
                 "mikehaertl/php-shellcommand": "<1.6.1",
                 "mineadmin/mineadmin": "<=3.0.9",
                 "miniorange/miniorange-saml": "<1.4.3",
+                "miraheze/ts-portal": "<=33",
                 "mittwald/typo3_forum": "<1.2.1",
                 "mobiledetect/mobiledetectlib": "<2.8.32",
                 "modx/revolution": "<=3.1",
@@ -3180,7 +3388,7 @@
                 "openid/php-openid": "<2.3",
                 "openmage/magento-lts": "<20.16.1",
                 "opensolutions/vimbadmin": "<=3.0.15",
-                "opensource-workshop/connect-cms": "<1.8.7|>=2,<2.4.7",
+                "opensource-workshop/connect-cms": "<1.41.1|>=2,<2.41.1",
                 "orchid/platform": ">=8,<14.43",
                 "oro/calendar-bundle": ">=4.2,<=4.2.6|>=5,<=5.0.6|>=5.1,<5.1.1",
                 "oro/commerce": ">=4.1,<5.0.11|>=5.1,<5.1.1",
@@ -3221,13 +3429,13 @@
                 "phpmailer/phpmailer": "<6.5",
                 "phpmussel/phpmussel": ">=1,<1.6",
                 "phpmyadmin/phpmyadmin": "<5.2.2",
-                "phpmyfaq/phpmyfaq": "<=4.0.16",
+                "phpmyfaq/phpmyfaq": "<=4.1",
                 "phpoffice/common": "<0.2.9",
                 "phpoffice/math": "<=0.2",
                 "phpoffice/phpexcel": "<=1.8.2",
                 "phpoffice/phpspreadsheet": "<1.30|>=2,<2.1.12|>=2.2,<2.4|>=3,<3.10|>=4,<5",
                 "phppgadmin/phppgadmin": "<=7.13",
-                "phpseclib/phpseclib": "<2.0.47|>=3,<3.0.36",
+                "phpseclib/phpseclib": "<=2.0.51|>=3,<=3.0.49",
                 "phpservermon/phpservermon": "<3.6",
                 "phpsysinfo/phpsysinfo": "<3.4.3",
                 "phpunit/phpunit": "<8.5.52|>=9,<9.6.33|>=10,<10.5.62|>=11,<11.5.50|>=12,<12.5.8",
@@ -3249,7 +3457,7 @@
                 "pixelfed/pixelfed": "<0.12.5",
                 "plotly/plotly.js": "<2.25.2",
                 "pocketmine/bedrock-protocol": "<8.0.2",
-                "pocketmine/pocketmine-mp": "<5.32.1",
+                "pocketmine/pocketmine-mp": "<5.41.1",
                 "pocketmine/raklib": ">=0.14,<0.14.6|>=0.15,<0.15.1",
                 "pressbooks/pressbooks": "<5.18",
                 "prestashop/autoupgrade": ">=4,<4.10.1",
@@ -3257,7 +3465,7 @@
                 "prestashop/blockwishlist": ">=2,<2.1.1",
                 "prestashop/contactform": ">=1.0.1,<4.3",
                 "prestashop/gamification": "<2.3.2",
-                "prestashop/prestashop": "<8.2.4|>=9.0.0.0-alpha1,<9.0.3",
+                "prestashop/prestashop": "<8.2.5|>=9.0.0.0-alpha1,<9.1",
                 "prestashop/productcomments": "<5.0.2",
                 "prestashop/ps_checkout": "<4.4.1|>=5,<5.0.5",
                 "prestashop/ps_contactinfo": "<=3.3.2",
@@ -3275,6 +3483,7 @@
                 "pubnub/pubnub": "<6.1",
                 "punktde/pt_extbase": "<1.5.1",
                 "pusher/pusher-php-server": "<2.2.1",
+                "putyourlightson/craft-sprig": ">=2,<2.15.2|>=3,<3.7.2",
                 "pwweb/laravel-core": "<=0.3.6.0-beta",
                 "pxlrbt/filament-excel": "<1.1.14|>=2.0.0.0-alpha,<2.3.3",
                 "pyrocms/pyrocms": "<=3.9.1",
@@ -3283,6 +3492,7 @@
                 "rainlab/blog-plugin": "<1.4.1",
                 "rainlab/debugbar-plugin": "<3.1",
                 "rainlab/user-plugin": "<=1.4.5",
+                "ralffreit/mfa-email": "<1.0.7|==2",
                 "rankmath/seo-by-rank-math": "<=1.0.95",
                 "rap2hpoutre/laravel-log-viewer": "<0.13",
                 "react/http": ">=0.7,<1.9",
@@ -3293,15 +3503,17 @@
                 "reportico-web/reportico": "<=8.1",
                 "rhukster/dom-sanitizer": "<1.0.7",
                 "rmccue/requests": ">=1.6,<1.8",
-                "robrichards/xmlseclibs": "<=3.1.3",
+                "roadiz/documents": "<2.3.42|>=2.4,<2.5.44|>=2.6,<2.6.28|>=2.7,<2.7.9",
+                "robrichards/xmlseclibs": "<3.1.5",
                 "roots/soil": "<4.1",
-                "roundcube/roundcubemail": "<1.5.10|>=1.6,<1.6.11",
+                "roundcube/roundcubemail": "<1.5.10|>=1.6,<1.6.11|>=1.7.0.0-beta,<1.7.0.0-RC5-dev",
                 "rudloff/alltube": "<3.0.3",
                 "rudloff/rtmpdump-bin": "<=2.3.1",
                 "s-cart/core": "<=9.0.5",
                 "s-cart/s-cart": "<6.9",
                 "sabberworm/php-css-parser": ">=1,<1.0.1|>=2,<2.0.1|>=3,<3.0.1|>=4,<4.0.1|>=5,<5.0.9|>=5.1,<5.1.3|>=5.2,<5.2.1|>=6,<6.0.2|>=7,<7.0.4|>=8,<8.0.1|>=8.1,<8.1.1|>=8.2,<8.2.1|>=8.3,<8.3.1",
                 "sabre/dav": ">=1.6,<1.7.11|>=1.8,<1.8.9",
+                "saloonphp/saloon": "<4",
                 "samwilson/unlinked-wikibase": "<1.42",
                 "scheb/two-factor-bundle": "<3.26|>=4,<4.11",
                 "sensiolabs/connect": "<4.2.3",
@@ -3344,7 +3556,7 @@
                 "simplesamlphp/simplesamlphp-module-openid": "<1",
                 "simplesamlphp/simplesamlphp-module-openidprovider": "<0.9",
                 "simplesamlphp/xml-common": "<1.20",
-                "simplesamlphp/xml-security": "==1.6.11",
+                "simplesamlphp/xml-security": "<1.13.9|>=2,<2.3.1",
                 "simplito/elliptic-php": "<1.0.6",
                 "sitegeist/fluid-components": "<3.5",
                 "sjbr/sr-feuser-register": "<2.6.2|>=5.1,<12.5",
@@ -3372,14 +3584,14 @@
                 "starcitizentools/short-description": ">=4,<4.0.1",
                 "starcitizentools/tabber-neue": ">=1.9.1,<2.7.2|>=3,<3.1.1",
                 "starcitizenwiki/embedvideo": "<=4",
-                "statamic/cms": "<5.73.11|>=6,<6.4",
+                "statamic/cms": "<5.73.16|>=6,<6.7.2",
                 "stormpath/sdk": "<9.9.99",
                 "studio-42/elfinder": "<=2.1.64",
                 "studiomitte/friendlycaptcha": "<0.1.4",
                 "subhh/libconnect": "<7.0.8|>=8,<8.1",
                 "sukohi/surpass": "<1",
                 "sulu/form-bundle": ">=2,<2.5.3",
-                "sulu/sulu": "<1.6.44|>=2,<2.5.25|>=2.6,<2.6.9|>=3.0.0.0-alpha1,<3.0.0.0-alpha3",
+                "sulu/sulu": "<2.6.22|>=3,<3.0.5",
                 "sumocoders/framework-user-bundle": "<1.4",
                 "superbig/craft-audit": "<3.0.2",
                 "svewap/a21glossary": "<=0.4.10",
@@ -3446,7 +3658,7 @@
                 "thelia/thelia": ">=2.1,<2.1.3",
                 "theonedemon/phpwhois": "<=4.2.5",
                 "thinkcmf/thinkcmf": "<6.0.8",
-                "thorsten/phpmyfaq": "<4.0.18|>=4.1.0.0-alpha,<=4.1.0.0-beta2",
+                "thorsten/phpmyfaq": "<4.1.1",
                 "tikiwiki/tiki-manager": "<=17.1",
                 "timber/timber": ">=0.16.6,<1.23.1|>=1.24,<1.24.1|>=2,<2.1",
                 "tinymce/tinymce": "<7.2",
@@ -3547,11 +3759,12 @@
                 "wpcloud/wp-stateless": "<3.2",
                 "wpglobus/wpglobus": "<=1.9.6",
                 "wpmetabox/meta-box": "<5.11.2",
-                "wwbn/avideo": "<25",
+                "wwbn/avideo": "<=26",
                 "xataface/xataface": "<3",
                 "xpressengine/xpressengine": "<3.0.15",
                 "yab/quarx": "<2.4.5",
-                "yeswiki/yeswiki": "<=4.5.4",
+                "yansongda/pay": "<=3.7.19",
+                "yeswiki/yeswiki": "<4.6",
                 "yetiforce/yetiforce-crm": "<6.5",
                 "yidashi/yii2cmf": "<=2",
                 "yii2mod/yii2-cms": "<1.9.2",
@@ -3566,6 +3779,7 @@
                 "yiisoft/yii2-redis": "<2.0.20",
                 "yikesinc/yikes-inc-easy-mailchimp-extender": "<6.8.6",
                 "yoast-seo-for-typo3/yoast_seo": "<7.2.3",
+                "yoast/duplicate-post": "<=4.5",
                 "yourls/yourls": "<=1.10.2",
                 "yuan1994/tpadmin": "<=1.3.12",
                 "yungifez/skuul": "<=2.6.5",
@@ -3645,7 +3859,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-03-12T14:21:15+00:00"
+            "time": "2026-04-06T23:13:58+00:00"
         },
         {
             "name": "sirbrillig/phpcs-variable-analysis",
