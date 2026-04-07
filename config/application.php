@@ -276,9 +276,15 @@ $ep_host = pantheon_get_secret( 'ep_host' );
 $ep_token = pantheon_get_secret( 'ep_token' );
 
 if ( $ep_prefix && $ep_host && $ep_token ) {
-	Config::define( 'EP_INDEX_PREFIX', $ep_prefix );
-	Config::define( 'EP_HOST', $ep_host );
-	Config::define( 'EP_CREDENTIALS', "$ep_prefix:$ep_token" );
+	if ( ! defined( 'EP_INDEX_PREFIX' ) ) {
+		Config::define( 'EP_INDEX_PREFIX', $ep_prefix );
+	}
+	if ( ! defined( 'EP_HOST' ) ) {
+		Config::define( 'EP_HOST', $ep_host );
+	}
+	if ( ! defined( 'EP_CREDENTIALS' ) ) {
+		Config::define( 'EP_CREDENTIALS', "$ep_prefix:$ep_token" );
+	}
 }
 
 $env_config = __DIR__ . '/environments/' . WP_ENV . '.php';

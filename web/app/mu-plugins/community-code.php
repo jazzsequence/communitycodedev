@@ -172,7 +172,7 @@ function get_yoast_meta_description( array $prepared ) {
 
 	$raw = has_excerpt( $post_id ) ? get_the_excerpt( $post_id ) : wp_strip_all_tags( get_post_field( 'post_content', $post_id ) );
 	$raw = trim( preg_replace( '/\s+/', ' ', $raw ) );
-	return mb_substr( $raw, 0 ) > 300 ? mb_substr( $raw, 0, 297 ) . '...' : $raw;
+	return mb_strlen( $raw ) > 300 ? mb_substr( $raw, 0, 297 ) . '...' : $raw;
 }
 
 /**

@@ -6,7 +6,6 @@
  */
 
 // Base button style
-// Using specific selectors to override parent theme without !important
 %button-base {
 	display: inline-block;
 	background-color: var( --wp--preset--color--terminal-blue );

@@ -100,7 +100,7 @@ function include_episode_transcript_in_index( array $post_args, int $post_id ) :
 	}
 
 	// Store transcript in custom field - searchable but not displayed in excerpts
-	$post_args['transcript_content'] = wp_strip_all_tags( $transcript_body );
+	$post_args['transcript_content'] = strip_vtt_formatting( wp_strip_all_tags( $transcript_body ) );
 
 	return $post_args;
 }
@@ -131,6 +131,25 @@ function get_episode_transcript_url( int $post_id ) : string {
  * @return string
  */
 function fetch_transcript_body( string $url ) : string {
+	// Try to read from disk first to avoid Cloudflare bot challenges on loopback requests.
+	$upload_dir      = wp_upload_dir();
+	$base_url        = trailingslashit( $upload_dir['baseurl'] );
+	$base_path       = trailingslashit( $upload_dir['basedir'] );
+	$url_normalized  = preg_replace( '#^https?://#', '', $url );
+	$base_normalized = preg_replace( '#^https?://#', '', $base_url );
+
+	if ( str_starts_with( $url_normalized, $base_normalized ) ) {
+		$local_path = $base_path . substr( $url_normalized, strlen( $base_normalized ) );
+		if ( file_exists( $local_path ) && is_readable( $local_path ) ) {
+			$body = file_get_contents( $local_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			if ( $body && strlen( $body ) > 300000 ) {
+				$body = substr( $body, 0, 300000 );
+			}
+			return $body ?: '';
+		}
+	}
+
+	// Fall back to HTTP for external transcript URLs.
 	$response = wp_remote_get( $url, [
 		'timeout' => 8,
 	] );
@@ -152,6 +171,31 @@ function fetch_transcript_body( string $url ) : string {
 	return $body;
 }
 
+
+/**
+ * Strip VTT cue timestamps and metadata, leaving only spoken content.
+ *
+ * Removes the WEBVTT header, timestamp lines (e.g. 00:00:01.000 --> 00:00:05.000),
+ * and cue identifiers so ElasticPress only indexes meaningful words.
+ *
+ * @param string $vtt Raw VTT text (after wp_strip_all_tags).
+ * @return string Plain spoken content.
+ */
+function strip_vtt_formatting( string $vtt ) : string {
+	// Remove WEBVTT header and NOTE/STYLE/REGION blocks.
+	$vtt = preg_replace( '/^WEBVTT.*$/m', '', $vtt );
+
+	// Remove timestamp cue lines: 00:00:00.000 --> 00:00:00.000 (with optional position metadata).
+	$vtt = preg_replace( '/^\d{2}:\d{2}:\d{2}[\.,]\d{3}\s*-->\s*\d{2}:\d{2}:\d{2}[\.,]\d{3}.*$/m', '', $vtt );
+
+	// Remove standalone numeric cue identifiers.
+	$vtt = preg_replace( '/^\d+\s*$/m', '', $vtt );
+
+	// Collapse excess whitespace.
+	$vtt = preg_replace( '/\n{2,}/', ' ', $vtt );
+
+	return trim( $vtt );
+}
 
 /**
  * Add transcript_content to searchable fields for regular search.
@@ -454,6 +498,11 @@ function render_related_episodes_block( array $attributes ) : string {
 	$posts = $feature->find_related( get_the_ID(), $count + 1 );
 	remove_filter( 'ep_find_related_args', $scoped_filter );
 
+	// If find_related returns false (e.g., for previews), treat as empty array
+	if ( ! is_array( $posts ) ) {
+		return '';
+	}
+
 	// Exclude current episode from results (in case EP isn't working locally)
 	$current_post_id = get_the_ID();
 	$posts = array_filter( $posts, static function( $post ) use ( $current_post_id ) {
@@ -595,6 +644,11 @@ function render_related_posts_block( array $attributes ) : string {
 	add_filter( 'ep_find_related_args', $scoped_filter );
 	$posts = $feature->find_related( get_the_ID(), $count + 1 );
 	remove_filter( 'ep_find_related_args', $scoped_filter );
+
+	// If find_related returns false (e.g., for previews), treat as empty array
+	if ( ! is_array( $posts ) ) {
+		return '';
+	}
 
 	// Exclude current post from results (in case EP isn't working locally)
 	$current_post_id = get_the_ID();
