@@ -8,6 +8,29 @@
 namespace CommunityCode\MuPlugin;
 
 /**
+ * Force HTTPS on home_url and site_url when the request arrives over HTTPS.
+ *
+ * On Pantheon behind Cloudflare, the COS runtime sets WP_HOME to http:// because
+ * Cloudflare terminates SSL before the request reaches Pantheon. config/application.php
+ * sets $_SERVER['HTTPS'] = 'on' when HTTP_X_FORWARDED_PROTO is https, but that doesn't
+ * affect home_url() which reads the WP_HOME constant directly. Filtering here corrects
+ * all URLs derived from home_url() — including REST API URLs — so PUT/POST requests
+ * from the browser don't get downgraded via an http→https redirect.
+ */
+if ( is_ssl() ) {
+	add_filter( 'home_url', __NAMESPACE__ . '\\force_https_url', 1 );
+	add_filter( 'site_url', __NAMESPACE__ . '\\force_https_url', 1 );
+}
+
+/**
+ * @param string $url
+ * @return string
+ */
+function force_https_url( string $url ) : string {
+	return str_replace( 'http://', 'https://', $url );
+}
+
+/**
  * Kick everything off.
  */
 function init() {
