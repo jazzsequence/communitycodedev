@@ -17,7 +17,11 @@ namespace CommunityCode\MuPlugin;
  * all URLs derived from home_url() — including REST API URLs — so PUT/POST requests
  * from the browser don't get downgraded via an http→https redirect.
  */
-if ( is_ssl() ) {
+// Only apply when the site is behind a custom domain (Cloudflare proxy).
+// Multidev environments use pantheonsite.io which handles SSL differently
+// and doesn't have the http:// WP_HOME mismatch that this filter corrects.
+$current_host = $_SERVER['HTTP_HOST'] ?? '';
+if ( is_ssl() && ! str_ends_with( $current_host, '.pantheonsite.io' ) ) {
 	add_filter( 'home_url', __NAMESPACE__ . '\\force_https_url', 1 );
 	add_filter( 'site_url', __NAMESPACE__ . '\\force_https_url', 1 );
 }
