@@ -28,6 +28,34 @@ function init() {
 	add_filter( 'ep_related_posts_fields', __NAMESPACE__ . '\\add_transcript_to_related_posts_fields' );
 	add_filter( 'ep_post_mapping', __NAMESPACE__ . '\\add_transcript_field_mapping' );
 	add_filter( 'ep_formatted_args', __NAMESPACE__ . '\\customize_related_posts_query', 999, 3 );
+
+	// Cloudflare blocks PUT from browser User-Agents, so also register POST for the
+	// features endpoint so EP's JS fallback succeeds.
+	add_action( 'rest_api_init', __NAMESPACE__ . '\\register_ep_features_post_route', 20 );
+}
+
+/**
+ * Register a POST alias for the EP features REST route.
+ *
+ * Cloudflare's bot protection blocks PUT requests from browser User-Agents,
+ * causing ElasticPress's JS to fall back to POST. The upstream route only
+ * registers PUT, so the POST returns "no route found". This adds a matching
+ * POST handler pointing to the same callback.
+ */
+function register_ep_features_post_route() {
+	if ( ! class_exists( '\\ElasticPress\\REST\\Features' ) ) {
+		return;
+	}
+	$controller = new \ElasticPress\REST\Features();
+	register_rest_route(
+		'elasticpress/v1',
+		'/features',
+		[
+			'methods'             => 'POST',
+			'callback'            => [ $controller, 'update_settings' ],
+			'permission_callback' => [ $controller, 'check_permission' ],
+		]
+	);
 }
 
 /**
