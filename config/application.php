@@ -49,6 +49,23 @@ if (
 }
 
 /**
+ * Allow WordPress to detect HTTPS when used behind a reverse proxy or a load balancer.
+ * This must run before application.pantheon.php so that WP_HOME is defined with the
+ * correct https:// scheme — otherwise WP_CONTENT_URL (derived from WP_HOME) is http://,
+ * which causes media/attachment URLs and Yoast og:image tags to use the wrong scheme.
+ * See https://codex.wordpress.org/Function_Reference/is_ssl#Notes
+ */
+if ( php_sapi_name() === 'cli' && ! isset( $_SERVER['HTTPS'] ) ) {
+	// Ensure CLI contexts (e.g., wp-cli reindex) treat the site as HTTPS.
+	$_SERVER['HTTPS'] = 'on';
+	$_SERVER['SERVER_PORT'] = 443;
+	$_SERVER['HTTP_X_FORWARDED_PROTO'] = 'https';
+}
+if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' ) {
+	$_SERVER['HTTPS'] = 'on';
+}
+
+/**
  * Include Pantheon application settings.
  */
 require_once __DIR__ . '/application.pantheon.php';
@@ -146,20 +163,6 @@ if ( $_ENV['PANTHEON_ENVIRONMENT'] === 'dev' || isset( $_ENV['LANDO'] ) ) {
 Config::define( 'FORCE_SSL_ADMIN', true );
 Config::define( 'FORCE_SSL_LOGIN', true );
 Config::define( 'FORCE_SSL', true );
-
-/**
- * Allow WordPress to detect HTTPS when used behind a reverse proxy or a load balancer
- * See https://codex.wordpress.org/Function_Reference/is_ssl#Notes
- */
-if ( php_sapi_name() === 'cli' && ! isset( $_SERVER['HTTPS'] ) ) {
-	// Ensure CLI contexts (e.g., wp-cli reindex) treat the site as HTTPS.
-	$_SERVER['HTTPS'] = 'on';
-	$_SERVER['SERVER_PORT'] = 443;
-	$_SERVER['HTTP_X_FORWARDED_PROTO'] = 'https';
-}
-if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' ) {
-	$_SERVER['HTTPS'] = 'on';
-}
 
 if ( ! function_exists( 'pantheon_get_secret' ) ) {
 	/**
