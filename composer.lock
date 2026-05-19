@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b653a61584ac8430fb2503e10ca940ec",
+    "content-hash": "0d7cd2c6a2c4d44a7b7374db607cc274",
     "packages": [
         {
             "name": "10up/elasticpress",
@@ -229,30 +229,99 @@
             "time": "2024-06-24T20:46:46+00:00"
         },
         {
-            "name": "cweagans/composer-patches",
-            "version": "1.7.3",
+            "name": "cweagans/composer-configurable-plugin",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/cweagans/composer-patches.git",
-                "reference": "e190d4466fe2b103a55467dfa83fc2fecfcaf2db"
+                "url": "https://github.com/cweagans/composer-configurable-plugin.git",
+                "reference": "15433906511a108a1806710e988629fd24b89974"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cweagans/composer-patches/zipball/e190d4466fe2b103a55467dfa83fc2fecfcaf2db",
-                "reference": "e190d4466fe2b103a55467dfa83fc2fecfcaf2db",
+                "url": "https://api.github.com/repos/cweagans/composer-configurable-plugin/zipball/15433906511a108a1806710e988629fd24b89974",
+                "reference": "15433906511a108a1806710e988629fd24b89974",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "^1.0 || ^2.0",
-                "php": ">=5.3.0"
+                "php": ">=8.0.0"
             },
             "require-dev": {
-                "composer/composer": "~1.0 || ~2.0",
-                "phpunit/phpunit": "~4.6"
+                "codeception/codeception": "~4.0",
+                "codeception/module-asserts": "^2.0",
+                "composer/composer": "~2.0",
+                "php-coveralls/php-coveralls": "~2.0",
+                "php-parallel-lint/php-parallel-lint": "^1.0.0",
+                "phpro/grumphp": "^1.8.0",
+                "sebastian/phpcpd": "^6.0",
+                "squizlabs/php_codesniffer": "^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "cweagans\\Composer\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Cameron Eagans",
+                    "email": "me@cweagans.net"
+                }
+            ],
+            "description": "Provides a lightweight configuration system for Composer plugins.",
+            "support": {
+                "issues": "https://github.com/cweagans/composer-configurable-plugin/issues",
+                "source": "https://github.com/cweagans/composer-configurable-plugin/tree/2.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/cweagans",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-02-12T04:58:58+00:00"
+        },
+        {
+            "name": "cweagans/composer-patches",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cweagans/composer-patches.git",
+                "reference": "bfa6018a5f864653d9ed899b902ea72f858a2cf7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cweagans/composer-patches/zipball/bfa6018a5f864653d9ed899b902ea72f858a2cf7",
+                "reference": "bfa6018a5f864653d9ed899b902ea72f858a2cf7",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^2.0",
+                "cweagans/composer-configurable-plugin": "^2.0",
+                "ext-json": "*",
+                "php": ">=8.0.0"
+            },
+            "require-dev": {
+                "codeception/codeception": "~4.0",
+                "codeception/module-asserts": "^2.0",
+                "codeception/module-cli": "^2.0",
+                "codeception/module-filesystem": "^2.0",
+                "composer/composer": "~2.0",
+                "php-coveralls/php-coveralls": "~2.0",
+                "php-parallel-lint/php-parallel-lint": "^1.0.0",
+                "phpro/grumphp": "^1.8.0",
+                "sebastian/phpcpd": "^6.0",
+                "squizlabs/php_codesniffer": "^4.0"
             },
             "type": "composer-plugin",
             "extra": {
-                "class": "cweagans\\Composer\\Patches"
+                "_": "The following two lines ensure that composer-patches is loaded as early as possible.",
+                "class": "cweagans\\Composer\\Plugin\\Patches",
+                "plugin-modifies-downloads": true,
+                "plugin-modifies-install-path": true
             },
             "autoload": {
                 "psr-4": {
@@ -272,9 +341,15 @@
             "description": "Provides a way to patch Composer packages.",
             "support": {
                 "issues": "https://github.com/cweagans/composer-patches/issues",
-                "source": "https://github.com/cweagans/composer-patches/tree/1.7.3"
+                "source": "https://github.com/cweagans/composer-patches/tree/2.0.0"
             },
-            "time": "2022-12-20T22:53:13+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/cweagans",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-10-30T23:44:22+00:00"
         },
         {
             "name": "fairpm/fair-plugin",
@@ -1640,15 +1715,15 @@
         },
         {
             "name": "wp-plugin/altis-accelerate",
-            "version": "3.5.5",
+            "version": "4.1.3",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/altis-accelerate/",
-                "reference": "tags/3.5.5"
+                "reference": "tags/4.1.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/altis-accelerate.3.5.5.zip"
+                "url": "https://downloads.wordpress.org/plugin/altis-accelerate.4.1.3.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -1701,15 +1776,15 @@
         },
         {
             "name": "wp-plugin/block-accessibility-checks",
-            "version": "2.3.0",
+            "version": "3.0.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/block-accessibility-checks/",
-                "reference": "tags/2.3.0"
+                "reference": "tags/3.0.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/block-accessibility-checks.2.3.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/block-accessibility-checks.3.0.2.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -1792,15 +1867,15 @@
         },
         {
             "name": "wp-plugin/mailpoet",
-            "version": "5.25.0",
+            "version": "5.27.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/mailpoet/",
-                "reference": "tags/5.25.0"
+                "reference": "tags/5.27.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.25.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.27.0.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -1819,19 +1894,19 @@
                 "issues": "https://wordpress.org/support/plugin/mailpoet",
                 "source": "https://plugins.svn.wordpress.org/mailpoet"
             },
-            "time": "2026-05-05T12:21:10+00:00"
+            "time": "2026-05-19T12:36:15+00:00"
         },
         {
             "name": "wp-plugin/ninja-forms",
-            "version": "3.14.3",
+            "version": "3.14.4",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/ninja-forms/",
-                "reference": "tags/3.14.3"
+                "reference": "tags/3.14.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.14.3.zip"
+                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.14.4.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -1850,19 +1925,19 @@
                 "issues": "https://wordpress.org/support/plugin/ninja-forms",
                 "source": "https://plugins.svn.wordpress.org/ninja-forms"
             },
-            "time": "2026-04-29T13:25:56+00:00"
+            "time": "2026-05-12T12:15:47+00:00"
         },
         {
             "name": "wp-plugin/powerpress",
-            "version": "11.16.4",
+            "version": "11.16.6",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/powerpress/",
-                "reference": "tags/11.16.4"
+                "reference": "tags/11.16.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/powerpress.11.16.4.zip"
+                "url": "https://downloads.wordpress.org/plugin/powerpress.11.16.6.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -1881,7 +1956,7 @@
                 "issues": "https://wordpress.org/support/plugin/powerpress",
                 "source": "https://plugins.svn.wordpress.org/powerpress"
             },
-            "time": "2026-05-07T14:06:19+00:00"
+            "time": "2026-05-19T14:06:11+00:00"
         },
         {
             "name": "wp-plugin/progress-planner",
@@ -1973,16 +2048,16 @@
         },
         {
             "name": "yoast/wordpress-seo",
-            "version": "27.5",
+            "version": "27.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Yoast-dist/wordpress-seo.git",
-                "reference": "76b5ac5b498c61abf5802314fa7f288d14fb267a"
+                "reference": "ae6b0fbdb12126559d7b1745d40d4aa7a45ec728"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Yoast-dist/wordpress-seo/zipball/76b5ac5b498c61abf5802314fa7f288d14fb267a",
-                "reference": "76b5ac5b498c61abf5802314fa7f288d14fb267a",
+                "url": "https://api.github.com/repos/Yoast-dist/wordpress-seo/zipball/ae6b0fbdb12126559d7b1745d40d4aa7a45ec728",
+                "reference": "ae6b0fbdb12126559d7b1745d40d4aa7a45ec728",
                 "shasum": ""
             },
             "require": {
@@ -2053,7 +2128,7 @@
                 "source": "https://github.com/Yoast/wordpress-seo",
                 "wiki": "https://github.com/Yoast/wordpress-seo/wiki"
             },
-            "time": "2026-04-28T08:51:30+00:00"
+            "time": "2026-05-12T08:55:54+00:00"
         }
     ],
     "packages-dev": [
@@ -4193,5 +4268,5 @@
     "platform-overrides": {
         "php": "8.3.14"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
