@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b653a61584ac8430fb2503e10ca940ec",
+    "content-hash": "ae30060a93f0098c1b146c3ac4ca88a1",
     "packages": [
         {
             "name": "10up/elasticpress",
@@ -1640,15 +1640,15 @@
         },
         {
             "name": "wp-plugin/altis-accelerate",
-            "version": "3.5.5",
+            "version": "4.1.3",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/altis-accelerate/",
-                "reference": "tags/3.5.5"
+                "reference": "tags/4.1.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/altis-accelerate.3.5.5.zip"
+                "url": "https://downloads.wordpress.org/plugin/altis-accelerate.4.1.3.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -4193,5 +4193,5 @@
     "platform-overrides": {
         "php": "8.3.14"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

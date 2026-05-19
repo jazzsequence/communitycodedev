@@ -94,7 +94,7 @@
         "roots/wp-config": "*",
         "vlucas/phpdotenv": "^5.5",
         "wp-plugin/akismet": "*",
-        "wp-plugin/altis-accelerate": "^3.5",
+        "wp-plugin/altis-accelerate": "^4.1",
         "wp-plugin/autoblue": "*",
         "wp-plugin/block-accessibility-checks": "^2.2",
         "wp-plugin/imagify": "*",
