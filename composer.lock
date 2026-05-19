@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b381e86f3d405497b4435a2216dc2441",
+    "content-hash": "b653a61584ac8430fb2503e10ca940ec",
     "packages": [
         {
             "name": "10up/elasticpress",
@@ -471,6 +471,40 @@
                 "source": "https://github.com/WordPress/two-factor"
             },
             "time": "2023-09-04T20:35:54+00:00"
+        },
+        {
+            "name": "jazzsequence/ash-nazg",
+            "version": "0.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jazzsequence/ash-nazg.git",
+                "reference": "4c89693a5a4d9a968628c9f2f6505b88f20e9d0e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jazzsequence/ash-nazg/zipball/4c89693a5a4d9a968628c9f2f6505b88f20e9d0e",
+                "reference": "4c89693a5a4d9a968628c9f2f6505b88f20e9d0e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "pantheon-systems/pantheon-wp-coding-standards": "^3.0",
+                "pantheon-systems/wpunit-helpers": "^2.0",
+                "phpunit/phpunit": "^9.6"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "WordPress plugin that integrates Pantheon Public API into the WordPress admin dashboard",
+            "support": {
+                "issues": "https://github.com/jazzsequence/ash-nazg/issues",
+                "source": "https://github.com/jazzsequence/ash-nazg/tree/0.6.0"
+            },
+            "time": "2026-04-24T22:08:31+00:00"
         },
         {
             "name": "oscarotero/env",
