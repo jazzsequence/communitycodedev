@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b653a61584ac8430fb2503e10ca940ec",
+    "content-hash": "b671ed508afd88fd6a5f8ddfd6e1a925",
     "packages": [
         {
             "name": "10up/elasticpress",
@@ -1701,15 +1701,15 @@
         },
         {
             "name": "wp-plugin/block-accessibility-checks",
-            "version": "2.3.0",
+            "version": "3.0.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/block-accessibility-checks/",
-                "reference": "tags/2.3.0"
+                "reference": "tags/3.0.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/block-accessibility-checks.2.3.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/block-accessibility-checks.3.0.2.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -4193,5 +4193,5 @@
     "platform-overrides": {
         "php": "8.3.14"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
