@@ -77,7 +77,7 @@
         "php": ">=8.1",
         "10up/elasticpress": "^5.3",
         "composer/installers": "^2.2",
-        "cweagans/composer-patches": "^1.7",
+        "cweagans/composer-patches": "^2.0",
         "fairpm/fair-plugin": "*",
         "humanmade/two-factor": "*",
         "jazzsequence/ash-nazg": "^0.6.0",
