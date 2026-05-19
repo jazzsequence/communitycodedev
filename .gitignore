@@ -8,6 +8,13 @@ auth.json
 # Ignore LLM files
 CLAUDE.md
 
+# Pantheon API Helper
+package.json
+package-lock.json
+.pantheonapi-docs
+node_modules/*
+AGENTS.md
+
 # The /web/app/ directory is used in favor of /wp-content in a traditional
 # WordPress project. This is where files are uploaded to, where plugins and
 # themes are installed and where other writeable directories are created.
