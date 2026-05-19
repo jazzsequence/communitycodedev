@@ -549,16 +549,16 @@
         },
         {
             "name": "jazzsequence/ash-nazg",
-            "version": "0.6.1",
+            "version": "0.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jazzsequence/ash-nazg.git",
-                "reference": "7f5403cee7856a08fffc202909bbaff709204258"
+                "reference": "50bacd3f8945bf856e1fbb806293a911a80d5718"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jazzsequence/ash-nazg/zipball/7f5403cee7856a08fffc202909bbaff709204258",
-                "reference": "7f5403cee7856a08fffc202909bbaff709204258",
+                "url": "https://api.github.com/repos/jazzsequence/ash-nazg/zipball/50bacd3f8945bf856e1fbb806293a911a80d5718",
+                "reference": "50bacd3f8945bf856e1fbb806293a911a80d5718",
                 "shasum": ""
             },
             "require": {
@@ -577,9 +577,9 @@
             "description": "WordPress plugin that integrates Pantheon Public API into the WordPress admin dashboard",
             "support": {
                 "issues": "https://github.com/jazzsequence/ash-nazg/issues",
-                "source": "https://github.com/jazzsequence/ash-nazg/tree/0.6.1"
+                "source": "https://github.com/jazzsequence/ash-nazg/tree/0.6.2"
             },
-            "time": "2026-05-19T20:42:13+00:00"
+            "time": "2026-05-19T21:34:44+00:00"
         },
         {
             "name": "oscarotero/env",
