@@ -52,7 +52,7 @@ function maybe_block_login(): void {
 	}
 
 	wp_die(
-		esc_html__( 'Access denied. Your IP address has been blocked due to too many failed login attempts. Contact the site administrator to request access.', 'community-code' ),
+		esc_html__( 'Access denied. Your IP address has been blocked due to too many failed login attempts.', 'community-code' ),
 		esc_html__( '403 Forbidden', 'community-code' ),
 		[ 'response' => 403 ]
 	);
