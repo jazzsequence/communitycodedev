@@ -1792,15 +1792,15 @@
         },
         {
             "name": "wp-plugin/mailpoet",
-            "version": "5.25.0",
+            "version": "5.27.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/mailpoet/",
-                "reference": "tags/5.25.0"
+                "reference": "tags/5.27.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.25.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.27.0.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -1819,7 +1819,7 @@
                 "issues": "https://wordpress.org/support/plugin/mailpoet",
                 "source": "https://plugins.svn.wordpress.org/mailpoet"
             },
-            "time": "2026-05-05T12:21:10+00:00"
+            "time": "2026-05-19T12:36:15+00:00"
         },
         {
             "name": "wp-plugin/ninja-forms",
@@ -4193,5 +4193,5 @@
     "platform-overrides": {
         "php": "8.3.14"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
