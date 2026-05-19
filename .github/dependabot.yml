@@ -1,7 +1,15 @@
 version: 2
+registries:
+  objectcache-pro:
+    type: composer-repository
+    url: https://objectcache.pro/repo/
+    username: token
+    password: ${{secrets.OBJECTCACHE_PRO_TOKEN}}
 updates:
   - package-ecosystem: composer
     directory: "/"
+    registries:
+      - objectcache-pro
     schedule:
       interval: daily
     open-pull-requests-limit: 99
