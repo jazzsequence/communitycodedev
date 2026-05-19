@@ -1823,15 +1823,15 @@
         },
         {
             "name": "wp-plugin/ninja-forms",
-            "version": "3.14.3",
+            "version": "3.14.4",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/ninja-forms/",
-                "reference": "tags/3.14.3"
+                "reference": "tags/3.14.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.14.3.zip"
+                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.14.4.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -1850,7 +1850,7 @@
                 "issues": "https://wordpress.org/support/plugin/ninja-forms",
                 "source": "https://plugins.svn.wordpress.org/ninja-forms"
             },
-            "time": "2026-04-29T13:25:56+00:00"
+            "time": "2026-05-12T12:15:47+00:00"
         },
         {
             "name": "wp-plugin/powerpress",
@@ -4193,5 +4193,5 @@
     "platform-overrides": {
         "php": "8.3.14"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
