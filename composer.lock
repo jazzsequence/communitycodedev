@@ -1854,15 +1854,15 @@
         },
         {
             "name": "wp-plugin/powerpress",
-            "version": "11.16.4",
+            "version": "11.16.6",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/powerpress/",
-                "reference": "tags/11.16.4"
+                "reference": "tags/11.16.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/powerpress.11.16.4.zip"
+                "url": "https://downloads.wordpress.org/plugin/powerpress.11.16.6.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -1881,7 +1881,7 @@
                 "issues": "https://wordpress.org/support/plugin/powerpress",
                 "source": "https://plugins.svn.wordpress.org/powerpress"
             },
-            "time": "2026-05-07T14:06:19+00:00"
+            "time": "2026-05-19T14:06:11+00:00"
         },
         {
             "name": "wp-plugin/progress-planner",
@@ -4193,5 +4193,5 @@
     "platform-overrides": {
         "php": "8.3.14"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
