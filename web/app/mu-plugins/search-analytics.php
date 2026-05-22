@@ -15,16 +15,12 @@ add_action( 'pre_get_posts', __NAMESPACE__ . '\\maybe_track_search' );
 add_action( 'admin_menu', __NAMESPACE__ . '\\register_admin_page' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_admin_assets' );
 
-/**
- * Get the configured ES host URL.
- */
+// ─── ES connection ────────────────────────────────────────────────────────────
+
 function get_es_host(): string {
 	return defined( 'EP_HOST' ) ? (string) EP_HOST : '';
 }
 
-/**
- * Get the Basic Auth header value for ES requests.
- */
 function get_es_auth_header(): string {
 	if ( ! defined( 'EP_CREDENTIALS' ) || ! EP_CREDENTIALS ) {
 		return '';
@@ -33,9 +29,6 @@ function get_es_auth_header(): string {
 	return 'Basic ' . base64_encode( EP_CREDENTIALS );
 }
 
-/**
- * Get the full ES index URL for the search analytics index.
- */
 function get_index_url(): string {
 	$host   = get_es_host();
 	$prefix = defined( 'EP_INDEX_PREFIX' ) ? EP_INDEX_PREFIX : '';
@@ -45,13 +38,11 @@ function get_index_url(): string {
 	return trailingslashit( $host ) . $prefix . '_' . INDEX_SUFFIX;
 }
 
-/**
- * Detect obvious bot requests to skip logging.
- */
+// ─── Bot detection ────────────────────────────────────────────────────────────
+
 function is_bot(): bool {
 	$agent = strtolower( sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ?? '' ) ) );
-	$bots  = [ 'bot', 'crawl', 'spider', 'slurp', 'mediapartners', 'wget', 'curl' ];
-	foreach ( $bots as $indicator ) {
+	foreach ( [ 'bot', 'crawl', 'spider', 'slurp', 'mediapartners', 'wget', 'curl' ] as $indicator ) {
 		if ( str_contains( $agent, $indicator ) ) {
 			return true;
 		}
@@ -59,9 +50,11 @@ function is_bot(): bool {
 	return false;
 }
 
+// ─── Search tracking ──────────────────────────────────────────────────────────
+
 /**
- * Hook into the main search query. If the user is anonymous and not a bot,
- * register a one-shot filter to capture results after the query runs.
+ * Hook into the main search query. For anonymous non-bot requests, register a
+ * one-shot the_posts filter to capture results and write to ES.
  */
 function maybe_track_search( \WP_Query $query ): void {
 	if ( ! $query->is_main_query() || ! $query->is_search() ) {
@@ -75,7 +68,6 @@ function maybe_track_search( \WP_Query $query ): void {
 		return;
 	}
 
-	// Capture the result count after the query runs, then write to ES.
 	$tracker = null;
 	$tracker = function ( array $posts, \WP_Query $q ) use ( $term, &$tracker ): array {
 		if ( $q->is_main_query() && $q->is_search() ) {
@@ -88,8 +80,7 @@ function maybe_track_search( \WP_Query $query ): void {
 }
 
 /**
- * Write a search event to the ES analytics index. Non-blocking — does not
- * delay the page response.
+ * Write a search event to ES. Non-blocking — does not delay the page response.
  */
 function write_to_es( string $term, int $results_count ): void {
 	$index_url = get_index_url();
@@ -112,67 +103,43 @@ function write_to_es( string $term, int $results_count ): void {
 					'timestamp'     => gmdate( 'c' ),
 				]
 			),
-			'blocking' => false, // Fire and forget — don't hold up the page.
+			'blocking' => false,
 		]
 	);
 }
 
-/**
- * Register the admin page under Dashboard.
- */
-function register_admin_page(): void {
-	add_dashboard_page(
-		__( 'Search Analytics', 'community-code' ),
-		__( 'Search Analytics', 'community-code' ),
-		'manage_options',
-		ADMIN_SLUG,
-		__NAMESPACE__ . '\\render_admin_page'
-	);
-}
+// ─── Data layer ───────────────────────────────────────────────────────────────
 
 /**
- * Enqueue minimal inline styles for the analytics page.
+ * Static cache so enqueue_admin_assets() and render_admin_page() share one ES query.
  */
-function enqueue_admin_assets( string $hook ): void {
-	if ( 'dashboard_page_' . ADMIN_SLUG !== $hook ) {
-		return;
+function get_analytics_data( int $days ): array {
+	static $cache = [];
+	if ( ! isset( $cache[ $days ] ) ) {
+		$cache[ $days ] = query_es( $days );
 	}
-	$css = '
-		.sa-bar-wrap { background:#f0f0f1; border-radius:3px; height:16px; min-width:80px; }
-		.sa-bar { background:#2271b1; border-radius:3px; height:16px; }
-		.sa-zero { color:#646970; font-style:italic; }
-		.sa-period a { display:inline-block; padding:4px 12px; border:1px solid #2271b1; border-radius:3px; margin-right:4px; text-decoration:none; color:#2271b1; }
-		.sa-period a.current { background:#2271b1; color:#fff; }
-		.sa-stat { display:inline-block; margin-right:32px; }
-		.sa-stat strong { display:block; font-size:2em; line-height:1.2; }
-	';
-	wp_register_style( 'cc-search-analytics', false );
-	wp_enqueue_style( 'cc-search-analytics' );
-	wp_add_inline_style( 'cc-search-analytics', $css );
+	return $cache[ $days ];
 }
 
 /**
- * Query ES for search analytics aggregations.
+ * Query ES for aggregated search analytics.
  *
- * @param int $days Number of days to look back. 0 = all time.
+ * @param int $days Days to look back. 0 = all time.
  * @return array{top_terms: array, daily_counts: array, total: int, unique: int}
  */
 function query_es( int $days ): array {
 	$index_url = get_index_url();
 	$auth      = get_es_auth_header();
-
-	$empty = [ 'top_terms' => [], 'daily_counts' => [], 'total' => 0, 'unique' => 0 ];
+	$empty     = [ 'top_terms' => [], 'daily_counts' => [], 'total' => 0, 'unique' => 0 ];
 
 	if ( ! $index_url || ! $auth ) {
 		return $empty;
 	}
 
 	$query = [
-		'size'  => 0,
-		'aggs'  => [
-			'top_terms'    => [
-				'terms' => [ 'field' => 'term.keyword', 'size' => 25 ],
-			],
+		'size' => 0,
+		'aggs' => [
+			'top_terms'    => [ 'terms' => [ 'field' => 'term.keyword', 'size' => 25 ] ],
 			'daily_counts' => [
 				'date_histogram' => [
 					'field'             => 'timestamp',
@@ -181,16 +148,12 @@ function query_es( int $days ): array {
 					'min_doc_count'     => 1,
 				],
 			],
-			'unique_terms' => [
-				'cardinality' => [ 'field' => 'term.keyword' ],
-			],
+			'unique_terms' => [ 'cardinality' => [ 'field' => 'term.keyword' ] ],
 		],
 	];
 
 	if ( $days > 0 ) {
-		$query['query'] = [
-			'range' => [ 'timestamp' => [ 'gte' => 'now-' . $days . 'd/d' ] ],
-		];
+		$query['query'] = [ 'range' => [ 'timestamp' => [ 'gte' => 'now-' . $days . 'd/d' ] ] ];
 	}
 
 	$response = wp_remote_post(
@@ -213,6 +176,7 @@ function query_es( int $days ): array {
 	$aggs = $body['aggregations'] ?? [];
 
 	return [
+		// ES returns daily_counts oldest-first. Reverse for table display (most-recent-first).
 		'top_terms'    => $aggs['top_terms']['buckets'] ?? [],
 		'daily_counts' => array_slice( array_reverse( $aggs['daily_counts']['buckets'] ?? [] ), 0, 30 ),
 		'total'        => (int) ( $body['hits']['total']['value'] ?? 0 ),
@@ -220,23 +184,164 @@ function query_es( int $days ): array {
 	];
 }
 
-/**
- * Render the search analytics dashboard page.
- */
+// ─── Admin ────────────────────────────────────────────────────────────────────
+
+function register_admin_page(): void {
+	add_dashboard_page(
+		__( 'Search Analytics', 'community-code' ),
+		__( 'Search Analytics', 'community-code' ),
+		'manage_options',
+		ADMIN_SLUG,
+		__NAMESPACE__ . '\\render_admin_page'
+	);
+}
+
+function enqueue_admin_assets( string $hook ): void {
+	if ( 'dashboard_page_' . ADMIN_SLUG !== $hook ) {
+		return;
+	}
+
+	// Register Chart.js from ash-nazg's bundled copy if not already registered.
+	if ( ! wp_script_is( 'chartjs', 'registered' ) ) {
+		$chart_file = WP_PLUGIN_DIR . '/ash-nazg/assets/js/libs/chart.umd.js';
+		if ( file_exists( $chart_file ) ) {
+			wp_register_script( 'chartjs', plugins_url( 'ash-nazg/assets/js/libs/chart.umd.js' ), [], false, true );
+		}
+	}
+
+	wp_register_script( 'cc-search-analytics', false, [ 'chartjs' ], false, true );
+	wp_enqueue_script( 'cc-search-analytics' );
+
+	// Localize chart data (daily_counts reversed back to chronological for the line chart).
+	$days = get_requested_days();
+	$data = get_analytics_data( $days );
+
+	$daily = array_reverse( $data['daily_counts'] ); // chronological for chart
+	wp_localize_script(
+		'cc-search-analytics',
+		'ccSearchAnalytics',
+		[
+			'daily' => [
+				'labels' => array_column( $daily, 'key_as_string' ),
+				'counts' => array_map( 'intval', array_column( $daily, 'doc_count' ) ),
+			],
+			'terms' => [
+				'labels' => array_column( $data['top_terms'], 'key' ),
+				'counts' => array_map( 'intval', array_column( $data['top_terms'], 'doc_count' ) ),
+			],
+		]
+	);
+
+	wp_add_inline_script( 'cc-search-analytics', get_chart_js() );
+
+	wp_register_style( 'cc-search-analytics', false );
+	wp_enqueue_style( 'cc-search-analytics' );
+	wp_add_inline_style( 'cc-search-analytics', get_admin_css() );
+}
+
+function get_requested_days(): int {
+	$days = (int) sanitize_text_field( wp_unslash( $_GET['days'] ?? '30' ) );
+	return array_key_exists( $days, [ 7 => '', 30 => '', 90 => '', 0 => '' ] ) ? $days : 30;
+}
+
+function get_admin_css(): string {
+	return '
+		.sa-period a { display:inline-block; padding:4px 12px; border:1px solid #2271b1; border-radius:3px; margin-right:4px; text-decoration:none; color:#2271b1; }
+		.sa-period a.current { background:#2271b1; color:#fff; }
+		.sa-stat { display:inline-block; margin-right:32px; }
+		.sa-stat strong { display:block; font-size:2em; line-height:1.2; }
+		.sa-card { background:#fff; border:1px solid #c3c4c7; border-radius:4px; padding:16px 20px; margin:20px 0; }
+		.sa-zero { color:#646970; font-style:italic; }
+		.sa-chart-wrap { position:relative; height:260px; }
+		.sa-terms-wrap { position:relative; }
+	';
+}
+
+function get_chart_js(): string {
+	return <<<'JS'
+(function () {
+	'use strict';
+	if ( typeof Chart === 'undefined' || typeof ccSearchAnalytics === 'undefined' ) { return; }
+
+	var blue = { border: 'rgb(28,151,234)', bg: 'rgba(28,151,234,0.1)' };
+	var baseOpts = {
+		responsive: true,
+		maintainAspectRatio: false,
+		plugins: {
+			legend: { display: false },
+			tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', padding: 10 }
+		},
+		scales: {
+			x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+			y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 } } }
+		}
+	};
+
+	var dailyEl = document.getElementById( 'cc-sa-daily-chart' );
+	if ( dailyEl && ccSearchAnalytics.daily.labels.length ) {
+		new Chart( dailyEl.getContext( '2d' ), {
+			type: 'line',
+			data: {
+				labels: ccSearchAnalytics.daily.labels,
+				datasets: [ {
+					label: 'Searches',
+					data: ccSearchAnalytics.daily.counts,
+					borderColor: blue.border,
+					backgroundColor: blue.bg,
+					borderWidth: 3,
+					pointRadius: 4,
+					pointHoverRadius: 6,
+					pointBackgroundColor: blue.border,
+					pointBorderColor: '#fff',
+					pointBorderWidth: 2,
+					fill: true,
+					tension: 0.4
+				} ]
+			},
+			options: baseOpts
+		} );
+	}
+
+	var termsEl = document.getElementById( 'cc-sa-terms-chart' );
+	if ( termsEl && ccSearchAnalytics.terms.labels.length ) {
+		new Chart( termsEl.getContext( '2d' ), {
+			type: 'bar',
+			data: {
+				labels: ccSearchAnalytics.terms.labels,
+				datasets: [ {
+					label: 'Searches',
+					data: ccSearchAnalytics.terms.counts,
+					backgroundColor: blue.bg,
+					borderColor: blue.border,
+					borderWidth: 2
+				} ]
+			},
+			options: {
+				indexAxis: 'y',
+				responsive: true,
+				maintainAspectRatio: false,
+				plugins: { legend: { display: false }, tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', padding: 10 } },
+				scales: {
+					x: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 } } },
+					y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+				}
+			}
+		} );
+	}
+})();
+JS;
+}
+
 function render_admin_page(): void {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( esc_html__( 'Permission denied.', 'community-code' ) );
 	}
 
-	$days    = (int) sanitize_text_field( wp_unslash( $_GET['days'] ?? '30' ) );
+	$days    = get_requested_days();
 	$periods = [ 7 => '7 days', 30 => '30 days', 90 => '90 days', 0 => 'All time' ];
-	if ( ! array_key_exists( $days, $periods ) ) {
-		$days = 30;
-	}
-
-	$data      = query_es( $days );
-	$top_terms = $data['top_terms'];
-	$max_count = ! empty( $top_terms ) ? (int) $top_terms[0]['doc_count'] : 1;
+	$data    = get_analytics_data( $days );
+	$terms   = $data['top_terms'];
+	$terms_h = max( count( $terms ) * 28 + 40, 120 ); // px height for bar chart
 	?>
 	<div class="wrap">
 		<h1><?php esc_html_e( 'Search Analytics', 'community-code' ); ?></h1>
@@ -262,47 +367,29 @@ function render_admin_page(): void {
 			</span>
 		</div>
 
-		<?php if ( empty( $top_terms ) ) : ?>
+		<?php if ( empty( $terms ) ) : ?>
 			<div class="notice notice-info inline">
 				<p><?php esc_html_e( 'No search data yet for this period.', 'community-code' ); ?></p>
 			</div>
 		<?php else : ?>
 
-		<div style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap;">
+		<div class="sa-card">
+			<h2 style="margin-top:0"><?php esc_html_e( 'Daily Search Volume', 'community-code' ); ?></h2>
+			<div class="sa-chart-wrap"><canvas id="cc-sa-daily-chart"></canvas></div>
+		</div>
 
-			<div style="flex:1;min-width:300px;">
-				<h2><?php esc_html_e( 'Top Search Terms', 'community-code' ); ?></h2>
-				<table class="wp-list-table widefat fixed striped">
-					<thead>
-						<tr>
-							<th><?php esc_html_e( 'Term', 'community-code' ); ?></th>
-							<th style="width:60px"><?php esc_html_e( 'Count', 'community-code' ); ?></th>
-							<th style="width:120px"></th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php foreach ( $top_terms as $bucket ) : ?>
-							<?php
-							$count = (int) $bucket['doc_count'];
-							$pct   = $max_count > 0 ? round( ( $count / $max_count ) * 100 ) : 0;
-							?>
-							<tr>
-								<td><code><?php echo esc_html( $bucket['key'] ); ?></code></td>
-								<td><?php echo esc_html( number_format_i18n( $count ) ); ?></td>
-								<td>
-									<div class="sa-bar-wrap">
-										<div class="sa-bar" style="width:<?php echo esc_attr( $pct ); ?>%"></div>
-									</div>
-								</td>
-							</tr>
-						<?php endforeach; ?>
-					</tbody>
-				</table>
+		<div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;">
+
+			<div class="sa-card" style="flex:2;min-width:300px;">
+				<h2 style="margin-top:0"><?php esc_html_e( 'Top Search Terms', 'community-code' ); ?></h2>
+				<div class="sa-terms-wrap" style="height:<?php echo esc_attr( $terms_h ); ?>px">
+					<canvas id="cc-sa-terms-chart"></canvas>
+				</div>
 			</div>
 
-			<div style="flex:1;min-width:280px;">
-				<h2><?php esc_html_e( 'Daily Search Volume', 'community-code' ); ?></h2>
-				<table class="wp-list-table widefat fixed striped">
+			<div class="sa-card" style="flex:1;min-width:220px;">
+				<h2 style="margin-top:0"><?php esc_html_e( 'Daily Volume', 'community-code' ); ?></h2>
+				<table class="wp-list-table widefat fixed striped" style="margin-top:0">
 					<thead>
 						<tr>
 							<th><?php esc_html_e( 'Date', 'community-code' ); ?></th>
