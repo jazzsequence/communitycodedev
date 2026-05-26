@@ -1806,15 +1806,15 @@
         },
         {
             "name": "wp-plugin/imagify",
-            "version": "2.2.7",
+            "version": "2.2.8",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/imagify/",
-                "reference": "tags/2.2.7"
+                "reference": "tags/2.2.8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/imagify.2.2.7.zip"
+                "url": "https://downloads.wordpress.org/plugin/imagify.2.2.8.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -1833,7 +1833,7 @@
                 "issues": "https://wordpress.org/support/plugin/imagify",
                 "source": "https://plugins.svn.wordpress.org/imagify"
             },
-            "time": "2026-04-07T15:40:57+00:00"
+            "time": "2026-05-25T16:01:05+00:00"
         },
         {
             "name": "wp-plugin/integromat-connector",
