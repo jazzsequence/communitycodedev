@@ -1,29 +1,14 @@
-/* AI Connector Secure Layer — admin settings page */
+/* AI Connector Secure Layer — admin notices */
 
-#aicsl-setup-form .form-table th {
-	padding-top: 12px;
-}
-
-#aicsl-api-key {
-	font-family: monospace;
-	width: 360px;
-}
-
-#aicsl-status {
-	display: none;
-	margin-top: 12px;
-	padding: 8px 12px;
-}
-
-#aicsl-status.notice {
-	display: block;
-}
-
-.aicsl-security-list {
+.aicsl-notice ul {
 	list-style: disc;
-	margin-left: 20px;
+	margin: 8px 0 4px 20px;
 }
 
-.aicsl-security-list li {
-	margin-bottom: 6px;
+.aicsl-notice li {
+	margin-bottom: 4px;
+}
+
+.aicsl-notice code {
+	font-size: 12px;
 }

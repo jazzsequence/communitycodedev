@@ -1,59 +1,130 @@
 # AI Connector Secure Layer
 
-A WordPress plugin that protects LLM API keys from server-side compromise by keeping the encryption key exclusively in the browser session.
+Keeps LLM API keys out of the WordPress database. Works with WordPress 7.0 AI Connectors and Pantheon Secrets.
 
-## The Problem
+## The problem
 
-WordPress AI Connectors (introduced in WP 7.0) need to store LLM API keys somewhere. Keys stored in `wp_options` or `wp-config.php` are readable by any code that executes on the server — including code injected through plugin vulnerabilities. A single compromised plugin on a site with a stored OpenAI key can expose a key with real financial value.
+WordPress 7.0 AI Connectors store API keys in `wp_options` by default. A database dump, SQL injection, or any plugin vulnerability that exposes the database immediately exposes every API key on the site — with no active session required.
 
-## How This Plugin Defends Against That
+## How this plugin works
+
+Instead of storing keys in the database, the plugin fetches them on-demand from Pantheon Secrets (or environment variables) at the exact moment an LLM HTTP request is made — and only then.
 
 ```
-Browser                              Server (WordPress / Pantheon)
-──────                               ─────────────────────────────
-Generate AES-256-GCM key ──────────► /aicsl/v1/setup
-Encrypt API key with it              Store ciphertext only (useless without key)
-Store key in sessionStorage
+init:15  wp_connectors_init fires
+           → plugin registers pre_update_option hooks to block DB writes for all AI connector options
 
-On each LLM request:
-Send key in X-AICSL-Key header ────► /aicsl/v1/complete
-                                     Decrypt → call LLM API → discard key
-                                     Return response
+init:20  _wp_connectors_pass_default_keys_to_ai_client() runs
+           → finds empty DB options (writes blocked) → skips all providers
+
+init:21  plugin injects Lazy_Auth into the AI client registry for each configured provider
+           → Lazy_Auth stores only the provider ID, not the key
+
+LLM request fires (e.g. Gutenberg AI feature)
+           → model calls getApiKey() on Lazy_Auth
+           → pantheon_get_secret() or getenv() is called HERE
+           → real key injected into request headers
+           → key exists in PHP memory only for this call
 ```
 
 **What this protects against:**
-- Database dump attacks — the stored value is ciphertext; the key is never on the server at rest
-- PHP RCE when no admin LLM request is in flight — there is simply no key anywhere to intercept
+- Database dump — no key is ever written to `wp_options`
+- Broad PHP execution — no PHP constant is defined; the key is not in any global
+- Idle requests — key only exists in memory during an active LLM API call
 
-**Residual risk:**
+**What this does not protect against:**
+- An attacker with PHP code execution who knows to call `pantheon_get_secret()` directly can still retrieve the key. No server-side architecture can prevent this: the key must be available to PHP when the LLM call is made.
 
-The decryption key travels in the `X-AICSL-Key` request header *only* during an active call to `/aicsl/v1/complete` — when the AI connector is actively being used, not during general WordPress admin activity. An attacker would need two things to coincide: a persistent server-side foothold that intercepts incoming requests, *and* a completion request happening at that same moment.
-
-On a standard WordPress host with a writable filesystem, a compromised plugin could install a file-based backdoor that achieves this. On hosts with read-only server filesystems the persistent foothold vectors are narrowed, but database-stored payloads (serialization exploits, stored eval via options) remain possible on any host.
-
-Compare this to storing a raw API key in `wp_options`: an attacker with any database read access retrieves it instantly, with no timing requirement and no active user session needed.
-
-The key is held in `sessionStorage` (cleared when the browser tab closes) rather than `localStorage`. This is intentional — `localStorage` persists across sessions and is accessible to any JavaScript on the page, widening the XSS attack surface.
+See the detailed threat model notes in the [Security Model](#security-model) section.
 
 ## Requirements
 
+- WordPress 7.0+
 - PHP 8.1+
-- WordPress 6.0+
-- The `openssl` PHP extension (standard on all Pantheon environments)
+- A WordPress AI provider plugin (`ai-provider-for-anthropic`, `ai-provider-for-google`, etc.)
+- Pantheon Secrets or environment variables for key storage
 
 ## Installation
-
-Install via Composer or drop the plugin directory into `wp-content/plugins/`. No Composer runtime dependencies — `vendor/` is dev-only.
 
 ```bash
 composer require jazzsequence/ai-connector-secure-layer
 ```
 
-Activate the plugin, then visit **Settings → AI Connector** to enter your LLM API key. The key is encrypted in your browser before submission.
+Activate the plugin, then install an AI provider plugin. **Do not enter API keys in Settings → Connectors** — use Terminus instead.
+
+## Configuration (Pantheon)
+
+For each provider you want to connect, set the key via Terminus:
+
+```bash
+terminus secret:site:set your-site-name anthropic_api_key sk-ant-YOUR_KEY
+terminus secret:site:set your-site-name google_api_key YOUR_GOOGLE_KEY
+```
+
+**Secret name convention:** `{provider_id}_api_key`
+
+| Provider ID | Secret name |
+|-------------|-------------|
+| `anthropic` | `anthropic_api_key` |
+| `google` | `google_api_key` |
+| `openai` | `openai_api_key` |
+
+Once set, reload Settings → Connectors — the provider shows "This API key is configured as a constant." with a green Connected badge. No key entry form is shown.
+
+## Configuration (non-Pantheon)
+
+Set an environment variable at the server level:
+
+```bash
+ANTHROPIC_API_KEY=sk-ant-YOUR_KEY
+GOOGLE_API_KEY=YOUR_GOOGLE_KEY
+```
+
+**Convention:** `strtoupper({provider_id}) . '_API_KEY'`
+
+## User experience
+
+### Before configuring a key
+
+Settings → Connectors shows the provider with a "Set up" button and an admin notice:
+
+> **AI keys managed via Pantheon Secrets**
+> This site manages AI provider API keys through Pantheon Secrets — not through this form.
+> Keys entered here cannot be saved. To connect a provider, run:
+> `terminus secret:site:set your-site anthropic_api_key YOUR_KEY`
+
+### After configuring via Terminus
+
+The provider shows:
+- Read-only field with "This API key is configured as a constant."
+- Green "Connected" badge
+- No input field — nothing to save
+
+### AI features
+
+WordPress AI features (Gutenberg AI blocks, etc.) work normally once a key is configured. The key is fetched at request time — no restart or cache flush needed.
+
+## Security model
+
+**Key is never in:**
+- `wp_options` (writes are blocked)
+- A PHP constant (`ANTHROPIC_API_KEY` is never defined)
+- The AI client registry at init time (lazy auth holds only the provider ID)
+
+**Key is in PHP memory only during:**
+- The `getApiKey()` call inside `AnthropicTextGenerationModel::getRequestAuthentication()`
+- The subsequent HTTP request to the LLM API
+
+**Remaining attack surface:**
+
+An attacker with arbitrary PHP code execution can still call `pantheon_get_secret('anthropic_api_key')` directly. The key must be available to PHP at request time — this cannot be eliminated at the plugin level for server-side LLM calls. This is meaningfully narrower than the default `wp_options` approach, where DB read access alone is sufficient to retrieve the key.
+
+For more on the threat model and Oliver Sild's analysis that motivated this plugin, see the [WordPress.org readme](readme.txt).
 
 ## Development
 
 ```bash
+cd web/app/plugins/ai-connector-secure-layer
 composer install
 
 # Unit tests (no WordPress required)
@@ -64,31 +135,7 @@ composer test:integration
 
 # Linting
 composer lint
-composer lint:phpcbf   # auto-fix
 ```
-
-### Running Integration Tests
-
-Integration tests use [wpunit-helpers](https://github.com/pantheon-systems/wpunit-helpers) to bootstrap WordPress. You'll need a local WordPress test suite installed:
-
-```bash
-# Set environment variables for your local DB, then:
-bash vendor/pantheon-systems/wpunit-helpers/bin/install-wp-tests.sh \
-  wordpress_test root '' localhost latest
-```
-
-Then run:
-
-```bash
-WP_TESTS_DIR=/tmp/wordpress-tests-lib composer test:integration
-```
-
-## Security Architecture Notes
-
-- Encryption: AES-256-GCM via the browser's native [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto)
-- The 16-byte GCM authentication tag is appended to the ciphertext (matching Web Crypto's output format), then the combined value is base64-encoded for storage
-- PHP decryption uses `openssl_decrypt` with `OPENSSL_RAW_DATA` and splits off the last 16 bytes as the tag
-- `sodium_memzero()` is called on the plaintext API key after use (best-effort — PHP's GC may have already copied it)
 
 ## License
 

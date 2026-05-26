@@ -1,63 +1,89 @@
 === AI Connector Secure Layer ===
 Contributors: jazzsequence
-Tags: ai, llm, api-key, security, openai
-Requires at least: 6.0
+Tags: ai, llm, api-key, security, pantheon
+Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 0.1.0
+Stable tag: 0.2.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
-Browser-key-protected LLM API key storage for WordPress AI Connectors.
+Keeps LLM API keys out of the WordPress database. Fetches keys from Pantheon Secrets or environment variables at request time — never stored in wp_options.
 
 == Description ==
 
-AI Connector Secure Layer protects LLM API keys from server-side compromise by ensuring the encryption key never leaves your browser session.
+WordPress 7.0 AI Connectors store API keys in `wp_options` by default. This plugin replaces that storage model: keys are fetched from Pantheon Secrets or environment variables only at the moment an LLM API call is made, and never written to the database.
 
-When you enter an API key in the settings page, it is encrypted in your browser using AES-256-GCM (via the Web Crypto API) before transmission. The server stores only the ciphertext. The decryption key lives in `sessionStorage` and is sent as a request header on each LLM API call — the server decrypts on demand and discards the key immediately.
+**How you connect an AI provider:**
+
+1. Install the AI provider plugin (e.g. ai-provider-for-anthropic)
+2. Install and activate this plugin
+3. Run a Terminus command to set your key: `terminus secret:site:set your-site anthropic_api_key YOUR_KEY`
+4. Reload Settings → Connectors — the provider shows "configured" and "Connected"
+
+No key entry form. No database storage.
 
 **What this protects against:**
 
-* Database dump attacks — a stolen database contains only ciphertext, which is useless without the key
-* PHP remote code execution when the AI connector is not actively in use — there is no plaintext key anywhere on the server to intercept
+* Database dump attacks — no key is ever written to wp_options
+* Broad server-side attacks — no PHP constant is defined; the key exists in memory only during an active LLM request
 
-**Residual risk:**
-
-This plugin is significantly safer than storing a raw API key in `wp_options` or `wp-config.php`, but it does not eliminate all risk. See the README on GitHub for a full explanation of the remaining attack surface and its constraints.
+This plugin is significantly safer than the default wp_options storage. See the README on GitHub for a complete threat model and the attack surface that remains.
 
 == Installation ==
 
-1. Upload the `ai-connector-secure-layer` directory to `/wp-content/plugins/`
-2. Activate the plugin through the **Plugins** menu in WordPress
-3. Go to **Settings → AI Connector**
-4. Enter your LLM API key — it will be encrypted in your browser before being saved
+1. Upload `ai-connector-secure-layer` to `/wp-content/plugins/`
+2. Activate the plugin
+3. Install an AI provider plugin
+4. Set keys via Pantheon Secrets or environment variables (see Configuration below)
 
-Note: the encryption key is stored in `sessionStorage` and is lost when you close the browser tab. You will need to re-enter your API key at the start of each session.
+== Configuration ==
+
+= Pantheon =
+
+```
+terminus secret:site:set your-site anthropic_api_key YOUR_KEY
+terminus secret:site:set your-site google_api_key YOUR_KEY
+```
+
+= Environment variables =
+
+```
+ANTHROPIC_API_KEY=YOUR_KEY
+GOOGLE_API_KEY=YOUR_KEY
+```
+
+= Secret name convention =
+
+* `anthropic` → `anthropic_api_key` / `ANTHROPIC_API_KEY`
+* `google` → `google_api_key` / `GOOGLE_API_KEY`
+* `openai` → `openai_api_key` / `OPENAI_API_KEY`
 
 == Frequently Asked Questions ==
 
-= Why does closing the tab require re-entering my API key? =
+= Why can't I enter a key in Settings → Connectors? =
 
-The encryption key is intentionally stored only in `sessionStorage`, which is cleared when the tab closes. This is a security trade-off: `localStorage` would be more convenient but is readable by any JavaScript on the page, including via XSS. Re-entering the key is the price of the stronger guarantee.
+This plugin intentionally blocks that form from saving keys to the database. The admin notice above the Connectors page shows the Terminus command to use instead.
 
-= Does this work with Pantheon Secrets? =
+= Does this work without Pantheon? =
 
-This plugin stores the ciphertext in `wp_options`. On Pantheon, `wp_options` lives in the database, which is protected by Pantheon's network security but readable via PHP execution. This plugin's browser-key model provides additional protection on top of that — even if an attacker reads the database, they only get ciphertext.
+Yes — set standard environment variables at the server level. The plugin checks Pantheon Secrets first, then falls back to env vars.
 
-= What LLM providers are supported? =
+= Will AI features work normally? =
 
-The initial implementation proxies to OpenAI's Chat Completions API. The architecture is designed to be extended — additional providers can be added to `includes/rest-api.php`.
+Yes. The key is fetched at the moment each LLM request is made. From WordPress's perspective, everything works the same — the provider appears "configured" in Settings → Connectors and AI features function normally.
 
-= Is the API key ever logged? =
+= What if I rotate my key? =
 
-The plaintext key is never written to disk. WordPress debug logs, PHP error logs, and access logs will not contain it. `sodium_memzero()` is called on the decrypted key after use as a best-effort cleanup.
+Update the Pantheon Secret or env var. The next LLM request automatically picks up the new value — no WordPress cache flush or plugin deactivation needed.
 
 == Changelog ==
 
+= 0.2.0 =
+* Complete rewrite: removed browser-key crypto approach
+* Now uses Lazy_Auth — extends ApiKeyRequestAuthentication, overrides getApiKey() to fetch from Pantheon Secrets or env vars at request time
+* Hooks: wp_connectors_init (block DB writes), init:21 (inject lazy auth), script_module_data filter (update UI state), admin_notices (Terminus instructions)
+* TDD: 24 unit tests, integration test suite
+
 = 0.1.0 =
-* Initial release
-* AES-256-GCM client-side encryption via Web Crypto API
-* `/aicsl/v1/setup` and `/aicsl/v1/complete` REST endpoints
-* Admin settings page with security model disclosure
-* Unit tests for crypto functions
-* Integration tests for REST API endpoints
+* Initial release (browser-key model — superseded)

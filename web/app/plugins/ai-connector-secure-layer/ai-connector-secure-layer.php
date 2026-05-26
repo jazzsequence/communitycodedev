@@ -2,9 +2,9 @@
 /**
  * Plugin Name:       AI Connector Secure Layer
  * Plugin URI:        https://github.com/jazzsequence/ai-connector-secure-layer
- * Description:       Browser-key-protected LLM API key storage. Encrypts keys client-side with AES-256-GCM; the server stores only ciphertext. Compatible with WordPress AI Connectors (WP 7.0+).
- * Version:           0.1.0
- * Requires at least: 6.0
+ * Description:       Keeps LLM API keys out of the WordPress database. Fetches keys from Pantheon Secrets or environment variables on-demand at request time — never stored in wp_options, never pre-loaded as PHP constants. Compatible with WordPress 7.0 AI Connectors.
+ * Version:           0.2.0
+ * Requires at least: 7.0
  * Requires PHP:      8.1
  * Author:            Chris Reynolds
  * Author URI:        https://github.com/jazzsequence
@@ -17,12 +17,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'AICSL_VERSION', '0.1.0' );
+define( 'AICSL_VERSION', '0.2.0' );
 
-require_once __DIR__ . '/includes/crypto.php';
-require_once __DIR__ . '/includes/rest-api.php';
-require_once __DIR__ . '/includes/admin.php';
+require_once __DIR__ . '/includes/secrets.php';
+require_once __DIR__ . '/includes/class-lazy-auth.php';
+require_once __DIR__ . '/includes/connectors.php';
 
-add_action( 'rest_api_init', 'AICSL\REST_API\register_routes' );
-add_action( 'admin_menu', 'AICSL\Admin\register_menu' );
-add_action( 'admin_enqueue_scripts', 'AICSL\Admin\enqueue_scripts' );
+// During init:15 (_wp_connectors_init), register pre_update_option hooks to block DB writes.
+add_action( 'wp_connectors_init', 'AICSL\Connectors\on_connectors_init' );
+
+// After init:20 (_wp_connectors_pass_default_keys_to_ai_client), inject lazy auth.
+add_action( 'init', 'AICSL\Connectors\inject_lazy_auth', 21 );
+
+// Override keySource/isConnected for the Connectors admin JS — priority 11 runs after WP's 10.
+add_filter( 'script_module_data_options-connectors-wp-admin', 'AICSL\Connectors\filter_script_module_data', 11 );
+
+// Terminus instructions above the Connectors page SPA for unconfigured providers.
+add_action( 'admin_notices', 'AICSL\Connectors\show_admin_notices' );
