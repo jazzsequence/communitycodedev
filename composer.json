@@ -93,6 +93,8 @@
         "roots/wordpress": "*",
         "roots/wp-config": "*",
         "vlucas/phpdotenv": "^5.5",
+        "wp-plugin/ai-provider-for-anthropic": "^1.0",
+        "wp-plugin/ai-provider-for-google": "^1.1",
         "wp-plugin/akismet": "*",
         "wp-plugin/altis-accelerate": "^4.1",
         "wp-plugin/autoblue": "*",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0d7cd2c6a2c4d44a7b7374db607cc274",
+    "content-hash": "799a9afa4b91399ee16229def59c5032",
     "packages": [
         {
             "name": "10up/elasticpress",
@@ -1681,6 +1681,68 @@
                 }
             ],
             "time": "2025-12-27T19:49:13+00:00"
+        },
+        {
+            "name": "wp-plugin/ai-provider-for-anthropic",
+            "version": "1.0.3",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/ai-provider-for-anthropic/",
+                "reference": "tags/1.0.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/ai-provider-for-anthropic.1.0.3.zip"
+            },
+            "require": {
+                "composer/installers": "~1.0|~2.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "WordPress.org"
+                }
+            ],
+            "description": "Anthropic (Claude) provider for the PHP AI Client SDK.",
+            "homepage": "https://github.com/WordPress/ai-provider-for-anthropic",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/ai-provider-for-anthropic/#developers",
+                "issues": "https://wordpress.org/support/plugin/ai-provider-for-anthropic",
+                "source": "https://plugins.svn.wordpress.org/ai-provider-for-anthropic"
+            },
+            "time": "2026-05-13T22:35:47+00:00"
+        },
+        {
+            "name": "wp-plugin/ai-provider-for-google",
+            "version": "1.1.0",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/ai-provider-for-google/",
+                "reference": "tags/1.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/ai-provider-for-google.1.1.0.zip"
+            },
+            "require": {
+                "composer/installers": "~1.0|~2.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "WordPress.org"
+                }
+            ],
+            "description": "Google AI (Gemini) provider for the PHP AI Client SDK.",
+            "homepage": "https://github.com/WordPress/ai-provider-for-google",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/ai-provider-for-google/#developers",
+                "issues": "https://wordpress.org/support/plugin/ai-provider-for-google",
+                "source": "https://plugins.svn.wordpress.org/ai-provider-for-google"
+            },
+            "time": "2026-05-13T21:46:25+00:00"
         },
         {
             "name": "wp-plugin/akismet",
@@ -4283,5 +4345,5 @@
     "platform-overrides": {
         "php": "8.3.14"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
