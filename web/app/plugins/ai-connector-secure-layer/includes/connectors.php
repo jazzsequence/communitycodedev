@@ -131,7 +131,7 @@ function show_admin_notices(): void {
 		return;
 	}
 
-	echo '<div class="notice notice-info aicsl-notice"><p>';
+	echo '<div class="notice notice-info"><p>';
 	echo '<strong>' . esc_html__( 'AI keys managed via Pantheon Secrets', 'ai-connector-secure-layer' ) . '</strong><br>';
 	esc_html_e(
 		'This site manages AI provider API keys through Pantheon Secrets — not through this form. Keys entered here cannot be saved. To connect a provider, run the Terminus command for it:',
@@ -145,7 +145,7 @@ function show_admin_notices(): void {
 		$site_name     = sanitize_title( get_bloginfo( 'name' ) );
 
 		echo '<li>' . $provider_name . ': ';
-		echo '<code>' . esc_html( "terminus secret:site:set {$site_name} {$secret_name} YOUR_KEY" ) . '</code>';
+		echo '<code>' . esc_html( "terminus secret:site:set {$site_name} {$secret_name} YOUR_KEY --type=runtime --scope=web,user" ) . '</code>';
 		echo '</li>';
 	}
 
