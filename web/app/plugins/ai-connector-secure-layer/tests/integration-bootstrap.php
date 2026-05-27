@@ -8,6 +8,8 @@
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' ) ?: '/tmp/wordpress-tests-lib';
 
+define( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH', dirname( __DIR__ ) . '/vendor/yoast/phpunit-polyfills' );
+
 if ( ! file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 	echo "Could not find WordPress test suite at '{$_tests_dir}'. " .
 		"Set WP_TESTS_DIR or run: composer run install-wp-tests\n";
@@ -22,3 +24,6 @@ function aicsl_manually_load_plugin(): void {
 tests_add_filter( 'muplugins_loaded', 'aicsl_manually_load_plugin' );
 
 require $_tests_dir . '/includes/bootstrap.php';
+
+// Loaded after WP bootstraps so WP AI Client classes are available.
+require_once dirname( __DIR__ ) . '/tests/stubs/wp-ai-provider-stubs.php';

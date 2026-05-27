@@ -12,6 +12,8 @@ namespace AICSL\Secrets;
 
 /**
  * Returns the Pantheon Secrets key name for a provider.
+ *
+ * @param string $provider_id WP AI Client provider ID (e.g. 'anthropic').
  */
 function get_secret_name( string $provider_id ): string {
 	return $provider_id . '_api_key';
@@ -19,6 +21,8 @@ function get_secret_name( string $provider_id ): string {
 
 /**
  * Returns the environment variable name for a provider.
+ *
+ * @param string $provider_id WP AI Client provider ID (e.g. 'anthropic').
  */
 function get_env_var_name( string $provider_id ): string {
 	return strtoupper( $provider_id ) . '_API_KEY';
@@ -27,6 +31,7 @@ function get_env_var_name( string $provider_id ): string {
 /**
  * Fetches the API key for a provider from the most secure available source.
  *
+ * @param string $provider_id WP AI Client provider ID (e.g. 'anthropic').
  * @return string|null Key value, or null if not configured anywhere.
  */
 function get_secret_for_provider( string $provider_id ): ?string {
@@ -49,6 +54,8 @@ function get_secret_for_provider( string $provider_id ): ?string {
 
 /**
  * Returns true if any configured secret source has a key for this provider.
+ *
+ * @param string $provider_id WP AI Client provider ID (e.g. 'anthropic').
  */
 function has_secret_for_provider( string $provider_id ): bool {
 	return null !== get_secret_for_provider( $provider_id );

@@ -8,7 +8,9 @@
 
 namespace AICSL\Tests\Integration;
 
+use AICSL\Tests\Stubs\StubAnthropicProvider;
 use WP_UnitTestCase;
+use WordPress\AiClient\AiClient;
 
 class ConnectorsTest extends WP_UnitTestCase {
 
@@ -16,6 +18,14 @@ class ConnectorsTest extends WP_UnitTestCase {
 		parent::setUp();
 		putenv( 'ANTHROPIC_API_KEY' );
 		putenv( 'GOOGLE_API_KEY' );
+
+		// Register a stub anthropic provider so inject_lazy_auth() can set
+		// authentication on it without requiring the real provider plugin.
+		try {
+			AiClient::defaultRegistry()->registerProvider( StubAnthropicProvider::class );
+		} catch ( \Exception $e ) {
+			// Already registered from a previous test — safe to ignore.
+		}
 	}
 
 	protected function tearDown(): void {

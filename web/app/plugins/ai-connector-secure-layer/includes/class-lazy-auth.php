@@ -19,13 +19,18 @@ use RuntimeException;
 use WordPress\AiClient\Providers\Http\DTO\ApiKeyRequestAuthentication;
 use WordPress\AiClient\Providers\Http\DTO\Request;
 
+/**
+ * Lazy-loading API key authentication for WP AI Client providers.
+ */
 class Lazy_Auth extends ApiKeyRequestAuthentication {
 
 	/**
+	 * Constructor.
+	 *
 	 * @param string $provider_id WP AI Client provider ID (e.g. 'anthropic', 'google').
 	 */
 	public function __construct( private string $provider_id ) {
-		parent::__construct( '' ); // placeholder — never read directly
+		parent::__construct( '' ); // Placeholder — never read directly.
 	}
 
 	/**
@@ -40,6 +45,7 @@ class Lazy_Auth extends ApiKeyRequestAuthentication {
 		$key = Secrets\get_secret_for_provider( $this->provider_id );
 
 		if ( empty( $key ) ) {
+			// phpcs:disable WordPress.Security.EscapeOutput.ExceptionNotEscaped
 			throw new RuntimeException(
 				sprintf(
 					'No API key secret configured for provider "%s". ' .
@@ -49,6 +55,7 @@ class Lazy_Auth extends ApiKeyRequestAuthentication {
 					Secrets\get_env_var_name( $this->provider_id )
 				)
 			);
+			// phpcs:enable WordPress.Security.EscapeOutput.ExceptionNotEscaped
 		}
 
 		return $key;
@@ -61,6 +68,7 @@ class Lazy_Auth extends ApiKeyRequestAuthentication {
 	 * getApiKey() directly and wrap the result in their own provider-specific auth. This
 	 * implementation handles any future provider that passes the stored auth through as-is.
 	 *
+	 * @param  Request $request Outgoing HTTP request.
 	 * @throws RuntimeException When no secret is configured.
 	 */
 	public function authenticateRequest( Request $request ): Request {

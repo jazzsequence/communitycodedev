@@ -20,3 +20,12 @@ Thumbs.db
 
 # WPUnit Helpers
 bin/*.sh
+
+# claude-code-reviewer
+reviewer-approved
+.claude/
+.reviewer-config.sh
+.reviewer-manifest
+AGENTS.md
+docs/
+.githooks/

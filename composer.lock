@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5f5fa8988840439591ce563e61110c27",
+    "content-hash": "646c54fe39dec79a4ff2c7945d000425",
     "packages": [
         {
             "name": "10up/elasticpress",
@@ -546,6 +546,49 @@
                 "source": "https://github.com/WordPress/two-factor"
             },
             "time": "2023-09-04T20:35:54+00:00"
+        },
+        {
+            "name": "jazzsequence/ai-connector-secure-layer",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jazzsequence/ai-connector-secure-layer.git",
+                "reference": "c8d72c41ea3519caddb95159b33c365263c88a44"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jazzsequence/ai-connector-secure-layer/zipball/c8d72c41ea3519caddb95159b33c365263c88a44",
+                "reference": "c8d72c41ea3519caddb95159b33c365263c88a44",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2"
+            },
+            "require-dev": {
+                "pantheon-systems/pantheon-wp-coding-standards": "*",
+                "pantheon-systems/wpunit-helpers": "*",
+                "phpunit/phpunit": "^9.0",
+                "roave/security-advisories": "dev-latest",
+                "yoast/phpunit-polyfills": "^4.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Reynolds",
+                    "email": "chris.reynolds@pantheon.io",
+                    "homepage": "https://github.com/jazzsequence"
+                }
+            ],
+            "description": "Keeps LLM API keys out of the WordPress database. Fetches keys from Pantheon Secrets or environment variables on-demand at the moment an LLM request fires — never stored in wp_options, never pre-loaded as a PHP constant.",
+            "support": {
+                "issues": "https://github.com/jazzsequence/ai-connector-secure-layer/issues",
+                "source": "https://github.com/jazzsequence/ai-connector-secure-layer/tree/1.0.0"
+            },
+            "time": "2026-05-27T16:50:44+00:00"
         },
         {
             "name": "jazzsequence/ash-nazg",

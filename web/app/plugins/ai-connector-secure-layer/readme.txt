@@ -1,10 +1,10 @@
 === AI Connector Secure Layer ===
-Contributors: jazzsequence
+Contributors: jazzs3quence
 Tags: ai, llm, api-key, security, pantheon
 Requires at least: 7.0
 Tested up to: 7.0
-Requires PHP: 8.1
-Stable tag: 0.2.0
+Requires PHP: 8.2
+Stable tag: 1.0.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -78,6 +78,11 @@ Yes. The key is fetched at the moment each LLM request is made. From WordPress's
 Update the Pantheon Secret or env var. The next LLM request automatically picks up the new value — no WordPress cache flush or plugin deactivation needed.
 
 == Changelog ==
+
+= 1.0.0 =
+* Initial public release
+* CI pipeline with unit and integration test matrix (PHP 8.2–8.5)
+* Dependabot for Composer and GitHub Actions updates
 
 = 0.2.0 =
 * Complete rewrite: removed browser-key crypto approach
