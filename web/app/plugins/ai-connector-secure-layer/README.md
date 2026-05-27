@@ -57,8 +57,8 @@ Activate the plugin, then install an AI provider plugin. **Do not enter API keys
 For each provider you want to connect, set the key via Terminus:
 
 ```bash
-terminus secret:site:set your-site-name anthropic_api_key sk-ant-YOUR_KEY
-terminus secret:site:set your-site-name google_api_key YOUR_GOOGLE_KEY
+terminus secret:site:set your-site-name anthropic_api_key sk-ant-YOUR_KEY --type=runtime --scope=web,user
+terminus secret:site:set your-site-name google_api_key YOUR_GOOGLE_KEY --type=runtime --scope=web,user
 ```
 
 **Secret name convention:** `{provider_id}_api_key`

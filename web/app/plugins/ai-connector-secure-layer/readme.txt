@@ -42,8 +42,8 @@ This plugin is significantly safer than the default wp_options storage. See the 
 = Pantheon =
 
 ```
-terminus secret:site:set your-site anthropic_api_key YOUR_KEY
-terminus secret:site:set your-site google_api_key YOUR_KEY
+terminus secret:site:set your-site anthropic_api_key YOUR_KEY --type=runtime --scope=web,user
+terminus secret:site:set your-site google_api_key YOUR_KEY --type=runtime --scope=web,user
 ```
 
 = Environment variables =
