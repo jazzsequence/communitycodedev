@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "646c54fe39dec79a4ff2c7945d000425",
+    "content-hash": "4500112af33d5cb14beefc2efa7e3e0c",
     "packages": [
         {
             "name": "10up/elasticpress",
@@ -546,6 +546,49 @@
                 "source": "https://github.com/WordPress/two-factor"
             },
             "time": "2023-09-04T20:35:54+00:00"
+        },
+        {
+            "name": "jazzsequence/ai-connector-priority",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jazzsequence/ai-connector-priority.git",
+                "reference": "341a1c0d5e0524887d9723841a7b92fa80200cca"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jazzsequence/ai-connector-priority/zipball/341a1c0d5e0524887d9723841a7b92fa80200cca",
+                "reference": "341a1c0d5e0524887d9723841a7b92fa80200cca",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2"
+            },
+            "require-dev": {
+                "pantheon-systems/pantheon-wp-coding-standards": "*",
+                "pantheon-systems/wpunit-helpers": "*",
+                "phpunit/phpunit": "^9.0",
+                "roave/security-advisories": "dev-latest",
+                "yoast/phpunit-polyfills": "^4.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Reynolds",
+                    "email": "chris.reynolds@pantheon.io",
+                    "homepage": "https://github.com/jazzsequence"
+                }
+            ],
+            "description": "Admin settings page to configure which AI provider is tried first for each task type (text, image, vision). Requires the WordPress AI plugin.",
+            "support": {
+                "issues": "https://github.com/jazzsequence/ai-connector-priority/issues",
+                "source": "https://github.com/jazzsequence/ai-connector-priority/tree/1.0.0"
+            },
+            "time": "2026-05-27T22:20:25+00:00"
         },
         {
             "name": "jazzsequence/ai-connector-secure-layer",
