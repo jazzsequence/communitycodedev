@@ -9,8 +9,6 @@ namespace CommunityCode\AiConnectorPriority;
 const OPTION_KEY = 'cc_ai_priority';
 const PAGE_SLUG  = 'cc-ai-priority';
 
-// ─── Provider + model definitions ────────────────────────────────────────────
-
 /**
  * Returns the available AI providers for a given task type.
  *
@@ -68,8 +66,6 @@ function get_models_for_provider( string $provider, string $task ): array {
 	return $map[ $task ][ $provider ] ?? [];
 }
 
-// ─── Saved priorities ─────────────────────────────────────────────────────────
-
 /**
  * Returns the saved provider priority order for all task types, merged with defaults.
  *
@@ -84,8 +80,6 @@ function get_priorities(): array {
 
 	return wp_parse_args( get_option( OPTION_KEY, [] ), $defaults );
 }
-
-// ─── Preference filters ───────────────────────────────────────────────────────
 
 /**
  * Builds the ordered [provider, model] list for a task type based on saved priorities.
@@ -110,9 +104,6 @@ function build_model_list( string $task ): array {
 add_filter( 'wpai_preferred_text_models', static fn() => build_model_list( 'text' ) );
 add_filter( 'wpai_preferred_image_models', static fn() => build_model_list( 'image' ) );
 add_filter( 'wpai_preferred_vision_models', static fn() => build_model_list( 'vision' ) );
-
-// ─── Admin page ───────────────────────────────────────────────────────────────
-
 add_action(
 	'admin_menu',
 	static function (): void {
@@ -220,8 +211,6 @@ function render_page(): void {
 	</div>
 	<?php
 }
-
-// ─── Save handler ─────────────────────────────────────────────────────────────
 
 /**
  * Sanitizes and persists the submitted provider priority order to wp_options.
