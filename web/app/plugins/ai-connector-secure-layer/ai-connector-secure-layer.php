@@ -34,3 +34,7 @@ add_filter( 'script_module_data_options-connectors-wp-admin', 'AICSL\Connectors\
 
 // Terminus instructions above the Connectors page SPA for unconfigured providers.
 add_action( 'admin_notices', 'AICSL\Connectors\show_admin_notices' );
+
+// Tell the WordPress AI plugin that credentials are available when keys come from
+// Pantheon Secrets rather than wp_options (which we intentionally block).
+add_filter( 'wpai_has_ai_credentials', 'AICSL\Connectors\filter_has_ai_credentials', 10, 2 );

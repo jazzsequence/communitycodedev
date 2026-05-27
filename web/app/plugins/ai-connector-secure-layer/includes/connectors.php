@@ -105,6 +105,35 @@ function filter_script_module_data( array $data ): array {
 }
 
 /**
+ * Tells the WordPress AI plugin (wordpress.org/plugins/ai) that credentials are
+ * available when a Pantheon Secret or environment variable is configured for any
+ * AI provider.
+ *
+ * The AI plugin's has_ai_credentials() checks get_option() directly. Because this
+ * plugin blocks DB writes for connector options, that check always returns empty.
+ * This filter corrects that so the AI settings page and editor features stay enabled.
+ *
+ * @param bool  $has_credentials Whether the AI plugin found credentials via wp_options.
+ * @param array $connectors      All registered connectors.
+ */
+function filter_has_ai_credentials( bool $has_credentials, array $connectors ): bool {
+	if ( $has_credentials ) {
+		return true;
+	}
+
+	foreach ( $connectors as $id => $data ) {
+		if ( 'ai_provider' !== ( $data['type'] ?? '' ) ) {
+			continue;
+		}
+		if ( \AICSL\Secrets\has_secret_for_provider( $id ) ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
  * Shows admin notices on the Connectors page for unconfigured providers.
  *
  * The Connectors page is a JS SPA but renders inside the standard wp-admin

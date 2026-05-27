@@ -96,6 +96,49 @@ class ConnectorsTest extends WP_UnitTestCase {
 	}
 
 	// -------------------------------------------------------------------------
+	// wpai_has_ai_credentials filter
+	// -------------------------------------------------------------------------
+
+	public function test_filter_has_ai_credentials_returns_true_when_secret_configured(): void {
+		putenv( 'GOOGLE_API_KEY=google-test-key' );
+
+		$connectors = [
+			'google' => [ 'type' => 'ai_provider' ],
+		];
+
+		$result = \AICSL\Connectors\filter_has_ai_credentials( false, $connectors );
+
+		$this->assertTrue( $result );
+	}
+
+	public function test_filter_has_ai_credentials_returns_false_when_no_secret(): void {
+		$connectors = [
+			'google' => [ 'type' => 'ai_provider' ],
+		];
+
+		$result = \AICSL\Connectors\filter_has_ai_credentials( false, $connectors );
+
+		$this->assertFalse( $result );
+	}
+
+	public function test_filter_has_ai_credentials_passes_through_existing_true(): void {
+		$result = \AICSL\Connectors\filter_has_ai_credentials( true, [] );
+
+		$this->assertTrue( $result );
+	}
+
+	public function test_filter_has_ai_credentials_ignores_non_ai_connectors(): void {
+		// Akismet has type spam_filtering — should not satisfy the credential check.
+		$connectors = [
+			'akismet' => [ 'type' => 'spam_filtering' ],
+		];
+
+		$result = \AICSL\Connectors\filter_has_ai_credentials( false, $connectors );
+
+		$this->assertFalse( $result );
+	}
+
+	// -------------------------------------------------------------------------
 	// script_module_data filter
 	// -------------------------------------------------------------------------
 
