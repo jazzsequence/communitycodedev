@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "799a9afa4b91399ee16229def59c5032",
+    "content-hash": "a8024c1c7e3e85399cb7895f3970a51b",
     "packages": [
         {
             "name": "10up/elasticpress",
@@ -1681,6 +1681,37 @@
                 }
             ],
             "time": "2025-12-27T19:49:13+00:00"
+        },
+        {
+            "name": "wp-plugin/ai",
+            "version": "1.0.0",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/ai/",
+                "reference": "tags/1.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/ai.1.0.0.zip"
+            },
+            "require": {
+                "composer/installers": "~1.0|~2.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "WordPress.org"
+                }
+            ],
+            "description": "AI features, experiments and capabilities for WordPress.",
+            "homepage": "https://github.com/WordPress/ai",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/ai/#developers",
+                "issues": "https://wordpress.org/support/plugin/ai",
+                "source": "https://plugins.svn.wordpress.org/ai"
+            },
+            "time": "2026-05-19T22:36:11+00:00"
         },
         {
             "name": "wp-plugin/ai-provider-for-anthropic",
