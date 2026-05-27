@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a8024c1c7e3e85399cb7895f3970a51b",
+    "content-hash": "5f5fa8988840439591ce563e61110c27",
     "packages": [
         {
             "name": "10up/elasticpress",
@@ -1774,6 +1774,37 @@
                 "source": "https://plugins.svn.wordpress.org/ai-provider-for-google"
             },
             "time": "2026-05-13T21:46:25+00:00"
+        },
+        {
+            "name": "wp-plugin/ai-provider-for-openai",
+            "version": "1.0.3",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/ai-provider-for-openai/",
+                "reference": "tags/1.0.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/ai-provider-for-openai.1.0.3.zip"
+            },
+            "require": {
+                "composer/installers": "~1.0|~2.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "WordPress.org"
+                }
+            ],
+            "description": "AI Provider for OpenAI for the PHP AI Client SDK.",
+            "homepage": "https://github.com/WordPress/ai-provider-for-openai",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/ai-provider-for-openai/#developers",
+                "issues": "https://wordpress.org/support/plugin/ai-provider-for-openai",
+                "source": "https://plugins.svn.wordpress.org/ai-provider-for-openai"
+            },
+            "time": "2026-05-13T22:26:08+00:00"
         },
         {
             "name": "wp-plugin/akismet",
