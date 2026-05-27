@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b370d00f8f41716022d6ef30e0491fb3",
+    "content-hash": "a8024c1c7e3e85399cb7895f3970a51b",
     "packages": [
         {
             "name": "10up/elasticpress",
@@ -1712,6 +1712,37 @@
                 "source": "https://plugins.svn.wordpress.org/ai"
             },
             "time": "2026-05-19T22:36:11+00:00"
+        },
+        {
+            "name": "wp-plugin/ai-provider-for-anthropic",
+            "version": "1.0.3",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/ai-provider-for-anthropic/",
+                "reference": "tags/1.0.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/ai-provider-for-anthropic.1.0.3.zip"
+            },
+            "require": {
+                "composer/installers": "~1.0|~2.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "WordPress.org"
+                }
+            ],
+            "description": "Anthropic (Claude) provider for the PHP AI Client SDK.",
+            "homepage": "https://github.com/WordPress/ai-provider-for-anthropic",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/ai-provider-for-anthropic/#developers",
+                "issues": "https://wordpress.org/support/plugin/ai-provider-for-anthropic",
+                "source": "https://plugins.svn.wordpress.org/ai-provider-for-anthropic"
+            },
+            "time": "2026-05-13T22:35:47+00:00"
         },
         {
             "name": "wp-plugin/ai-provider-for-google",
