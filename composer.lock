@@ -1867,15 +1867,15 @@
         },
         {
             "name": "wp-plugin/mailpoet",
-            "version": "5.27.0",
+            "version": "5.28.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/mailpoet/",
-                "reference": "tags/5.27.0"
+                "reference": "tags/5.28.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.27.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.28.0.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -1894,19 +1894,19 @@
                 "issues": "https://wordpress.org/support/plugin/mailpoet",
                 "source": "https://plugins.svn.wordpress.org/mailpoet"
             },
-            "time": "2026-05-19T12:36:15+00:00"
+            "time": "2026-05-26T14:11:09+00:00"
         },
         {
             "name": "wp-plugin/ninja-forms",
-            "version": "3.14.4",
+            "version": "3.14.5",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/ninja-forms/",
-                "reference": "tags/3.14.4"
+                "reference": "tags/3.14.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.14.4.zip"
+                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.14.5.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -1925,7 +1925,7 @@
                 "issues": "https://wordpress.org/support/plugin/ninja-forms",
                 "source": "https://plugins.svn.wordpress.org/ninja-forms"
             },
-            "time": "2026-05-12T12:15:47+00:00"
+            "time": "2026-05-26T15:41:10+00:00"
         },
         {
             "name": "wp-plugin/powerpress",
@@ -2048,16 +2048,16 @@
         },
         {
             "name": "yoast/wordpress-seo",
-            "version": "27.6",
+            "version": "27.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Yoast-dist/wordpress-seo.git",
-                "reference": "ae6b0fbdb12126559d7b1745d40d4aa7a45ec728"
+                "reference": "cc90f11d788cfb219ce8336fd27f26405065a39f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Yoast-dist/wordpress-seo/zipball/ae6b0fbdb12126559d7b1745d40d4aa7a45ec728",
-                "reference": "ae6b0fbdb12126559d7b1745d40d4aa7a45ec728",
+                "url": "https://api.github.com/repos/Yoast-dist/wordpress-seo/zipball/cc90f11d788cfb219ce8336fd27f26405065a39f",
+                "reference": "cc90f11d788cfb219ce8336fd27f26405065a39f",
                 "shasum": ""
             },
             "require": {
@@ -2128,7 +2128,7 @@
                 "source": "https://github.com/Yoast/wordpress-seo",
                 "wiki": "https://github.com/Yoast/wordpress-seo/wiki"
             },
-            "time": "2026-05-12T08:55:54+00:00"
+            "time": "2026-05-27T09:33:34+00:00"
         }
     ],
     "packages-dev": [
