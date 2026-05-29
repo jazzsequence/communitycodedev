@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4500112af33d5cb14beefc2efa7e3e0c",
+    "content-hash": "deb71ab6e5c1f3ed599f7954e54aecb0",
     "packages": [
         {
             "name": "10up/elasticpress",
@@ -549,16 +549,16 @@
         },
         {
             "name": "jazzsequence/ai-connector-priority",
-            "version": "1.0.0",
+            "version": "dev-feature/dynamic-provider-discovery",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jazzsequence/ai-connector-priority.git",
-                "reference": "341a1c0d5e0524887d9723841a7b92fa80200cca"
+                "reference": "7ca92ca07ef80907109b22004f64a9df1217c358"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jazzsequence/ai-connector-priority/zipball/341a1c0d5e0524887d9723841a7b92fa80200cca",
-                "reference": "341a1c0d5e0524887d9723841a7b92fa80200cca",
+                "url": "https://api.github.com/repos/jazzsequence/ai-connector-priority/zipball/7ca92ca07ef80907109b22004f64a9df1217c358",
+                "reference": "7ca92ca07ef80907109b22004f64a9df1217c358",
                 "shasum": ""
             },
             "require": {
@@ -586,9 +586,9 @@
             "description": "Admin settings page to configure which AI provider is tried first for each task type (text, image, vision). Requires the WordPress AI plugin.",
             "support": {
                 "issues": "https://github.com/jazzsequence/ai-connector-priority/issues",
-                "source": "https://github.com/jazzsequence/ai-connector-priority/tree/1.0.0"
+                "source": "https://github.com/jazzsequence/ai-connector-priority/tree/feature/dynamic-provider-discovery"
             },
-            "time": "2026-05-27T22:20:25+00:00"
+            "time": "2026-05-29T17:53:12+00:00"
         },
         {
             "name": "jazzsequence/ai-connector-secure-layer",
@@ -1770,15 +1770,15 @@
         },
         {
             "name": "wp-plugin/ai",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/ai/",
-                "reference": "tags/1.0.0"
+                "reference": "tags/1.0.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/ai.1.0.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/ai.1.0.1.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -1797,7 +1797,7 @@
                 "issues": "https://wordpress.org/support/plugin/ai",
                 "source": "https://plugins.svn.wordpress.org/ai"
             },
-            "time": "2026-05-19T22:36:11+00:00"
+            "time": "2026-05-27T22:16:17+00:00"
         },
         {
             "name": "wp-plugin/ai-provider-for-anthropic",
@@ -4481,6 +4481,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "jazzsequence/ai-connector-priority": 20,
         "pantheon-upstreams/upstream-configuration": 20,
         "roave/security-advisories": 20
     },
