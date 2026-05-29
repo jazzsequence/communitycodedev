@@ -97,6 +97,7 @@
         "vlucas/phpdotenv": "^5.5",
         "wp-plugin/ai": "^1.0",
         "wp-plugin/ai-provider-for-anthropic": "^1.0",
+        "wp-plugin/ai-provider-for-deepseek": "^1.0",
         "wp-plugin/ai-provider-for-google": "^1.1",
         "wp-plugin/ai-provider-for-openai": "^1.0",
         "wp-plugin/akismet": "*",
