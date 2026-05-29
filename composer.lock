@@ -553,12 +553,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jazzsequence/ai-connector-priority.git",
-                "reference": "3b65ee683e2e3098bb5256d162cb8111f2d89aab"
+                "reference": "b4e9be772c440a005a4114e035afa3030fa3ffb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jazzsequence/ai-connector-priority/zipball/3b65ee683e2e3098bb5256d162cb8111f2d89aab",
-                "reference": "3b65ee683e2e3098bb5256d162cb8111f2d89aab",
+                "url": "https://api.github.com/repos/jazzsequence/ai-connector-priority/zipball/b4e9be772c440a005a4114e035afa3030fa3ffb8",
+                "reference": "b4e9be772c440a005a4114e035afa3030fa3ffb8",
                 "shasum": ""
             },
             "require": {
@@ -588,7 +588,7 @@
                 "issues": "https://github.com/jazzsequence/ai-connector-priority/issues",
                 "source": "https://github.com/jazzsequence/ai-connector-priority/tree/feature/dynamic-provider-discovery"
             },
-            "time": "2026-05-29T19:08:04+00:00"
+            "time": "2026-05-29T19:21:49+00:00"
         },
         {
             "name": "jazzsequence/ai-connector-secure-layer",
