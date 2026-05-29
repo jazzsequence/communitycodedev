@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "63573cdd92c97d416312ef9c2d6cb358",
+    "content-hash": "a3419747025a51c05441e7eb5101aa83",
     "packages": [
         {
             "name": "10up/elasticpress",
@@ -549,16 +549,16 @@
         },
         {
             "name": "jazzsequence/ai-connector-priority",
-            "version": "dev-feature/dynamic-provider-discovery",
+            "version": "dev-fix/single-provider-selection",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jazzsequence/ai-connector-priority.git",
-                "reference": "b4e9be772c440a005a4114e035afa3030fa3ffb8"
+                "reference": "db9313a7db372ea7afd4db7b80b58334fc4ee051"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jazzsequence/ai-connector-priority/zipball/b4e9be772c440a005a4114e035afa3030fa3ffb8",
-                "reference": "b4e9be772c440a005a4114e035afa3030fa3ffb8",
+                "url": "https://api.github.com/repos/jazzsequence/ai-connector-priority/zipball/db9313a7db372ea7afd4db7b80b58334fc4ee051",
+                "reference": "db9313a7db372ea7afd4db7b80b58334fc4ee051",
                 "shasum": ""
             },
             "require": {
@@ -586,9 +586,9 @@
             "description": "Admin settings page to configure which AI provider is tried first for each task type (text, image, vision). Requires the WordPress AI plugin.",
             "support": {
                 "issues": "https://github.com/jazzsequence/ai-connector-priority/issues",
-                "source": "https://github.com/jazzsequence/ai-connector-priority/tree/feature/dynamic-provider-discovery"
+                "source": "https://github.com/jazzsequence/ai-connector-priority/tree/fix/single-provider-selection"
             },
-            "time": "2026-05-29T19:21:49+00:00"
+            "time": "2026-05-29T20:22:31+00:00"
         },
         {
             "name": "jazzsequence/ai-connector-secure-layer",
