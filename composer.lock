@@ -553,12 +553,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jazzsequence/ai-connector-priority.git",
-                "reference": "67b2bc09dd9e161d119e89ce8fe15c3eb075e097"
+                "reference": "1bad4dc7aa474b71788ce1464ccbaf8ed97c56b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jazzsequence/ai-connector-priority/zipball/67b2bc09dd9e161d119e89ce8fe15c3eb075e097",
-                "reference": "67b2bc09dd9e161d119e89ce8fe15c3eb075e097",
+                "url": "https://api.github.com/repos/jazzsequence/ai-connector-priority/zipball/1bad4dc7aa474b71788ce1464ccbaf8ed97c56b8",
+                "reference": "1bad4dc7aa474b71788ce1464ccbaf8ed97c56b8",
                 "shasum": ""
             },
             "require": {
@@ -588,7 +588,7 @@
                 "issues": "https://github.com/jazzsequence/ai-connector-priority/issues",
                 "source": "https://github.com/jazzsequence/ai-connector-priority/tree/fix/single-provider-selection"
             },
-            "time": "2026-05-30T19:54:17+00:00"
+            "time": "2026-05-30T21:40:43+00:00"
         },
         {
             "name": "jazzsequence/ai-connector-secure-layer",
