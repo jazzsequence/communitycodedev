@@ -553,12 +553,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jazzsequence/ai-connector-priority.git",
-                "reference": "153c7fbaa11d18260cf50f521df85e3e18f2d7b1"
+                "reference": "089fc75c959aa110c03ef57b16e09c24d7790a16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jazzsequence/ai-connector-priority/zipball/153c7fbaa11d18260cf50f521df85e3e18f2d7b1",
-                "reference": "153c7fbaa11d18260cf50f521df85e3e18f2d7b1",
+                "url": "https://api.github.com/repos/jazzsequence/ai-connector-priority/zipball/089fc75c959aa110c03ef57b16e09c24d7790a16",
+                "reference": "089fc75c959aa110c03ef57b16e09c24d7790a16",
                 "shasum": ""
             },
             "require": {
@@ -588,7 +588,7 @@
                 "issues": "https://github.com/jazzsequence/ai-connector-priority/issues",
                 "source": "https://github.com/jazzsequence/ai-connector-priority/tree/feat/developer-mode-notice"
             },
-            "time": "2026-06-01T16:42:08+00:00"
+            "time": "2026-06-01T17:09:24+00:00"
         },
         {
             "name": "jazzsequence/ai-connector-secure-layer",
