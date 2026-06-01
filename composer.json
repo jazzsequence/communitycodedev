@@ -80,7 +80,7 @@
         "cweagans/composer-patches": "^2.0",
         "fairpm/fair-plugin": "*",
         "humanmade/two-factor": "*",
-        "jazzsequence/ai-connector-priority": "dev-fix/single-provider-selection",
+        "jazzsequence/ai-connector-priority": "dev-feat/developer-mode-notice",
         "jazzsequence/ai-connector-secure-layer": "^1.0",
         "jazzsequence/ash-nazg": "^0.6.0",
         "oscarotero/env": "^2.1",
