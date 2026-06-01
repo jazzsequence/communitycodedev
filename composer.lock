@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "195daa95d432b788eb56e25ca4519e34",
+    "content-hash": "d78f37f88aa96f9c87e9ae8b476e6e21",
     "packages": [
         {
             "name": "10up/elasticpress",
@@ -549,16 +549,16 @@
         },
         {
             "name": "jazzsequence/ai-connector-priority",
-            "version": "dev-feat/developer-mode-notice",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jazzsequence/ai-connector-priority.git",
-                "reference": "2005835f5327644754fc7156584ed20543570968"
+                "reference": "8a1a329dc63cc5a583bbe901c29a441a7a7dabf3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jazzsequence/ai-connector-priority/zipball/2005835f5327644754fc7156584ed20543570968",
-                "reference": "2005835f5327644754fc7156584ed20543570968",
+                "url": "https://api.github.com/repos/jazzsequence/ai-connector-priority/zipball/8a1a329dc63cc5a583bbe901c29a441a7a7dabf3",
+                "reference": "8a1a329dc63cc5a583bbe901c29a441a7a7dabf3",
                 "shasum": ""
             },
             "require": {
@@ -583,12 +583,12 @@
                     "homepage": "https://github.com/jazzsequence"
                 }
             ],
-            "description": "Admin settings page to configure which AI provider is tried first for each task type (text, image, vision). Requires the WordPress AI plugin.",
+            "description": "Admin settings page to choose which AI provider to use for each task type (text, image, vision). Requires the WordPress AI plugin.",
             "support": {
                 "issues": "https://github.com/jazzsequence/ai-connector-priority/issues",
-                "source": "https://github.com/jazzsequence/ai-connector-priority/tree/feat/developer-mode-notice"
+                "source": "https://github.com/jazzsequence/ai-connector-priority/tree/1.1.0"
             },
-            "time": "2026-06-01T19:47:44+00:00"
+            "time": "2026-06-01T21:46:39+00:00"
         },
         {
             "name": "jazzsequence/ai-connector-secure-layer",
@@ -1829,37 +1829,6 @@
                 "source": "https://plugins.svn.wordpress.org/ai-provider-for-anthropic"
             },
             "time": "2026-05-13T22:35:47+00:00"
-        },
-        {
-            "name": "wp-plugin/ai-provider-for-deepseek",
-            "version": "1.0.1",
-            "source": {
-                "type": "svn",
-                "url": "https://plugins.svn.wordpress.org/ai-provider-for-deepseek/",
-                "reference": "tags/1.0.1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/ai-provider-for-deepseek.1.0.1.zip"
-            },
-            "require": {
-                "composer/installers": "~1.0|~2.0"
-            },
-            "type": "wordpress-plugin",
-            "notification-url": "https://wp-packages.org/downloads",
-            "authors": [
-                {
-                    "name": "Sajjad Hossain Sagor"
-                }
-            ],
-            "description": "AI Provider for DeepSeek for the PHP AI Client SDK.",
-            "homepage": "https://wordpress.org/plugins/ai-provider-for-deepseek/",
-            "support": {
-                "changelog": "https://wordpress.org/plugins/ai-provider-for-deepseek/#developers",
-                "issues": "https://wordpress.org/support/plugin/ai-provider-for-deepseek",
-                "source": "https://plugins.svn.wordpress.org/ai-provider-for-deepseek"
-            },
-            "time": "2026-05-29T18:26:05+00:00"
         },
         {
             "name": "wp-plugin/ai-provider-for-google",
@@ -4512,7 +4481,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "jazzsequence/ai-connector-priority": 20,
         "pantheon-upstreams/upstream-configuration": 20,
         "roave/security-advisories": 20
     },
