@@ -47,6 +47,20 @@ function is_target_request( $url ) : bool {
 }
 
 /**
+ * Re-entrancy flag so our own cold-miss fetch isn't intercepted by short_circuit().
+ *
+ * @param bool|null $set Pass true/false to set, null to read.
+ * @return bool
+ */
+function is_fetching( $set = null ) : bool {
+	static $state = false;
+	if ( null !== $set ) {
+		$state = (bool) $set;
+	}
+	return $state;
+}
+
+/**
  * Build a minimal, serialize-safe HTTP response array that the plugin can parse
  * with wp_remote_retrieve_response_code() / wp_remote_retrieve_body().
  *
@@ -69,6 +83,10 @@ function make_response( int $code, string $body ) : array {
 
 /**
  * A safe fallback the plugin maps to the 'low' intensity level.
+ *
+ * The body mimics the RAW Electricity Maps API JSON (keyed `data[].level`, the
+ * pre-normalized schema the plugin parses in get_current_intensity_level_direct),
+ * not the plugin's normalized `intensity_level` output.
  *
  * @return array
  */
@@ -107,18 +125,20 @@ add_filter( 'http_request_args', __NAMESPACE__ . '\\cap_timeout', 10, 2 );
 /**
  * Short-circuit the Electricity Maps call with a site-wide cached response.
  *
- * Cold-miss policy: if nothing is cached yet, prime a brief placeholder (acts as a
- * stampede lock) and let THIS one request perform the real fetch — capped at
- * HOT_TIMEOUT by cap_timeout(). The genuine response is captured in
- * capture_response() below and cached site-wide for HIT_TTL.
+ * On a warm cache, returns the cached response without any network call. On a cold
+ * miss it primes a brief placeholder (a stampede lock so concurrent requests in the
+ * cold window are served instantly), then performs ONE upstream fetch itself — so
+ * success, HTTP errors, AND transport-level WP_Errors are all caught and cached in
+ * a single place rather than relying on the http_response filter (which never fires
+ * for transport failures).
  *
- * @param false|array $pre  Short-circuit value (false to proceed normally).
- * @param array       $args HTTP request args.
- * @param string      $url  Request URL.
- * @return false|array
+ * @param false|array|\WP_Error $pre  Short-circuit value (false to proceed normally).
+ * @param array                 $args HTTP request args.
+ * @param string                $url  Request URL.
+ * @return false|array|\WP_Error
  */
 function short_circuit( $pre, $args, $url ) {
-	if ( false !== $pre || ! is_target_request( $url ) ) {
+	if ( false !== $pre || is_fetching() || ! is_target_request( $url ) ) {
 		return $pre;
 	}
 
@@ -129,42 +149,35 @@ function short_circuit( $pre, $args, $url ) {
 	}
 
 	// Cold miss: prime a short-lived placeholder so concurrent requests in this
-	// window are served instantly instead of all stampeding the upstream API, then
-	// allow this single request through to fetch the real value.
+	// window are served instantly instead of all stampeding the upstream API.
 	set_transient( CACHE_KEY, fallback_response(), LOCK_TTL );
-	return false;
-}
-add_filter( 'pre_http_request', __NAMESPACE__ . '\\short_circuit', 10, 3 );
 
-/**
- * Capture the genuine Electricity Maps response and cache it site-wide.
- *
- * On success (HTTP 200) the real response is cached for HIT_TTL. On any failure the
- * fallback is cached for the shorter MISS_TTL — so upstream errors are cached
- * (negative caching) rather than retried on every subsequent render — and the
- * fallback is returned so the current request still renders.
- *
- * @param array  $response Parsed HTTP response.
- * @param array  $args     HTTP request args.
- * @param string $url      Request URL.
- * @return array
- */
-function capture_response( $response, $args, $url ) {
-	if ( ! is_target_request( $url ) ) {
-		return $response;
+	// Perform the single cold-miss fetch ourselves (re-entrancy guarded so this
+	// filter doesn't intercept it). Timeout is capped by cap_timeout().
+	is_fetching( true );
+	$response = wp_remote_request( $url, $args );
+	is_fetching( false );
+
+	if ( is_wp_error( $response ) ) {
+		// Transport failure (DNS, refused, SSL, timeout): negative-cache the
+		// fallback for MISS_TTL so we don't retry the dead upstream every request.
+		$fallback = fallback_response();
+		set_transient( CACHE_KEY, $fallback, MISS_TTL );
+		return $fallback;
 	}
 
 	$code = (int) wp_remote_retrieve_response_code( $response );
 	$body = wp_remote_retrieve_body( $response );
 
 	if ( 200 === $code && '' !== $body ) {
-		$cacheable = make_response( 200, $body );
-		set_transient( CACHE_KEY, $cacheable, HIT_TTL );
-		return $cacheable;
+		$real = make_response( 200, $body );
+		set_transient( CACHE_KEY, $real, HIT_TTL );
+		return $real;
 	}
 
+	// Non-200 HTTP response: negative-cache the fallback for the short MISS_TTL.
 	$fallback = fallback_response();
 	set_transient( CACHE_KEY, $fallback, MISS_TTL );
 	return $fallback;
 }
-add_filter( 'http_response', __NAMESPACE__ . '\\capture_response', 10, 3 );
+add_filter( 'pre_http_request', __NAMESPACE__ . '\\short_circuit', 10, 3 );
