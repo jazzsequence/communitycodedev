@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0d7cd2c6a2c4d44a7b7374db607cc274",
+    "content-hash": "d78f37f88aa96f9c87e9ae8b476e6e21",
     "packages": [
         {
             "name": "10up/elasticpress",
@@ -546,6 +546,92 @@
                 "source": "https://github.com/WordPress/two-factor"
             },
             "time": "2023-09-04T20:35:54+00:00"
+        },
+        {
+            "name": "jazzsequence/ai-connector-priority",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jazzsequence/ai-connector-priority.git",
+                "reference": "8a1a329dc63cc5a583bbe901c29a441a7a7dabf3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jazzsequence/ai-connector-priority/zipball/8a1a329dc63cc5a583bbe901c29a441a7a7dabf3",
+                "reference": "8a1a329dc63cc5a583bbe901c29a441a7a7dabf3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2"
+            },
+            "require-dev": {
+                "pantheon-systems/pantheon-wp-coding-standards": "*",
+                "pantheon-systems/wpunit-helpers": "*",
+                "phpunit/phpunit": "^9.0",
+                "roave/security-advisories": "dev-latest",
+                "yoast/phpunit-polyfills": "^4.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Reynolds",
+                    "email": "chris.reynolds@pantheon.io",
+                    "homepage": "https://github.com/jazzsequence"
+                }
+            ],
+            "description": "Admin settings page to choose which AI provider to use for each task type (text, image, vision). Requires the WordPress AI plugin.",
+            "support": {
+                "issues": "https://github.com/jazzsequence/ai-connector-priority/issues",
+                "source": "https://github.com/jazzsequence/ai-connector-priority/tree/1.1.0"
+            },
+            "time": "2026-06-01T21:46:39+00:00"
+        },
+        {
+            "name": "jazzsequence/ai-connector-secure-layer",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jazzsequence/ai-connector-secure-layer.git",
+                "reference": "c8d72c41ea3519caddb95159b33c365263c88a44"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jazzsequence/ai-connector-secure-layer/zipball/c8d72c41ea3519caddb95159b33c365263c88a44",
+                "reference": "c8d72c41ea3519caddb95159b33c365263c88a44",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2"
+            },
+            "require-dev": {
+                "pantheon-systems/pantheon-wp-coding-standards": "*",
+                "pantheon-systems/wpunit-helpers": "*",
+                "phpunit/phpunit": "^9.0",
+                "roave/security-advisories": "dev-latest",
+                "yoast/phpunit-polyfills": "^4.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Reynolds",
+                    "email": "chris.reynolds@pantheon.io",
+                    "homepage": "https://github.com/jazzsequence"
+                }
+            ],
+            "description": "Keeps LLM API keys out of the WordPress database. Fetches keys from Pantheon Secrets or environment variables on-demand at the moment an LLM request fires — never stored in wp_options, never pre-loaded as a PHP constant.",
+            "support": {
+                "issues": "https://github.com/jazzsequence/ai-connector-secure-layer/issues",
+                "source": "https://github.com/jazzsequence/ai-connector-secure-layer/tree/1.0.0"
+            },
+            "time": "2026-05-27T16:50:44+00:00"
         },
         {
             "name": "jazzsequence/ash-nazg",
@@ -1681,6 +1767,130 @@
                 }
             ],
             "time": "2025-12-27T19:49:13+00:00"
+        },
+        {
+            "name": "wp-plugin/ai",
+            "version": "1.0.1",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/ai/",
+                "reference": "tags/1.0.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/ai.1.0.1.zip"
+            },
+            "require": {
+                "composer/installers": "~1.0|~2.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "WordPress.org"
+                }
+            ],
+            "description": "AI features, experiments and capabilities for WordPress.",
+            "homepage": "https://github.com/WordPress/ai",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/ai/#developers",
+                "issues": "https://wordpress.org/support/plugin/ai",
+                "source": "https://plugins.svn.wordpress.org/ai"
+            },
+            "time": "2026-05-27T22:16:17+00:00"
+        },
+        {
+            "name": "wp-plugin/ai-provider-for-anthropic",
+            "version": "1.0.3",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/ai-provider-for-anthropic/",
+                "reference": "tags/1.0.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/ai-provider-for-anthropic.1.0.3.zip"
+            },
+            "require": {
+                "composer/installers": "~1.0|~2.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "WordPress.org"
+                }
+            ],
+            "description": "Anthropic (Claude) provider for the PHP AI Client SDK.",
+            "homepage": "https://github.com/WordPress/ai-provider-for-anthropic",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/ai-provider-for-anthropic/#developers",
+                "issues": "https://wordpress.org/support/plugin/ai-provider-for-anthropic",
+                "source": "https://plugins.svn.wordpress.org/ai-provider-for-anthropic"
+            },
+            "time": "2026-05-13T22:35:47+00:00"
+        },
+        {
+            "name": "wp-plugin/ai-provider-for-google",
+            "version": "1.1.0",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/ai-provider-for-google/",
+                "reference": "tags/1.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/ai-provider-for-google.1.1.0.zip"
+            },
+            "require": {
+                "composer/installers": "~1.0|~2.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "WordPress.org"
+                }
+            ],
+            "description": "Google AI (Gemini) provider for the PHP AI Client SDK.",
+            "homepage": "https://github.com/WordPress/ai-provider-for-google",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/ai-provider-for-google/#developers",
+                "issues": "https://wordpress.org/support/plugin/ai-provider-for-google",
+                "source": "https://plugins.svn.wordpress.org/ai-provider-for-google"
+            },
+            "time": "2026-05-13T21:46:25+00:00"
+        },
+        {
+            "name": "wp-plugin/ai-provider-for-openai",
+            "version": "1.0.3",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/ai-provider-for-openai/",
+                "reference": "tags/1.0.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/ai-provider-for-openai.1.0.3.zip"
+            },
+            "require": {
+                "composer/installers": "~1.0|~2.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "WordPress.org"
+                }
+            ],
+            "description": "AI Provider for OpenAI for the PHP AI Client SDK.",
+            "homepage": "https://github.com/WordPress/ai-provider-for-openai",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/ai-provider-for-openai/#developers",
+                "issues": "https://wordpress.org/support/plugin/ai-provider-for-openai",
+                "source": "https://plugins.svn.wordpress.org/ai-provider-for-openai"
+            },
+            "time": "2026-05-13T22:26:08+00:00"
         },
         {
             "name": "wp-plugin/akismet",
@@ -4283,5 +4493,5 @@
     "platform-overrides": {
         "php": "8.3.14"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
