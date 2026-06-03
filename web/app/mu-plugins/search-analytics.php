@@ -1,41 +1,70 @@
 <?php
 /**
  * Plugin Name: Search Analytics
- * Description: Logs anonymous search queries to Elasticsearch and provides a dashboard to view search trends.
+ * Description: Logs anonymous search queries to a custom database table and provides a dashboard to view search trends.
  * Author: Chris Reynolds
  * License: MIT
  */
 
 namespace CommunityCode\SearchAnalytics;
 
-const INDEX_SUFFIX = 'search_analytics';
-const ADMIN_SLUG   = 'cc-search-analytics';
+const ADMIN_SLUG        = 'cc-search-analytics';
+const DB_VERSION        = '1.0';
+const DB_VERSION_OPTION = 'cc_search_analytics_db_version';
 
+add_action( 'init', __NAMESPACE__ . '\\maybe_create_table' );
+add_action( 'init', __NAMESPACE__ . '\\schedule_cleanup' );
+add_action( 'cc_search_analytics_cleanup', __NAMESPACE__ . '\\run_cleanup' );
 add_action( 'pre_get_posts', __NAMESPACE__ . '\\maybe_track_search' );
 add_action( 'admin_menu', __NAMESPACE__ . '\\register_admin_page' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_admin_assets' );
 
-// ─── ES connection ────────────────────────────────────────────────────────────
+// ─── Database ─────────────────────────────────────────────────────────────────
 
-function get_es_host(): string {
-	return defined( 'EP_HOST' ) ? (string) EP_HOST : '';
+function get_table_name(): string {
+	global $wpdb;
+	return $wpdb->prefix . 'cc_search_analytics';
 }
 
-function get_es_auth_header(): string {
-	if ( ! defined( 'EP_CREDENTIALS' ) || ! EP_CREDENTIALS ) {
-		return '';
+function maybe_create_table(): void {
+	if ( get_option( DB_VERSION_OPTION ) === DB_VERSION ) {
+		return;
 	}
-	// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
-	return 'Basic ' . base64_encode( EP_CREDENTIALS );
+	global $wpdb;
+	$table           = get_table_name();
+	$charset_collate = $wpdb->get_charset_collate();
+
+	$sql = "CREATE TABLE {$table} (
+		id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+		term        VARCHAR(200)    NOT NULL,
+		results     MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
+		searched_at DATETIME NOT NULL,
+		PRIMARY KEY (id),
+		KEY term (term(50)),
+		KEY searched_at (searched_at)
+	) {$charset_collate};";
+
+	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+	dbDelta( $sql );
+	update_option( DB_VERSION_OPTION, DB_VERSION );
 }
 
-function get_index_url(): string {
-	$host   = get_es_host();
-	$prefix = defined( 'EP_INDEX_PREFIX' ) ? EP_INDEX_PREFIX : '';
-	if ( ! $host || ! $prefix ) {
-		return '';
+function schedule_cleanup(): void {
+	if ( ! wp_next_scheduled( 'cc_search_analytics_cleanup' ) ) {
+		wp_schedule_event( time(), 'daily', 'cc_search_analytics_cleanup' );
 	}
-	return trailingslashit( $host ) . $prefix . '_' . INDEX_SUFFIX;
+}
+
+function run_cleanup(): void {
+	global $wpdb;
+	$table = get_table_name();
+	$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			"DELETE FROM {$table} WHERE searched_at < %s",
+			gmdate( 'Y-m-d H:i:s', strtotime( '-90 days' ) )
+		)
+	);
 }
 
 // ─── Bot detection ────────────────────────────────────────────────────────────
@@ -54,7 +83,7 @@ function is_bot(): bool {
 
 /**
  * Hook into the main search query. For anonymous non-bot requests, register a
- * one-shot the_posts filter to capture results and write to ES.
+ * one-shot the_posts filter to capture results and write to the DB.
  */
 function maybe_track_search( \WP_Query $query ): void {
 	if ( ! $query->is_main_query() || ! $query->is_search() ) {
@@ -71,7 +100,7 @@ function maybe_track_search( \WP_Query $query ): void {
 	$tracker = null;
 	$tracker = function ( array $posts, \WP_Query $q ) use ( $term, &$tracker ): array {
 		if ( $q->is_main_query() && $q->is_search() ) {
-			write_to_es( $term, (int) $q->found_posts );
+			write_to_db( $term, (int) $q->found_posts );
 			remove_filter( 'the_posts', $tracker, 10 );
 		}
 		return $posts;
@@ -79,108 +108,75 @@ function maybe_track_search( \WP_Query $query ): void {
 	add_filter( 'the_posts', $tracker, 10, 2 );
 }
 
-/**
- * Write a search event to ES. Non-blocking — does not delay the page response.
- */
-function write_to_es( string $term, int $results_count ): void {
-	$index_url = get_index_url();
-	$auth      = get_es_auth_header();
-	if ( ! $index_url || ! $auth ) {
-		return;
-	}
-
-	wp_remote_post(
-		$index_url . '/_doc',
+function write_to_db( string $term, int $results_count ): void {
+	global $wpdb;
+	$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+		get_table_name(),
 		[
-			'headers'  => [
-				'Content-Type'  => 'application/json',
-				'Authorization' => $auth,
-			],
-			'body'     => wp_json_encode(
-				[
-					'term'          => $term,
-					'results_count' => $results_count,
-					'timestamp'     => gmdate( 'c' ),
-				]
-			),
-			'blocking' => false,
-		]
+			'term'        => $term,
+			'results'     => $results_count,
+			'searched_at' => gmdate( 'Y-m-d H:i:s' ),
+		],
+		[ '%s', '%d', '%s' ]
 	);
 }
 
 // ─── Data layer ───────────────────────────────────────────────────────────────
 
 /**
- * Static cache so enqueue_admin_assets() and render_admin_page() share one ES query.
+ * Static cache so enqueue_admin_assets() and render_admin_page() share one DB query.
  */
 function get_analytics_data( int $days ): array {
 	static $cache = [];
 	if ( ! isset( $cache[ $days ] ) ) {
-		$cache[ $days ] = query_es( $days );
+		$cache[ $days ] = query_db( $days );
 	}
 	return $cache[ $days ];
 }
 
 /**
- * Query ES for aggregated search analytics.
+ * Query the DB for aggregated search analytics.
+ *
+ * Returns arrays shaped to match the former ES response so the admin UI
+ * needs no changes: top_terms items have `key`/`doc_count` keys; daily_counts
+ * items have `key_as_string`/`doc_count` keys.
  *
  * @param int $days Days to look back. 0 = all time.
  * @return array{top_terms: array, daily_counts: array, total: int, unique: int}
  */
-function query_es( int $days ): array {
-	$index_url = get_index_url();
-	$auth      = get_es_auth_header();
-	$empty     = [ 'top_terms' => [], 'daily_counts' => [], 'total' => 0, 'unique' => 0 ];
-
-	if ( ! $index_url || ! $auth ) {
-		return $empty;
-	}
-
-	$query = [
-		'size' => 0,
-		'aggs' => [
-			'top_terms'    => [ 'terms' => [ 'field' => 'term.keyword', 'size' => 25 ] ],
-			'daily_counts' => [
-				'date_histogram' => [
-					'field'             => 'timestamp',
-					'calendar_interval' => 'day',
-					'format'            => 'yyyy-MM-dd',
-					'min_doc_count'     => 1,
-				],
-			],
-			'unique_terms' => [ 'cardinality' => [ 'field' => 'term.keyword' ] ],
-		],
-	];
+function query_db( int $days ): array {
+	global $wpdb;
+	$table = get_table_name();
+	$empty = [ 'top_terms' => [], 'daily_counts' => [], 'total' => 0, 'unique' => 0 ];
 
 	if ( $days > 0 ) {
-		$query['query'] = [ 'range' => [ 'timestamp' => [ 'gte' => 'now-' . $days . 'd/d' ] ] ];
+		$since     = gmdate( 'Y-m-d H:i:s', strtotime( "-{$days} days" ) );
+		$where_sql = $wpdb->prepare( 'WHERE searched_at >= %s', $since );
+	} else {
+		$where_sql = '';
 	}
 
-	$response = wp_remote_post(
-		$index_url . '/_search',
-		[
-			'headers' => [
-				'Content-Type'  => 'application/json',
-				'Authorization' => $auth,
-			],
-			'body'    => wp_json_encode( $query ),
-			'timeout' => 10,
-		]
-	);
+	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	$top_terms = $wpdb->get_results(
+		"SELECT term AS `key`, COUNT(*) AS doc_count FROM {$table} {$where_sql} GROUP BY term ORDER BY doc_count DESC LIMIT 25",
+		ARRAY_A
+	) ?: [];
 
-	if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
-		return $empty;
-	}
+	$daily_counts = $wpdb->get_results(
+		"SELECT DATE(searched_at) AS key_as_string, COUNT(*) AS doc_count FROM {$table} {$where_sql} GROUP BY DATE(searched_at) ORDER BY key_as_string DESC LIMIT 30",
+		ARRAY_A
+	) ?: [];
 
-	$body = json_decode( wp_remote_retrieve_body( $response ), true );
-	$aggs = $body['aggregations'] ?? [];
+	$total  = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table} {$where_sql}" );
+	$unique = (int) $wpdb->get_var( "SELECT COUNT(DISTINCT term) FROM {$table} {$where_sql}" );
+	// phpcs:enable
 
 	return [
-		// ES returns daily_counts oldest-first. Reverse for table display (most-recent-first).
-		'top_terms'    => $aggs['top_terms']['buckets'] ?? [],
-		'daily_counts' => array_slice( array_reverse( $aggs['daily_counts']['buckets'] ?? [] ), 0, 30 ),
-		'total'        => (int) ( $body['hits']['total']['value'] ?? 0 ),
-		'unique'       => (int) ( $aggs['unique_terms']['value'] ?? 0 ),
+		'top_terms'    => $top_terms,
+		// Stored DESC (most-recent-first) for the table; enqueue_admin_assets() reverses for the chart.
+		'daily_counts' => $daily_counts,
+		'total'        => $total,
+		'unique'       => $unique,
 	];
 }
 
