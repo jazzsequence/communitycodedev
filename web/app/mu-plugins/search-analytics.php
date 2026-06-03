@@ -15,7 +15,8 @@ const DB_VERSION_OPTION = 'cc_search_analytics_db_version';
 add_action( 'init', __NAMESPACE__ . '\\maybe_create_table' );
 add_action( 'init', __NAMESPACE__ . '\\schedule_cleanup' );
 add_action( 'cc_search_analytics_cleanup', __NAMESPACE__ . '\\run_cleanup' );
-add_action( 'pre_get_posts', __NAMESPACE__ . '\\maybe_track_search' );
+add_action( 'wp', __NAMESPACE__ . '\\maybe_track_standard_search' );
+add_filter( 'rest_request_after_callbacks', __NAMESPACE__ . '\\track_ep_pointer_search', 10, 3 );
 add_action( 'admin_menu', __NAMESPACE__ . '\\register_admin_page' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_admin_assets' );
 
@@ -82,30 +83,54 @@ function is_bot(): bool {
 // ─── Search tracking ──────────────────────────────────────────────────────────
 
 /**
- * Hook into the main search query. For anonymous non-bot requests, register a
- * one-shot the_posts filter to capture results and write to the DB.
+ * Track standard WordPress search page loads (?s=query full-page requests).
+ * Fires on the `wp` action, after the main query has fully executed.
  */
-function maybe_track_search( \WP_Query $query ): void {
-	if ( ! $query->is_main_query() || ! $query->is_search() ) {
+function maybe_track_standard_search(): void {
+	global $wp_query;
+	if ( ! $wp_query->is_search() ) {
 		return;
 	}
 	if ( is_user_logged_in() || is_bot() ) {
 		return;
 	}
-	$term = trim( $query->get( 's' ) );
+	$term = trim( $wp_query->get( 's' ) );
 	if ( empty( $term ) ) {
 		return;
 	}
+	write_to_db( $term, (int) $wp_query->found_posts );
+}
 
-	$tracker = null;
-	$tracker = function ( array $posts, \WP_Query $q ) use ( $term, &$tracker ): array {
-		if ( $q->is_main_query() && $q->is_search() ) {
-			write_to_db( $term, (int) $q->found_posts );
-			remove_filter( 'the_posts', $tracker, 10 );
-		}
-		return $posts;
-	};
-	add_filter( 'the_posts', $tracker, 10, 2 );
+/**
+ * Track live searches routed through ElasticPress's pointer_search REST endpoint.
+ *
+ * EP Instant Results intercepts search form submissions and queries this endpoint
+ * instead of triggering a full page load, so the standard `wp` hook never fires.
+ *
+ * @param \WP_REST_Response|\WP_Error $response
+ * @param array                        $handler
+ * @param \WP_REST_Request             $request
+ * @return \WP_REST_Response|\WP_Error
+ */
+function track_ep_pointer_search( $response, array $handler, \WP_REST_Request $request ) {
+	if ( '/elasticpress/v1/pointer_search' !== $request->get_route() ) {
+		return $response;
+	}
+	if ( is_user_logged_in() || is_bot() ) {
+		return $response;
+	}
+	$term = trim( sanitize_text_field( (string) ( $request->get_param( 's' ) ?? '' ) ) );
+	// Skip partial/single-char queries that fire as the user begins typing.
+	if ( mb_strlen( $term ) < 2 ) {
+		return $response;
+	}
+	$results_count = 0;
+	if ( ! is_wp_error( $response ) ) {
+		$data          = $response->get_data();
+		$results_count = (int) ( $data['hits']['total']['value'] ?? $data['total'] ?? 0 );
+	}
+	write_to_db( $term, $results_count );
+	return $response;
 }
 
 function write_to_db( string $term, int $results_count ): void {
