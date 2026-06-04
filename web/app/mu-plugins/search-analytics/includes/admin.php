@@ -359,7 +359,149 @@ function render_admin_page(): void {
 			<?php endif; ?>
 		</div>
 
+		<div class="sa-card">
+			<h2 style="margin-top:0"><?php esc_html_e( 'Suggested Tags', 'community-code' ); ?></h2>
+			<?php render_suggested_tags( $days ); ?>
+		</div>
+
 		<?php endif; ?>
 	</div>
 	<?php
+}
+
+/**
+ * Render the Suggested Tags section of the analytics dashboard.
+ *
+ * Compares frequently searched terms against the post_tag taxonomy and surfaces
+ * terms that have no matching tag. Optionally uses the AI plugin to suggest
+ * canonical slugs when it is available and configured.
+ *
+ * @since 1.2.0
+ *
+ * @param int $days Analytics period passed from render_admin_page(). 0 = all time.
+ * @return void
+ */
+function render_suggested_tags( int $days ): void {
+	$gaps = get_tag_gaps( 3, $days );
+
+	if ( empty( $gaps ) ) {
+		echo '<p class="sa-zero">' . esc_html__( 'No suggested tags — all frequently searched terms already exist as tags.', 'community-code' ) . '</p>';
+		return;
+	}
+
+	$using_ai = ai_is_available();
+	$slugs = normalize_terms_with_ai( $gaps );
+	$nonce = wp_create_nonce( 'cc-create-tag' );
+	?>
+	<?php if ( $using_ai ) : ?>
+	<p><em><?php esc_html_e( 'Canonical slugs are AI-assisted suggestions.', 'community-code' ); ?></em></p>
+	<?php else : ?>
+	<p><em><?php esc_html_e( 'Install and configure the AI plugin to get AI-assisted slug suggestions.', 'community-code' ); ?></em></p>
+	<?php endif; ?>
+	<table class="wp-list-table widefat fixed striped" style="margin-top:0">
+		<thead>
+			<tr>
+				<th><?php esc_html_e( 'Term', 'community-code' ); ?></th>
+				<th style="width:80px"><?php esc_html_e( 'Searches', 'community-code' ); ?></th>
+				<th><?php esc_html_e( 'Suggested slug', 'community-code' ); ?></th>
+				<th style="width:120px"><?php esc_html_e( 'Candidate posts', 'community-code' ); ?></th>
+				<th style="width:130px"><?php esc_html_e( 'Action', 'community-code' ); ?></th>
+			</tr>
+		</thead>
+		<tbody>
+		<?php foreach ( $gaps as $gap ) :
+			$term = $gap['term'];
+			$slug = $slugs[ $term ] ?? sanitize_title( $term );
+			$posts = get_posts_for_term( $term, 5 );
+		?>
+		<tr>
+			<td><?php echo esc_html( $term ); ?></td>
+			<td><?php echo esc_html( number_format_i18n( (int) $gap['count'] ) ); ?></td>
+			<td><code><?php echo esc_html( $slug ); ?></code></td>
+			<td>
+				<?php if ( $posts ) : ?>
+					<?php foreach ( $posts as $post ) : ?>
+						<a href="<?php echo esc_url( $post['edit_url'] ); ?>" target="_blank" style="display:block;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px" title="<?php echo esc_attr( $post['title'] ); ?>"><?php echo esc_html( $post['title'] ); ?></a>
+					<?php endforeach; ?>
+				<?php else : ?>
+					<span class="sa-zero"><?php esc_html_e( 'None found', 'community-code' ); ?></span>
+				<?php endif; ?>
+			</td>
+			<td>
+				<button class="button button-small cc-create-tag"
+					data-term="<?php echo esc_attr( $term ); ?>"
+					data-slug="<?php echo esc_attr( $slug ); ?>"
+					data-nonce="<?php echo esc_attr( $nonce ); ?>">
+					<?php esc_html_e( 'Create tag', 'community-code' ); ?>
+				</button>
+			</td>
+		</tr>
+		<?php endforeach; ?>
+		</tbody>
+	</table>
+	<script>
+	( function () {
+		document.querySelectorAll( '.cc-create-tag' ).forEach( function ( btn ) {
+			btn.addEventListener( 'click', function () {
+				var term  = btn.dataset.term;
+				var slug  = btn.dataset.slug;
+				var nonce = btn.dataset.nonce;
+				btn.disabled = true;
+				btn.textContent = '<?php echo esc_js( __( 'Creating…', 'community-code' ) ); ?>';
+				fetch( ajaxurl, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+					body: new URLSearchParams( {
+						action: 'cc_create_analytics_tag',
+						term: term,
+						slug: slug,
+						nonce: nonce
+					} )
+				} ).then( function ( r ) { return r.json(); } ).then( function ( data ) {
+					if ( data.success ) {
+						btn.textContent = '<?php echo esc_js( __( 'Created', 'community-code' ) ); ?>';
+						btn.classList.add( 'button-primary' );
+					} else {
+						btn.disabled = false;
+						btn.textContent = '<?php echo esc_js( __( 'Create tag', 'community-code' ) ); ?>';
+						alert( data.data || '<?php echo esc_js( __( 'Something went wrong.', 'community-code' ) ); ?>' );
+					}
+				} );
+			} );
+		} );
+	} )();
+	</script>
+	<?php
+}
+
+/**
+ * AJAX handler: create a post_tag from a suggested analytics term.
+ *
+ * Expects POST fields: term, slug, nonce.
+ * Requires manage_categories capability.
+ *
+ * @since 1.2.0
+ * @return void
+ */
+function handle_create_analytics_tag(): void {
+	check_ajax_referer( 'cc-create-tag', 'nonce' );
+
+	if ( ! current_user_can( 'manage_categories' ) ) {
+		wp_send_json_error( __( 'Permission denied.', 'community-code' ) );
+	}
+
+	$term = sanitize_text_field( wp_unslash( $_POST['term'] ?? '' ) );
+	$slug = sanitize_title( wp_unslash( $_POST['slug'] ?? $term ) );
+
+	if ( ! $term ) {
+		wp_send_json_error( __( 'Term is required.', 'community-code' ) );
+	}
+
+	$result = wp_insert_term( $term, 'post_tag', [ 'slug' => $slug ] );
+
+	if ( is_wp_error( $result ) ) {
+		wp_send_json_error( $result->get_error_message() );
+	}
+
+	wp_send_json_success( [ 'term_id' => $result['term_id'] ] );
 }
