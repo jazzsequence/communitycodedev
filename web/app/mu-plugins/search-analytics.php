@@ -147,7 +147,7 @@ function register_ep_proxy_endpoint(): void {
  * @return \WP_REST_Response|\WP_Error
  */
 function handle_ep_search_proxy( \WP_REST_Request $request ) {
-	$term = trim( sanitize_text_field( (string) ( $request->get_param( 'ep-search' ) ?? '' ) ) );
+	$term = trim( sanitize_text_field( (string) ( $request->get_param( 'search' ) ?? '' ) ) );
 	if ( mb_strlen( $term ) >= 2 && ! is_user_logged_in() && ! is_bot() ) {
 		write_to_db( $term, 0 );
 	}
