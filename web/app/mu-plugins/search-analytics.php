@@ -16,7 +16,8 @@ add_action( 'init', __NAMESPACE__ . '\\maybe_create_table' );
 add_action( 'init', __NAMESPACE__ . '\\schedule_cleanup' );
 add_action( 'cc_search_analytics_cleanup', __NAMESPACE__ . '\\run_cleanup' );
 add_action( 'wp', __NAMESPACE__ . '\\maybe_track_standard_search' );
-add_filter( 'rest_request_after_callbacks', __NAMESPACE__ . '\\track_ep_pointer_search', 10, 3 );
+add_action( 'rest_api_init', __NAMESPACE__ . '\\register_client_track_endpoint' );
+add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_tracking_script' );
 add_action( 'admin_menu', __NAMESPACE__ . '\\register_admin_page' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_admin_assets' );
 
@@ -102,35 +103,78 @@ function maybe_track_standard_search(): void {
 }
 
 /**
- * Track live searches routed through ElasticPress's pointer_search REST endpoint.
+ * REST endpoint for client-side EP Instant Results tracking.
  *
- * EP Instant Results intercepts search form submissions and queries this endpoint
- * instead of triggering a full page load, so the standard `wp` hook never fires.
- *
- * @param \WP_REST_Response|\WP_Error $response
- * @param array                        $handler
- * @param \WP_REST_Request             $request
- * @return \WP_REST_Response|\WP_Error
+ * EP Instant Results calls the hosted EP.io search API directly from the browser,
+ * bypassing WordPress PHP entirely. A small front-end script intercepts those
+ * fetch requests and forwards the search term here.
  */
-function track_ep_pointer_search( $response, array $handler, \WP_REST_Request $request ) {
-	if ( '/elasticpress/v1/pointer_search' !== $request->get_route() ) {
-		return $response;
+function register_client_track_endpoint(): void {
+	register_rest_route(
+		'community-code/v1',
+		'/track-search',
+		[
+			'methods'             => \WP_REST_Server::CREATABLE,
+			'callback'            => __NAMESPACE__ . '\\handle_client_track',
+			'permission_callback' => '__return_true',
+			'args'                => [
+				'term' => [
+					'required'          => true,
+					'type'              => 'string',
+					'sanitize_callback' => 'sanitize_text_field',
+					'maxLength'         => 200,
+				],
+			],
+		]
+	);
+}
+
+function handle_client_track( \WP_REST_Request $request ): \WP_REST_Response {
+	$term = trim( (string) $request->get_param( 'term' ) );
+	if ( mb_strlen( $term ) < 2 || is_user_logged_in() || is_bot() ) {
+		return new \WP_REST_Response( null, 204 );
 	}
-	if ( is_user_logged_in() || is_bot() ) {
-		return $response;
-	}
-	$term = trim( sanitize_text_field( (string) ( $request->get_param( 's' ) ?? '' ) ) );
-	// Skip partial/single-char queries that fire as the user begins typing.
-	if ( mb_strlen( $term ) < 2 ) {
-		return $response;
-	}
-	$results_count = 0;
-	if ( ! is_wp_error( $response ) ) {
-		$data          = $response->get_data();
-		$results_count = (int) ( $data['hits']['total']['value'] ?? $data['total'] ?? 0 );
-	}
-	write_to_db( $term, $results_count );
-	return $response;
+	write_to_db( $term, 0 );
+	return new \WP_REST_Response( null, 204 );
+}
+
+/**
+ * Enqueue the front-end fetch intercept that tracks EP Instant Results searches.
+ *
+ * EP Instant Results sends searches directly to hosted-elasticpress.io from the
+ * browser (no WordPress PHP involved), so the only way to capture them is to
+ * patch window.fetch and forward the search term to our own REST endpoint.
+ */
+function enqueue_tracking_script(): void {
+	wp_register_script( 'cc-ep-search-track', false, [], false, true );
+	wp_enqueue_script( 'cc-ep-search-track' );
+	wp_add_inline_script( 'cc-ep-search-track', get_tracking_js() );
+}
+
+function get_tracking_js(): string {
+	$endpoint = wp_json_encode( esc_url_raw( rest_url( 'community-code/v1/track-search' ) ) );
+	return <<<JS
+(function (endpoint) {
+	'use strict';
+	var _fetch = window.fetch;
+	window.fetch = function (url, opts) {
+		if (typeof url === 'string' && url.indexOf('hosted-elasticpress.io') !== -1) {
+			try {
+				var term = (new URL(url)).searchParams.get('ep-search') || '';
+				term = term.trim();
+				if (term.length >= 2) {
+					_fetch(endpoint, {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ term: term })
+					});
+				}
+			} catch (e) {}
+		}
+		return _fetch.apply(this, arguments);
+	};
+})($endpoint);
+JS;
 }
 
 function write_to_db( string $term, int $results_count ): void {
