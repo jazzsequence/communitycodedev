@@ -16,8 +16,9 @@ add_action( 'init', __NAMESPACE__ . '\\maybe_create_table' );
 add_action( 'init', __NAMESPACE__ . '\\schedule_cleanup' );
 add_action( 'cc_search_analytics_cleanup', __NAMESPACE__ . '\\run_cleanup' );
 add_action( 'wp', __NAMESPACE__ . '\\maybe_track_standard_search' );
-add_action( 'rest_api_init', __NAMESPACE__ . '\\register_client_track_endpoint' );
-add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_tracking_script' );
+add_action( 'rest_api_init', __NAMESPACE__ . '\\register_ep_proxy_endpoint' );
+// Priority 20 runs after Pantheon's MU plugin sets EP_DIRECT_HOST endpoint at priority 10.
+add_filter( 'ep_instant_results_search_endpoint', __NAMESPACE__ . '\\redirect_ep_to_proxy', 20 );
 add_action( 'admin_menu', __NAMESPACE__ . '\\register_admin_page' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_admin_assets' );
 
@@ -103,78 +104,77 @@ function maybe_track_standard_search(): void {
 }
 
 /**
- * REST endpoint for client-side EP Instant Results tracking.
+ * Redirect EP Instant Results searches through our WP REST proxy.
  *
- * EP Instant Results calls the hosted EP.io search API directly from the browser,
- * bypassing WordPress PHP entirely. A small front-end script intercepts those
- * fetch requests and forwards the search term here.
+ * Pantheon's MU plugin routes EP Instant Results directly from the browser to
+ * hosted-elasticpress.io (bypassing WordPress PHP). We intercept at the filter
+ * level so the localized apiEndpoint points to our proxy instead — which means
+ * every search passes through WordPress, where we can log it.
+ *
+ * Runs at priority 20, after Pantheon's filter at 10 sets EP_DIRECT_HOST.
  */
-function register_client_track_endpoint(): void {
+function redirect_ep_to_proxy(): string {
+	return rest_url( 'community-code/v1/ep-search' );
+}
+
+/**
+ * Reconstruct the original EP.io direct search endpoint from platform constants.
+ */
+function get_ep_direct_endpoint(): string {
+	if ( ! defined( 'EP_DIRECT_HOST' ) || ! class_exists( '\\ElasticPress\\Indexables' ) ) {
+		return '';
+	}
+	$index = \ElasticPress\Indexables::factory()->get( 'post' )->get_index_name();
+	return $index ? EP_DIRECT_HOST . '/api/v1/search/posts/' . $index : '';
+}
+
+function register_ep_proxy_endpoint(): void {
 	register_rest_route(
 		'community-code/v1',
-		'/track-search',
+		'/ep-search',
 		[
-			'methods'             => \WP_REST_Server::CREATABLE,
-			'callback'            => __NAMESPACE__ . '\\handle_client_track',
+			'methods'             => \WP_REST_Server::READABLE,
+			'callback'            => __NAMESPACE__ . '\\handle_ep_search_proxy',
 			'permission_callback' => '__return_true',
-			'args'                => [
-				'term' => [
-					'required'          => true,
-					'type'              => 'string',
-					'sanitize_callback' => 'sanitize_text_field',
-					'maxLength'         => 200,
-				],
-			],
 		]
 	);
 }
 
-function handle_client_track( \WP_REST_Request $request ): \WP_REST_Response {
-	$term = trim( (string) $request->get_param( 'term' ) );
-	if ( mb_strlen( $term ) < 2 || is_user_logged_in() || is_bot() ) {
-		return new \WP_REST_Response( null, 204 );
-	}
-	write_to_db( $term, 0 );
-	return new \WP_REST_Response( null, 204 );
-}
-
 /**
- * Enqueue the front-end fetch intercept that tracks EP Instant Results searches.
+ * Log the search term, then proxy the request to EP.io and return its response.
  *
- * EP Instant Results sends searches directly to hosted-elasticpress.io from the
- * browser (no WordPress PHP involved), so the only way to capture them is to
- * patch window.fetch and forward the search term to our own REST endpoint.
+ * @param \WP_REST_Request $request
+ * @return \WP_REST_Response|\WP_Error
  */
-function enqueue_tracking_script(): void {
-	wp_register_script( 'cc-ep-search-track', false, [], false, true );
-	wp_enqueue_script( 'cc-ep-search-track' );
-	wp_add_inline_script( 'cc-ep-search-track', get_tracking_js() );
-}
+function handle_ep_search_proxy( \WP_REST_Request $request ) {
+	$term = trim( sanitize_text_field( (string) ( $request->get_param( 'ep-search' ) ?? '' ) ) );
+	if ( mb_strlen( $term ) >= 2 && ! is_user_logged_in() && ! is_bot() ) {
+		write_to_db( $term, 0 );
+	}
 
-function get_tracking_js(): string {
-	$endpoint = wp_json_encode( esc_url_raw( rest_url( 'community-code/v1/track-search' ) ) );
-	return <<<JS
-(function (endpoint) {
-	'use strict';
-	var _fetch = window.fetch;
-	window.fetch = function (url, opts) {
-		if (typeof url === 'string' && url.indexOf('hosted-elasticpress.io') !== -1) {
-			try {
-				var term = (new URL(url)).searchParams.get('ep-search') || '';
-				term = term.trim();
-				if (term.length >= 2) {
-					_fetch(endpoint, {
-						method: 'POST',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({ term: term })
-					});
-				}
-			} catch (e) {}
-		}
-		return _fetch.apply(this, arguments);
-	};
-})($endpoint);
-JS;
+	$ep_endpoint = get_ep_direct_endpoint();
+	if ( ! $ep_endpoint ) {
+		return new \WP_Error( 'ep_proxy_error', 'EP endpoint not configured.', [ 'status' => 500 ] );
+	}
+
+	$ep_url      = add_query_arg( $request->get_query_params(), $ep_endpoint );
+	$ep_response = wp_remote_get(
+		$ep_url,
+		[
+			'timeout' => 10,
+			'headers' => [ 'Accept' => 'application/json' ],
+		]
+	);
+
+	if ( is_wp_error( $ep_response ) ) {
+		return new \WP_Error( 'ep_proxy_upstream', $ep_response->get_error_message(), [ 'status' => 502 ] );
+	}
+
+	$status   = wp_remote_retrieve_response_code( $ep_response );
+	$data     = json_decode( wp_remote_retrieve_body( $ep_response ), true );
+	$response = new \WP_REST_Response( $data, $status );
+	$response->header( 'Cache-Control', 'no-store' );
+	return $response;
 }
 
 function write_to_db( string $term, int $results_count ): void {
