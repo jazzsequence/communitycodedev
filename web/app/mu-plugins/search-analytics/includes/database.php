@@ -93,6 +93,46 @@ function run_cleanup(): void {
 }
 
 /**
+ * Resolve a two-letter ISO country code for the current visitor.
+ *
+ * Pantheon exposes the real client IP in REMOTE_ADDR (via Cloudflare's
+ * CF-Connecting-IP). CF-IPCountry is not forwarded at the GCDN layer, so
+ * we fall back to a lightweight lookup against ipinfo.io's free API (50k
+ * requests/month, returns just the 2-char country code). The call uses a
+ * short timeout so a slow or failing API response never blocks the
+ * tracker for more than 2 seconds.
+ *
+ * @since 1.1.0
+ *
+ * @return string Two-letter uppercase country code, or empty string on failure.
+ */
+function get_country_from_request(): string {
+	// CF-IPCountry first (works if Pantheon ever forwards it).
+	$country = strtoupper( substr( sanitize_text_field( wp_unslash( $_SERVER['HTTP_CF_IPCOUNTRY'] ?? '' ) ), 0, 2 ) );
+	if ( $country && $country !== 'XX' && $country !== 'T1' ) {
+		return $country;
+	}
+
+	// Pantheon sets REMOTE_ADDR to the real client IP via Cloudflare.
+	$ip = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ?? '' ) );
+	if ( ! $ip || $ip === '127.0.0.1' ) {
+		return '';
+	}
+
+	$response = wp_remote_get(
+		'https://ipinfo.io/' . rawurlencode( $ip ) . '/country',
+		[ 'timeout' => 2 ]
+	);
+
+	if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
+		return '';
+	}
+
+	$code = strtoupper( trim( wp_remote_retrieve_body( $response ) ) );
+	return ( strlen( $code ) === 2 ) ? $code : '';
+}
+
+/**
  * Insert a single search event into the analytics table.
  *
  * Captures country (from Cloudflare's CF-IPCountry header), raw user agent,
@@ -109,7 +149,7 @@ function run_cleanup(): void {
 function write_to_db( string $term, int $results_count ): void {
 	global $wpdb;
 
-	$country = strtoupper( substr( sanitize_text_field( wp_unslash( $_SERVER['HTTP_CF_IPCOUNTRY'] ?? '' ) ), 0, 2 ) );
+	$country = get_country_from_request();
 	$user_agent = substr( sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ?? '' ) ), 0, 500 );
 	$referrer = substr( esc_url_raw( wp_unslash( $_SERVER['HTTP_REFERER'] ?? '' ) ), 0, 500 );
 

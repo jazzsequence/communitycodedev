@@ -8,19 +8,65 @@
 namespace CommunityCode\SearchAnalytics;
 
 /**
+ * Return the number of recent searches to show per the current user's screen option.
+ *
+ * Reads the cc_search_analytics_per_page user option set via the Screen
+ * Options panel. Falls back to 50 if the option has not been saved.
+ *
+ * @since 1.1.0
+ *
+ * @return int Number of rows to display.
+ */
+function get_per_page(): int {
+	$saved = (int) get_user_option( 'cc_search_analytics_per_page' );
+	return $saved > 0 ? $saved : 50;
+}
+
+/**
+ * Sanitize and return the per_page value when saved via Screen Options.
+ *
+ * @since 1.1.0
+ *
+ * @param mixed  $status Unused default return value.
+ * @param string $option Option name.
+ * @param mixed  $value  Raw posted value.
+ * @return int Sanitized per_page value.
+ */
+function save_per_page_screen_option( $status, string $option, $value ): int {
+	return (int) $value;
+}
+
+/**
  * Register the Search Analytics page under Dashboard in wp-admin.
+ *
+ * Also registers a per_page Screen Option so the number of Recent Searches
+ * rows is configurable per-user from the Screen Options panel.
  *
  * @since 1.0.0
  *
  * @return void
  */
 function register_admin_page(): void {
-	add_dashboard_page(
+	$hook = add_dashboard_page(
 		__( 'Search Analytics', 'community-code' ),
 		__( 'Search Analytics', 'community-code' ),
 		'manage_options',
 		ADMIN_SLUG,
 		__NAMESPACE__ . '\\render_admin_page'
+	);
+
+	add_action(
+		'load-' . $hook,
+		function () {
+			add_screen_option(
+				'per_page',
+				[
+					'label'   => __( 'Searches per page', 'community-code' ),
+					'default' => 50,
+					'option'  => 'cc_search_analytics_per_page',
+				]
+			);
+		}
 	);
 }
 
@@ -194,7 +240,7 @@ function render_admin_page(): void {
 		<div class="sa-card">
 			<h2 style="margin-top:0"><?php esc_html_e( 'Recent Searches', 'community-code' ); ?></h2>
 			<?php
-			$recent = query_recent_searches( $days );
+			$recent = query_recent_searches( $days, get_per_page() );
 			if ( empty( $recent ) ) :
 			?>
 				<p class="sa-zero"><?php esc_html_e( 'No searches recorded for this period.', 'community-code' ); ?></p>
