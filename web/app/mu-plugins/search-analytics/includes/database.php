@@ -119,6 +119,12 @@ function get_country_from_request(): string {
 		return '';
 	}
 
+	$transient_key = 'cc_sa_country_' . md5( $ip );
+	$cached = get_transient( $transient_key );
+	if ( $cached !== false ) {
+		return (string) $cached;
+	}
+
 	$response = wp_remote_get(
 		'https://ipinfo.io/' . rawurlencode( $ip ) . '/country',
 		[ 'timeout' => 2 ]
@@ -129,7 +135,10 @@ function get_country_from_request(): string {
 	}
 
 	$code = strtoupper( trim( wp_remote_retrieve_body( $response ) ) );
-	return ( strlen( $code ) === 2 ) ? $code : '';
+	$code = ( strlen( $code ) === 2 ) ? $code : '';
+
+	set_transient( $transient_key, $code, DAY_IN_SECONDS );
+	return $code;
 }
 
 /**

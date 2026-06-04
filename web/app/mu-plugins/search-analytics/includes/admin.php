@@ -8,9 +8,9 @@
 namespace CommunityCode\SearchAnalytics;
 
 /**
- * Return the number of recent searches to show per the current user's screen option.
+ * Return the number of recent searches to display for the current user.
  *
- * Reads the cc_search_analytics_per_page user option set via the Screen
+ * Reads the cc_search_analytics_per_page user meta key saved via the Screen
  * Options panel. Falls back to 50 if the option has not been saved.
  *
  * @since 1.1.0
@@ -18,29 +18,59 @@ namespace CommunityCode\SearchAnalytics;
  * @return int Number of rows to display.
  */
 function get_per_page(): int {
-	$saved = (int) get_user_option( 'cc_search_analytics_per_page' );
+	$saved = (int) get_user_meta( get_current_user_id(), 'cc_search_analytics_per_page', true );
 	return $saved > 0 ? $saved : 50;
 }
 
 /**
- * Sanitize and return the per_page value when saved via Screen Options.
+ * Sanitize and save the per_page value when Screen Options are submitted.
+ *
+ * WordPress calls set_screen_option_{$option} filters during wp_save_screen_options()
+ * for any POST field whose filter returns non-false. The return value is then
+ * passed to update_user_meta() automatically.
  *
  * @since 1.1.0
  *
  * @param mixed  $status Unused default return value.
- * @param string $option Option name.
+ * @param string $option Option name (cc_search_analytics_per_page).
  * @param mixed  $value  Raw posted value.
- * @return int Sanitized per_page value.
+ * @return int Sanitized row count.
  */
 function save_per_page_screen_option( $status, string $option, $value ): int {
-	return (int) $value;
+	return max( 1, (int) $value );
+}
+
+/**
+ * Render the per-page input inside the Screen Options panel.
+ *
+ * WordPress's built-in per_page screen option type only applies to WP_List_Table
+ * contexts. For custom admin pages, the screen_settings filter is the correct
+ * hook for injecting arbitrary screen option controls.
+ *
+ * @since 1.1.0
+ *
+ * @param string    $status  Accumulated HTML from other screen option callbacks.
+ * @param \WP_Screen $screen  Current screen object.
+ * @return string HTML with our input appended.
+ */
+function render_per_page_screen_option( string $status, \WP_Screen $screen ): string {
+	if ( 'dashboard_page_' . ADMIN_SLUG !== $screen->id ) {
+		return $status;
+	}
+	$per_page = get_per_page();
+	$status .= '<fieldset><legend>' . esc_html__( 'Recent Searches', 'community-code' ) . '</legend>';
+	$status .= '<label for="cc-sa-per-page">' . esc_html__( 'Number of rows:', 'community-code' ) . ' ';
+	$status .= '<input type="number" id="cc-sa-per-page" name="cc_search_analytics_per_page"';
+	$status .= ' value="' . esc_attr( $per_page ) . '" min="1" max="200" step="1" style="width:50px" />';
+	$status .= '</label></fieldset>';
+	return $status;
 }
 
 /**
  * Register the Search Analytics page under Dashboard in wp-admin.
  *
- * Also registers a per_page Screen Option so the number of Recent Searches
- * rows is configurable per-user from the Screen Options panel.
+ * Wires up the screen_settings filter on page load so the per-page
+ * control appears in the Screen Options panel.
  *
  * @since 1.0.0
  *
@@ -58,14 +88,7 @@ function register_admin_page(): void {
 	add_action(
 		'load-' . $hook,
 		function () {
-			add_screen_option(
-				'per_page',
-				[
-					'label'   => __( 'Searches per page', 'community-code' ),
-					'default' => 50,
-					'option'  => 'cc_search_analytics_per_page',
-				]
-			);
+			add_filter( 'screen_settings', __NAMESPACE__ . '\\render_per_page_screen_option', 10, 2 );
 		}
 	);
 }
