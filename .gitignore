@@ -88,6 +88,8 @@ web/app/mu-plugins/local-media-proxy.php
 web/app/mu-plugins/*/
 !web/app/mu-plugins/community-code-elasticpress/
 !web/app/mu-plugins/community-code-elasticpress/**
+!web/app/mu-plugins/search-analytics/
+!web/app/mu-plugins/search-analytics/**
 
 # Plugins
 # Ignore the plugins directory by default. WordPress plugins should be managed
