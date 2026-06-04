@@ -26,7 +26,7 @@ function get_rows_per_page(): int {
  */
 function get_min_count(): int {
 	$saved = (int) get_user_meta( get_current_user_id(), 'cc_search_analytics_min_count', true );
-	return $saved > 0 ? $saved : 1;
+	return $saved > 0 ? $saved : 5;
 }
 
 /**
