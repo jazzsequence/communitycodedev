@@ -7,90 +7,161 @@
 
 namespace CommunityCode\SearchAnalytics;
 
+// ─── Screen option getters ────────────────────────────────────────────────────
+
 /**
- * Return the number of recent searches to display for the current user.
- *
- * Reads the cc_search_analytics_per_page user meta key saved via the Screen
- * Options panel. Falls back to 50 if the option has not been saved.
+ * Number of rows to show in the Recent Searches table.
  *
  * @since 1.1.0
- *
- * @return int Number of rows to display.
+ * @return int
  */
-function get_per_page(): int {
-	$saved = (int) get_user_meta( get_current_user_id(), 'cc_search_analytics_per_page', true );
+function get_rows_per_page(): int {
+	$saved = (int) get_user_meta( get_current_user_id(), 'cc_search_analytics_rows', true );
 	return $saved > 0 ? $saved : 50;
 }
 
+/**
+ * Number of days to show in the Daily Volume table.
+ *
+ * @since 1.1.0
+ * @return int
+ */
+function get_daily_limit(): int {
+	$saved = (int) get_user_meta( get_current_user_id(), 'cc_search_analytics_daily', true );
+	return $saved > 0 ? $saved : 30;
+}
 
 /**
- * Render the per-page input inside the Screen Options panel.
+ * Default analytics period in days. 0 = all time.
  *
- * WordPress's built-in per_page screen option type only applies to WP_List_Table
- * contexts. For custom admin pages, the screen_settings filter is the correct
- * hook for injecting arbitrary screen option controls.
+ * Uses the empty-string check because 0 is a valid saved value (all time).
+ *
+ * @since 1.1.0
+ * @return int
+ */
+function get_default_period(): int {
+	$saved = get_user_meta( get_current_user_id(), 'cc_search_analytics_period', true );
+	if ( $saved === '' || $saved === false ) {
+		return 30;
+	}
+	return (int) $saved;
+}
+
+// ─── Screen options ───────────────────────────────────────────────────────────
+
+/**
+ * Render the Screen Options fieldsets for the analytics dashboard.
+ *
+ * Follows the ash-nazg pattern: the Apply button is included inside the
+ * screen_settings HTML because WordPress does not add one automatically
+ * when only custom content is injected via this filter.
  *
  * @since 1.1.0
  *
- * @param string    $status  Accumulated HTML from other screen option callbacks.
- * @param \WP_Screen $screen  Current screen object.
- * @return string HTML with our input appended.
+ * @param string     $settings Accumulated HTML from other callbacks.
+ * @param \WP_Screen $screen   Current screen object.
+ * @return string
  */
-function render_per_page_screen_option( string $status, \WP_Screen $screen ): string {
+function render_screen_options( string $settings, \WP_Screen $screen ): string {
 	if ( 'dashboard_page_' . ADMIN_SLUG !== $screen->id ) {
-		return $status;
+		return $settings;
 	}
-	$per_page = get_per_page();
-	$status .= '<fieldset><legend>' . esc_html__( 'Recent Searches', 'community-code' ) . '</legend>';
-	$status .= '<label for="cc-sa-per-page">' . esc_html__( 'Number of rows:', 'community-code' ) . ' ';
-	$status .= '<input type="number" id="cc-sa-per-page" name="cc_search_analytics_per_page"';
-	$status .= ' value="' . esc_attr( $per_page ) . '" min="1" max="200" step="1" style="width:50px" />';
-	$status .= '</label></fieldset>';
-	return $status;
+
+	$rows   = get_rows_per_page();
+	$daily  = get_daily_limit();
+	$period = get_default_period();
+	$valid_periods = [ 7 => __( '7 days', 'community-code' ), 30 => __( '30 days', 'community-code' ), 90 => __( '90 days', 'community-code' ), 0 => __( 'All time', 'community-code' ) ];
+
+	ob_start();
+	?>
+	<fieldset class="screen-options">
+		<legend><?php esc_html_e( 'Recent Searches', 'community-code' ); ?></legend>
+		<label for="cc-sa-rows">
+			<?php esc_html_e( 'Number of rows:', 'community-code' ); ?>
+			<input type="number" id="cc-sa-rows" name="cc_search_analytics_rows"
+				value="<?php echo esc_attr( $rows ); ?>" min="1" max="200" step="1" style="width:50px" />
+		</label>
+	</fieldset>
+	<fieldset class="screen-options">
+		<legend><?php esc_html_e( 'Daily Volume', 'community-code' ); ?></legend>
+		<label for="cc-sa-daily">
+			<?php esc_html_e( 'Number of days:', 'community-code' ); ?>
+			<input type="number" id="cc-sa-daily" name="cc_search_analytics_daily"
+				value="<?php echo esc_attr( $daily ); ?>" min="1" max="90" step="1" style="width:50px" />
+		</label>
+	</fieldset>
+	<fieldset class="screen-options">
+		<legend><?php esc_html_e( 'Default Period', 'community-code' ); ?></legend>
+		<?php foreach ( $valid_periods as $d => $label ) : ?>
+		<label>
+			<input type="radio" name="cc_search_analytics_period"
+				value="<?php echo esc_attr( $d ); ?>" <?php checked( $period, $d ); ?> />
+			<?php echo esc_html( $label ); ?>
+		</label>
+		<?php endforeach; ?>
+	</fieldset>
+	<?php submit_button( __( 'Apply', 'community-code' ), 'primary', 'screen-options-apply', false ); ?>
+	<?php
+	$settings .= ob_get_clean();
+	return $settings;
 }
+
+/**
+ * Save screen options on form submission.
+ *
+ * Checks for the Apply button POST key and the page slug, then persists
+ * each option to user meta. Hooked to admin_init.
+ *
+ * @since 1.1.0
+ * @return void
+ */
+function handle_screen_options(): void {
+	if ( ! isset( $_POST['screen-options-apply'] ) ) {
+		return;
+	}
+	if ( ! isset( $_GET['page'] ) || ADMIN_SLUG !== $_GET['page'] ) {
+		return;
+	}
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	$user_id = get_current_user_id();
+
+	if ( isset( $_POST['cc_search_analytics_rows'] ) ) {
+		update_user_meta( $user_id, 'cc_search_analytics_rows', max( 1, min( 200, (int) $_POST['cc_search_analytics_rows'] ) ) );
+	}
+	if ( isset( $_POST['cc_search_analytics_daily'] ) ) {
+		update_user_meta( $user_id, 'cc_search_analytics_daily', max( 1, min( 90, (int) $_POST['cc_search_analytics_daily'] ) ) );
+	}
+	if ( isset( $_POST['cc_search_analytics_period'] ) ) {
+		$val = (int) $_POST['cc_search_analytics_period'];
+		if ( in_array( $val, [ 7, 30, 90, 0 ], true ) ) {
+			update_user_meta( $user_id, 'cc_search_analytics_period', $val );
+		}
+	}
+}
+
+// ─── Admin page ───────────────────────────────────────────────────────────────
 
 /**
  * Register the Search Analytics page under Dashboard in wp-admin.
  *
- * Wires up the screen_settings filter on page load so the per-page
- * control appears in the Screen Options panel.
- *
  * @since 1.0.0
- *
  * @return void
  */
 function register_admin_page(): void {
-	$hook = add_dashboard_page(
+	add_dashboard_page(
 		__( 'Search Analytics', 'community-code' ),
 		__( 'Search Analytics', 'community-code' ),
 		'manage_options',
 		ADMIN_SLUG,
 		__NAMESPACE__ . '\\render_admin_page'
 	);
-
-	add_action(
-		'load-' . $hook,
-		function () {
-			// wp_save_screen_options() only processes $_POST['wp_screen_options'][option/value],
-			// not arbitrary POST fields, so saving must be handled here manually.
-			if ( isset( $_POST['screenoptionnonce'], $_POST['cc_search_analytics_per_page'] ) ) {
-				check_admin_referer( 'screen-options-nonce', 'screenoptionnonce' );
-				$per_page = max( 1, min( 200, (int) $_POST['cc_search_analytics_per_page'] ) );
-				update_user_meta( get_current_user_id(), 'cc_search_analytics_per_page', $per_page );
-			}
-
-			add_filter( 'screen_settings', __NAMESPACE__ . '\\render_per_page_screen_option', 10, 2 );
-		}
-	);
 }
 
 /**
  * Enqueue scripts and styles for the Search Analytics dashboard page.
- *
- * Registers Chart.js from the ash-nazg plugin bundle if it is not already
- * registered, then enqueues the analytics chart script and dashboard
- * stylesheet. Localizes ccSearchAnalytics with the chart data for the
- * currently selected period.
  *
  * @since 1.0.0
  *
@@ -119,7 +190,7 @@ function enqueue_admin_assets( string $hook ): void {
 
 	$days = get_requested_days();
 	$data = get_analytics_data( $days );
-	$daily = array_reverse( $data['daily_counts'] ); // chronological order for the line chart
+	$daily = array_slice( array_reverse( $data['daily_counts'] ), 0, get_daily_limit() );
 
 	wp_localize_script(
 		'cc-search-analytics',
@@ -145,29 +216,26 @@ function enqueue_admin_assets( string $hook ): void {
 }
 
 /**
- * Parse and validate the `days` query parameter for the analytics period selector.
+ * Parse and validate the `days` query parameter for the period selector.
  *
- * Accepts 7, 30, 90, or 0 (all time). Returns 30 for any unrecognised value.
+ * Falls back to the user's saved default period screen option.
  *
  * @since 1.0.0
- *
- * @return int Number of days for the analytics window. 0 means all time.
+ * @return int Number of days. 0 = all time.
  */
 function get_requested_days(): int {
-	$days = (int) sanitize_text_field( wp_unslash( $_GET['days'] ?? '30' ) );
-	return array_key_exists( $days, [ 7 => '', 30 => '', 90 => '', 0 => '' ] ) ? $days : 30;
+	$valid = [ 7 => '', 30 => '', 90 => '', 0 => '' ];
+	if ( ! isset( $_GET['days'] ) ) {
+		return get_default_period();
+	}
+	$days = (int) sanitize_text_field( wp_unslash( $_GET['days'] ) );
+	return array_key_exists( $days, $valid ) ? $days : get_default_period();
 }
 
 /**
  * Render the Search Analytics dashboard page.
  *
- * Outputs the period selector, summary stats, daily volume chart, top terms
- * chart, daily volume table, and a Recent Searches table showing individual
- * search events with country, user agent, and referrer for bot/human analysis.
- * Chart rendering is handled by admin.js via the ccSearchAnalytics localised object.
- *
  * @since 1.0.0
- *
  * @return void
  */
 function render_admin_page(): void {
@@ -179,7 +247,8 @@ function render_admin_page(): void {
 	$periods = [ 7 => '7 days', 30 => '30 days', 90 => '90 days', 0 => 'All time' ];
 	$data = get_analytics_data( $days );
 	$terms = $data['top_terms'];
-	$terms_h = max( count( $terms ) * 28 + 40, 120 ); // px height for bar chart
+	$terms_h = max( count( $terms ) * 28 + 40, 120 );
+	$daily_rows = array_slice( $data['daily_counts'], 0, get_daily_limit() );
 	?>
 	<div class="wrap">
 		<h1><?php esc_html_e( 'Search Analytics', 'community-code' ); ?></h1>
@@ -235,10 +304,10 @@ function render_admin_page(): void {
 						</tr>
 					</thead>
 					<tbody>
-						<?php if ( empty( $data['daily_counts'] ) ) : ?>
+						<?php if ( empty( $daily_rows ) ) : ?>
 							<tr><td colspan="2" class="sa-zero"><?php esc_html_e( 'No data', 'community-code' ); ?></td></tr>
 						<?php else : ?>
-							<?php foreach ( $data['daily_counts'] as $bucket ) : ?>
+							<?php foreach ( $daily_rows as $bucket ) : ?>
 								<tr>
 									<td><?php echo esc_html( $bucket['key_as_string'] ); ?></td>
 									<td><?php echo esc_html( number_format_i18n( (int) $bucket['doc_count'] ) ); ?></td>
@@ -253,10 +322,8 @@ function render_admin_page(): void {
 
 		<div class="sa-card">
 			<h2 style="margin-top:0"><?php esc_html_e( 'Recent Searches', 'community-code' ); ?></h2>
-			<?php
-			$recent = query_recent_searches( $days, get_per_page() );
-			if ( empty( $recent ) ) :
-			?>
+			<?php $recent = query_recent_searches( $days, get_rows_per_page() ); ?>
+			<?php if ( empty( $recent ) ) : ?>
 				<p class="sa-zero"><?php esc_html_e( 'No searches recorded for this period.', 'community-code' ); ?></p>
 			<?php else : ?>
 			<table class="wp-list-table widefat fixed striped" style="margin-top:0">
