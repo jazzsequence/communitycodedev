@@ -468,8 +468,9 @@ function render_suggested_tags( int $days ): void {
 				<button class="button button-small cc-create-tag"
 					data-term="<?php echo esc_attr( $row['term'] ); ?>"
 					data-slug="<?php echo esc_attr( $row['slug'] ); ?>"
+					data-post-ids="<?php echo esc_attr( implode( ',', array_column( $row['posts'], 'ID' ) ) ); ?>"
 					data-nonce="<?php echo esc_attr( $nonce ); ?>">
-					<?php esc_html_e( 'Create tag', 'community-code' ); ?>
+					<?php esc_html_e( 'Create &amp; apply tag', 'community-code' ); ?>
 				</button>
 			</td>
 		</tr>
@@ -480,11 +481,12 @@ function render_suggested_tags( int $days ): void {
 	( function () {
 		document.querySelectorAll( '.cc-create-tag' ).forEach( function ( btn ) {
 			btn.addEventListener( 'click', function () {
-				var term  = btn.dataset.term;
-				var slug  = btn.dataset.slug;
-				var nonce = btn.dataset.nonce;
+				var term    = btn.dataset.term;
+				var slug    = btn.dataset.slug;
+				var postIds = btn.dataset.postIds;
+				var nonce   = btn.dataset.nonce;
 				btn.disabled = true;
-				btn.textContent = '<?php echo esc_js( __( 'Creating…', 'community-code' ) ); ?>';
+				btn.textContent = '<?php echo esc_js( __( 'Applying…', 'community-code' ) ); ?>';
 				fetch( ajaxurl, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -492,6 +494,7 @@ function render_suggested_tags( int $days ): void {
 						action: 'cc_create_analytics_tag',
 						term: term,
 						slug: slug,
+						post_ids: postIds,
 						nonce: nonce
 					} )
 				} ).then( function ( r ) { return r.json(); } ).then( function ( data ) {
@@ -540,5 +543,19 @@ function handle_create_analytics_tag(): void {
 		wp_send_json_error( $result->get_error_message() );
 	}
 
-	wp_send_json_success( [ 'term_id' => $result['term_id'] ] );
+	$tag_id  = $result['term_id'];
+	$applied = 0;
+
+	$raw_ids = sanitize_text_field( wp_unslash( $_POST['post_ids'] ?? '' ) );
+	if ( $raw_ids ) {
+		$post_ids = array_filter( array_map( 'absint', explode( ',', $raw_ids ) ) );
+		foreach ( $post_ids as $post_id ) {
+			if ( get_post( $post_id ) ) {
+				wp_set_post_tags( $post_id, [ $tag_id ], true );
+				$applied++;
+			}
+		}
+	}
+
+	wp_send_json_success( [ 'term_id' => $tag_id, 'applied' => $applied ] );
 }
