@@ -19,17 +19,6 @@ function get_rows_per_page(): int {
 }
 
 /**
- * Number of days to show in the Daily Volume table.
- *
- * @since 1.1.0
- * @return int
- */
-function get_daily_limit(): int {
-	$saved = (int) get_user_meta( get_current_user_id(), 'cc_search_analytics_daily', true );
-	return $saved > 0 ? $saved : 30;
-}
-
-/**
  * Default analytics period in days. 0 = all time.
  *
  * Uses the empty-string check because 0 is a valid saved value (all time).
@@ -64,7 +53,6 @@ function render_screen_options( string $settings, \WP_Screen $screen ): string {
 	}
 
 	$rows   = get_rows_per_page();
-	$daily  = get_daily_limit();
 	$period = get_default_period();
 	$valid_periods = [ 7 => __( '7 days', 'community-code' ), 30 => __( '30 days', 'community-code' ), 90 => __( '90 days', 'community-code' ), 0 => __( 'All time', 'community-code' ) ];
 
@@ -75,15 +63,7 @@ function render_screen_options( string $settings, \WP_Screen $screen ): string {
 		<label for="cc-sa-rows">
 			<?php esc_html_e( 'Number of rows:', 'community-code' ); ?>
 			<input type="number" id="cc-sa-rows" name="cc_search_analytics_rows"
-				value="<?php echo esc_attr( $rows ); ?>" min="1" max="200" step="1" style="width:50px" />
-		</label>
-	</fieldset>
-	<fieldset class="screen-options">
-		<legend><?php esc_html_e( 'Daily Volume', 'community-code' ); ?></legend>
-		<label for="cc-sa-daily">
-			<?php esc_html_e( 'Number of days:', 'community-code' ); ?>
-			<input type="number" id="cc-sa-daily" name="cc_search_analytics_daily"
-				value="<?php echo esc_attr( $daily ); ?>" min="1" max="90" step="1" style="width:50px" />
+				value="<?php echo esc_attr( $rows ); ?>" min="1" max="200" step="1" class="small-text" />
 		</label>
 	</fieldset>
 	<fieldset class="screen-options">
@@ -127,9 +107,6 @@ function handle_screen_options(): void {
 	if ( isset( $_POST['cc_search_analytics_rows'] ) ) {
 		update_user_meta( $user_id, 'cc_search_analytics_rows', max( 1, min( 200, (int) $_POST['cc_search_analytics_rows'] ) ) );
 	}
-	if ( isset( $_POST['cc_search_analytics_daily'] ) ) {
-		update_user_meta( $user_id, 'cc_search_analytics_daily', max( 1, min( 90, (int) $_POST['cc_search_analytics_daily'] ) ) );
-	}
 	if ( isset( $_POST['cc_search_analytics_period'] ) ) {
 		$val = (int) $_POST['cc_search_analytics_period'];
 		if ( in_array( $val, [ 7, 30, 90, 0 ], true ) ) {
@@ -156,8 +133,6 @@ function save_screen_option( $status, string $option, $value ) {
 	switch ( $option ) {
 		case 'cc_search_analytics_rows':
 			return max( 1, min( 200, (int) $value ) );
-		case 'cc_search_analytics_daily':
-			return max( 1, min( 90, (int) $value ) );
 		case 'cc_search_analytics_period':
 			$val = (int) $value;
 			return in_array( $val, [ 7, 30, 90, 0 ], true ) ? $val : $status;
@@ -218,7 +193,7 @@ function enqueue_admin_assets( string $hook ): void {
 
 	$days = get_requested_days();
 	$data = get_analytics_data( $days );
-	$daily = array_slice( array_reverse( $data['daily_counts'] ), 0, get_daily_limit() );
+	$daily = array_reverse( $data['daily_counts'] );
 
 	wp_localize_script(
 		'cc-search-analytics',
@@ -276,7 +251,7 @@ function render_admin_page(): void {
 	$data = get_analytics_data( $days );
 	$terms = $data['top_terms'];
 	$terms_h = max( count( $terms ) * 28 + 40, 120 );
-	$daily_rows = array_slice( $data['daily_counts'], 0, get_daily_limit() );
+	$daily_rows = $data['daily_counts'];
 	?>
 	<div class="wrap">
 		<h1><?php esc_html_e( 'Search Analytics', 'community-code' ); ?></h1>
