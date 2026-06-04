@@ -204,7 +204,7 @@ function render_admin_page(): void {
 					<tr>
 						<th style="width:140px"><?php esc_html_e( 'Term', 'community-code' ); ?></th>
 						<th style="width:130px"><?php esc_html_e( 'Date', 'community-code' ); ?></th>
-						<th style="width:40px"><?php esc_html_e( 'CC', 'community-code' ); ?></th>
+						<th style="width:60px"><?php esc_html_e( 'Country', 'community-code' ); ?></th>
 						<th><?php esc_html_e( 'User Agent', 'community-code' ); ?></th>
 						<th><?php esc_html_e( 'Referrer', 'community-code' ); ?></th>
 					</tr>
