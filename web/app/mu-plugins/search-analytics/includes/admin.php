@@ -63,9 +63,9 @@ function render_screen_options( string $settings, \WP_Screen $screen ): string {
 		return $settings;
 	}
 
-	$rows      = get_rows_per_page();
+	$rows = get_rows_per_page();
 	$min_count = get_min_count();
-	$period    = get_default_period();
+	$period = get_default_period();
 	$valid_periods = [ 7 => __( '7 days', 'community-code' ), 30 => __( '30 days', 'community-code' ), 90 => __( '90 days', 'community-code' ), 0 => __( 'All time', 'community-code' ) ];
 
 	ob_start();
@@ -481,10 +481,10 @@ function render_suggested_tags( int $days ): void {
 	( function () {
 		document.querySelectorAll( '.cc-create-tag' ).forEach( function ( btn ) {
 			btn.addEventListener( 'click', function () {
-				var term    = btn.dataset.term;
-				var slug    = btn.dataset.slug;
+				var term = btn.dataset.term;
+				var slug = btn.dataset.slug;
 				var postIds = btn.dataset.postIds;
-				var nonce   = btn.dataset.nonce;
+				var nonce = btn.dataset.nonce;
 				btn.disabled = true;
 				btn.textContent = '<?php echo esc_js( __( 'Applying…', 'community-code' ) ); ?>';
 				fetch( ajaxurl, {
@@ -543,7 +543,7 @@ function handle_create_analytics_tag(): void {
 		wp_send_json_error( $result->get_error_message() );
 	}
 
-	$tag_id  = $result['term_id'];
+	$tag_id = $result['term_id'];
 	$applied = 0;
 
 	$raw_ids = sanitize_text_field( wp_unslash( $_POST['post_ids'] ?? '' ) );
