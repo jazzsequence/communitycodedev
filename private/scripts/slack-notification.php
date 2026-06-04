@@ -149,7 +149,7 @@ function _create_base_blocks() {
 	$site_name = _get_pantheon_environment()->site_name;
 
 	$blocks = [
-		_create_text_block( "{$icons[$workflow_type]} {$workflow_name}", 'plain_text', 'header' ),
+		_create_text_block( "*{$icons[$workflow_type]} {$workflow_name}*" ),
 		_create_multi_block([
 			"*Site:* <https://dashboard.pantheon.io/sites/" . PANTHEON_SITE . "#{$environment}/code|{$site_name}>",
 			"*Environment:* <http://{$environment}-{$site_name}.pantheonsite.io|{$environment}>",
