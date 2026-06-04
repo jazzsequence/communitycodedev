@@ -19,6 +19,17 @@ function get_rows_per_page(): int {
 }
 
 /**
+ * Minimum number of searches required to surface a term as a suggested tag.
+ *
+ * @since 1.2.0
+ * @return int
+ */
+function get_min_count(): int {
+	$saved = (int) get_user_meta( get_current_user_id(), 'cc_search_analytics_min_count', true );
+	return $saved > 0 ? $saved : 5;
+}
+
+/**
  * Default analytics period in days. 0 = all time.
  *
  * Uses the empty-string check because 0 is a valid saved value (all time).
@@ -52,7 +63,8 @@ function render_screen_options( string $settings, \WP_Screen $screen ): string {
 		return $settings;
 	}
 
-	$rows   = get_rows_per_page();
+	$rows = get_rows_per_page();
+	$min_count = get_min_count();
 	$period = get_default_period();
 	$valid_periods = [ 7 => __( '7 days', 'community-code' ), 30 => __( '30 days', 'community-code' ), 90 => __( '90 days', 'community-code' ), 0 => __( 'All time', 'community-code' ) ];
 
@@ -64,6 +76,14 @@ function render_screen_options( string $settings, \WP_Screen $screen ): string {
 			<?php esc_html_e( 'Number of rows:', 'community-code' ); ?>
 			<input type="number" id="cc-sa-rows" name="cc_search_analytics_rows"
 				value="<?php echo esc_attr( $rows ); ?>" min="1" max="200" step="1" class="small-text" />
+		</label>
+	</fieldset>
+	<fieldset class="screen-options">
+		<legend><?php esc_html_e( 'Suggested Tags', 'community-code' ); ?></legend>
+		<label for="cc-sa-min-count">
+			<?php esc_html_e( 'Minimum searches to suggest:', 'community-code' ); ?>
+			<input type="number" id="cc-sa-min-count" name="cc_search_analytics_min_count"
+				value="<?php echo esc_attr( $min_count ); ?>" min="1" max="100" step="1" class="small-text" />
 		</label>
 	</fieldset>
 	<fieldset class="screen-options">
@@ -107,6 +127,9 @@ function handle_screen_options(): void {
 	if ( isset( $_POST['cc_search_analytics_rows'] ) ) {
 		update_user_meta( $user_id, 'cc_search_analytics_rows', max( 1, min( 200, (int) $_POST['cc_search_analytics_rows'] ) ) );
 	}
+	if ( isset( $_POST['cc_search_analytics_min_count'] ) ) {
+		update_user_meta( $user_id, 'cc_search_analytics_min_count', max( 1, min( 100, (int) $_POST['cc_search_analytics_min_count'] ) ) );
+	}
 	if ( isset( $_POST['cc_search_analytics_period'] ) ) {
 		$val = (int) $_POST['cc_search_analytics_period'];
 		if ( in_array( $val, [ 7, 30, 90, 0 ], true ) ) {
@@ -133,6 +156,8 @@ function save_screen_option( $status, string $option, $value ) {
 	switch ( $option ) {
 		case 'cc_search_analytics_rows':
 			return max( 1, min( 200, (int) $value ) );
+		case 'cc_search_analytics_min_count':
+			return max( 1, min( 100, (int) $value ) );
 		case 'cc_search_analytics_period':
 			$val = (int) $value;
 			return in_array( $val, [ 7, 30, 90, 0 ], true ) ? $val : $status;
@@ -359,7 +384,178 @@ function render_admin_page(): void {
 			<?php endif; ?>
 		</div>
 
+		<div class="sa-card">
+			<h2 style="margin-top:0"><?php esc_html_e( 'Suggested Tags', 'community-code' ); ?></h2>
+			<?php render_suggested_tags( $days ); ?>
+		</div>
+
 		<?php endif; ?>
 	</div>
 	<?php
+}
+
+/**
+ * Render the Suggested Tags section of the analytics dashboard.
+ *
+ * Compares frequently searched terms against the post_tag taxonomy and surfaces
+ * terms that have no matching tag. Optionally uses the AI plugin to suggest
+ * canonical slugs when it is available and configured.
+ *
+ * @since 1.2.0
+ *
+ * @param int $days Analytics period passed from render_admin_page(). 0 = all time.
+ * @return void
+ */
+function render_suggested_tags( int $days ): void {
+	$gaps = get_tag_gaps( get_min_count(), $days );
+
+	if ( empty( $gaps ) ) {
+		echo '<p class="sa-zero">' . esc_html__( 'No suggested tags — all frequently searched terms already exist as tags.', 'community-code' ) . '</p>';
+		return;
+	}
+
+	$using_ai = ai_is_available();
+	$slugs = normalize_terms_with_ai( $gaps );
+	$nonce = wp_create_nonce( 'cc-create-tag' );
+
+	// Pre-fetch candidate posts and discard terms with no matches.
+	$rows = [];
+	foreach ( $gaps as $gap ) {
+		$posts = get_posts_for_term( $gap['term'] );
+		if ( empty( $posts ) ) {
+			continue;
+		}
+		$rows[] = [
+			'term'  => $gap['term'],
+			'count' => $gap['count'],
+			'slug'  => $slugs[ $gap['term'] ] ?? sanitize_title( $gap['term'] ),
+			'posts' => $posts,
+		];
+	}
+
+	if ( empty( $rows ) ) {
+		echo '<p class="sa-zero">' . esc_html__( 'No suggested tags — all frequently searched terms either already exist as tags or matched no posts.', 'community-code' ) . '</p>';
+		return;
+	}
+	?>
+	<?php if ( $using_ai ) : ?>
+	<p><em><?php esc_html_e( 'Canonical slugs are AI-assisted suggestions.', 'community-code' ); ?></em></p>
+	<?php else : ?>
+	<p><em><?php esc_html_e( 'Install and configure the AI plugin to get AI-assisted slug suggestions.', 'community-code' ); ?></em></p>
+	<?php endif; ?>
+	<table class="wp-list-table widefat striped" style="margin-top:0;table-layout:auto">
+		<thead>
+			<tr>
+				<th style="width:15%"><?php esc_html_e( 'Term', 'community-code' ); ?></th>
+				<th style="width:70px"><?php esc_html_e( 'Searches', 'community-code' ); ?></th>
+				<th style="width:18%"><?php esc_html_e( 'Suggested slug', 'community-code' ); ?></th>
+				<th><?php esc_html_e( 'Candidate posts', 'community-code' ); ?></th>
+				<th style="width:110px"><?php esc_html_e( 'Action', 'community-code' ); ?></th>
+			</tr>
+		</thead>
+		<tbody>
+		<?php foreach ( $rows as $row ) : ?>
+		<tr>
+			<td><?php echo esc_html( $row['term'] ); ?></td>
+			<td><?php echo esc_html( number_format_i18n( (int) $row['count'] ) ); ?></td>
+			<td><code><?php echo esc_html( $row['slug'] ); ?></code></td>
+			<td>
+				<?php foreach ( $row['posts'] as $post ) : ?>
+					<a href="<?php echo esc_url( $post['edit_url'] ); ?>" target="_blank" style="display:block;font-size:12px" title="<?php echo esc_attr( $post['title'] ); ?>"><?php echo esc_html( $post['title'] ); ?></a>
+				<?php endforeach; ?>
+			</td>
+			<td>
+				<button class="button button-small cc-create-tag"
+					data-term="<?php echo esc_attr( $row['term'] ); ?>"
+					data-slug="<?php echo esc_attr( $row['slug'] ); ?>"
+					data-post-ids="<?php echo esc_attr( implode( ',', array_column( $row['posts'], 'ID' ) ) ); ?>"
+					data-nonce="<?php echo esc_attr( $nonce ); ?>">
+					<?php esc_html_e( 'Create &amp; apply tag', 'community-code' ); ?>
+				</button>
+			</td>
+		</tr>
+		<?php endforeach; ?>
+		</tbody>
+	</table>
+	<script>
+	( function () {
+		document.querySelectorAll( '.cc-create-tag' ).forEach( function ( btn ) {
+			btn.addEventListener( 'click', function () {
+				var term = btn.dataset.term;
+				var slug = btn.dataset.slug;
+				var postIds = btn.dataset.postIds;
+				var nonce = btn.dataset.nonce;
+				btn.disabled = true;
+				btn.textContent = '<?php echo esc_js( __( 'Applying…', 'community-code' ) ); ?>';
+				fetch( ajaxurl, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+					body: new URLSearchParams( {
+						action: 'cc_create_analytics_tag',
+						term: term,
+						slug: slug,
+						post_ids: postIds,
+						nonce: nonce
+					} )
+				} ).then( function ( r ) { return r.json(); } ).then( function ( data ) {
+					if ( data.success ) {
+						btn.textContent = '<?php echo esc_js( __( 'Created', 'community-code' ) ); ?>';
+						btn.classList.add( 'button-primary' );
+					} else {
+						btn.disabled = false;
+						btn.textContent = '<?php echo esc_js( __( 'Create tag', 'community-code' ) ); ?>';
+						alert( data.data || '<?php echo esc_js( __( 'Something went wrong.', 'community-code' ) ); ?>' );
+					}
+				} );
+			} );
+		} );
+	} )();
+	</script>
+	<?php
+}
+
+/**
+ * AJAX handler: create a post_tag from a suggested analytics term.
+ *
+ * Expects POST fields: term, slug, nonce.
+ * Requires manage_categories capability.
+ *
+ * @since 1.2.0
+ * @return void
+ */
+function handle_create_analytics_tag(): void {
+	check_ajax_referer( 'cc-create-tag', 'nonce' );
+
+	if ( ! current_user_can( 'manage_categories' ) ) {
+		wp_send_json_error( __( 'Permission denied.', 'community-code' ) );
+	}
+
+	$term = sanitize_text_field( wp_unslash( $_POST['term'] ?? '' ) );
+	$slug = sanitize_title( wp_unslash( $_POST['slug'] ?? $term ) );
+
+	if ( ! $term ) {
+		wp_send_json_error( __( 'Term is required.', 'community-code' ) );
+	}
+
+	$result = wp_insert_term( $term, 'post_tag', [ 'slug' => $slug ] );
+
+	if ( is_wp_error( $result ) ) {
+		wp_send_json_error( $result->get_error_message() );
+	}
+
+	$tag_id = $result['term_id'];
+	$applied = 0;
+
+	$raw_ids = sanitize_text_field( wp_unslash( $_POST['post_ids'] ?? '' ) );
+	if ( $raw_ids ) {
+		$post_ids = array_filter( array_map( 'absint', explode( ',', $raw_ids ) ) );
+		foreach ( $post_ids as $post_id ) {
+			if ( get_post( $post_id ) ) {
+				wp_set_post_tags( $post_id, [ $tag_id ], true );
+				$applied++;
+			}
+		}
+	}
+
+	wp_send_json_success( [ 'term_id' => $tag_id, 'applied' => $applied ] );
 }

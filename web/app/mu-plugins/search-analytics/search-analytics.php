@@ -18,7 +18,13 @@ define( 'CC_SEARCH_ANALYTICS_URL', str_replace( WP_CONTENT_DIR, WP_CONTENT_URL, 
 require_once CC_SEARCH_ANALYTICS_DIR . 'includes/database.php';
 require_once CC_SEARCH_ANALYTICS_DIR . 'includes/data.php';
 require_once CC_SEARCH_ANALYTICS_DIR . 'includes/tracking.php';
+require_once CC_SEARCH_ANALYTICS_DIR . 'includes/suggestions.php';
 require_once CC_SEARCH_ANALYTICS_DIR . 'includes/admin.php';
+
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	require_once CC_SEARCH_ANALYTICS_DIR . 'includes/cli.php';
+	\WP_CLI::add_command( 'cc-analytics tag-gaps', 'CommunityCode\SearchAnalytics\CLI\Tag_Gaps_Command' );
+}
 
 // Database
 add_action( 'init', __NAMESPACE__ . '\\maybe_create_table' );
@@ -35,3 +41,4 @@ add_action( 'admin_init', __NAMESPACE__ . '\\handle_screen_options' );
 add_filter( 'set-screen-option', __NAMESPACE__ . '\\save_screen_option', 10, 3 );
 add_action( 'admin_menu', __NAMESPACE__ . '\\register_admin_page' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_admin_assets' );
+add_action( 'wp_ajax_cc_create_analytics_tag', __NAMESPACE__ . '\\handle_create_analytics_tag' );
