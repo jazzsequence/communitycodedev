@@ -417,45 +417,57 @@ function render_suggested_tags( int $days ): void {
 	$using_ai = ai_is_available();
 	$slugs = normalize_terms_with_ai( $gaps );
 	$nonce = wp_create_nonce( 'cc-create-tag' );
+
+	// Pre-fetch candidate posts and discard terms with no matches.
+	$rows = [];
+	foreach ( $gaps as $gap ) {
+		$posts = get_posts_for_term( $gap['term'], 5 );
+		if ( empty( $posts ) ) {
+			continue;
+		}
+		$rows[] = [
+			'term'  => $gap['term'],
+			'count' => $gap['count'],
+			'slug'  => $slugs[ $gap['term'] ] ?? sanitize_title( $gap['term'] ),
+			'posts' => $posts,
+		];
+	}
+
+	if ( empty( $rows ) ) {
+		echo '<p class="sa-zero">' . esc_html__( 'No suggested tags — all frequently searched terms either already exist as tags or matched no posts.', 'community-code' ) . '</p>';
+		return;
+	}
 	?>
 	<?php if ( $using_ai ) : ?>
 	<p><em><?php esc_html_e( 'Canonical slugs are AI-assisted suggestions.', 'community-code' ); ?></em></p>
 	<?php else : ?>
 	<p><em><?php esc_html_e( 'Install and configure the AI plugin to get AI-assisted slug suggestions.', 'community-code' ); ?></em></p>
 	<?php endif; ?>
-	<table class="wp-list-table widefat fixed striped" style="margin-top:0">
+	<table class="wp-list-table widefat striped" style="margin-top:0;table-layout:auto">
 		<thead>
 			<tr>
-				<th><?php esc_html_e( 'Term', 'community-code' ); ?></th>
-				<th style="width:80px"><?php esc_html_e( 'Searches', 'community-code' ); ?></th>
-				<th><?php esc_html_e( 'Suggested slug', 'community-code' ); ?></th>
-				<th style="width:120px"><?php esc_html_e( 'Candidate posts', 'community-code' ); ?></th>
-				<th style="width:130px"><?php esc_html_e( 'Action', 'community-code' ); ?></th>
+				<th style="width:15%"><?php esc_html_e( 'Term', 'community-code' ); ?></th>
+				<th style="width:70px"><?php esc_html_e( 'Searches', 'community-code' ); ?></th>
+				<th style="width:18%"><?php esc_html_e( 'Suggested slug', 'community-code' ); ?></th>
+				<th><?php esc_html_e( 'Candidate posts', 'community-code' ); ?></th>
+				<th style="width:110px"><?php esc_html_e( 'Action', 'community-code' ); ?></th>
 			</tr>
 		</thead>
 		<tbody>
-		<?php foreach ( $gaps as $gap ) :
-			$term = $gap['term'];
-			$slug = $slugs[ $term ] ?? sanitize_title( $term );
-			$posts = get_posts_for_term( $term, 5 );
-		?>
+		<?php foreach ( $rows as $row ) : ?>
 		<tr>
-			<td><?php echo esc_html( $term ); ?></td>
-			<td><?php echo esc_html( number_format_i18n( (int) $gap['count'] ) ); ?></td>
-			<td><code><?php echo esc_html( $slug ); ?></code></td>
+			<td><?php echo esc_html( $row['term'] ); ?></td>
+			<td><?php echo esc_html( number_format_i18n( (int) $row['count'] ) ); ?></td>
+			<td><code><?php echo esc_html( $row['slug'] ); ?></code></td>
 			<td>
-				<?php if ( $posts ) : ?>
-					<?php foreach ( $posts as $post ) : ?>
-						<a href="<?php echo esc_url( $post['edit_url'] ); ?>" target="_blank" style="display:block;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px" title="<?php echo esc_attr( $post['title'] ); ?>"><?php echo esc_html( $post['title'] ); ?></a>
-					<?php endforeach; ?>
-				<?php else : ?>
-					<span class="sa-zero"><?php esc_html_e( 'None found', 'community-code' ); ?></span>
-				<?php endif; ?>
+				<?php foreach ( $row['posts'] as $post ) : ?>
+					<a href="<?php echo esc_url( $post['edit_url'] ); ?>" target="_blank" style="display:block;font-size:12px" title="<?php echo esc_attr( $post['title'] ); ?>"><?php echo esc_html( $post['title'] ); ?></a>
+				<?php endforeach; ?>
 			</td>
 			<td>
 				<button class="button button-small cc-create-tag"
-					data-term="<?php echo esc_attr( $term ); ?>"
-					data-slug="<?php echo esc_attr( $slug ); ?>"
+					data-term="<?php echo esc_attr( $row['term'] ); ?>"
+					data-slug="<?php echo esc_attr( $row['slug'] ); ?>"
 					data-nonce="<?php echo esc_attr( $nonce ); ?>">
 					<?php esc_html_e( 'Create tag', 'community-code' ); ?>
 				</button>
