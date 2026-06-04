@@ -8,8 +8,8 @@
 
 namespace CommunityCode\SearchAnalytics;
 
-const ADMIN_SLUG        = 'cc-search-analytics';
-const DB_VERSION        = '1.0';
+const ADMIN_SLUG = 'cc-search-analytics';
+const DB_VERSION = '1.0';
 const DB_VERSION_OPTION = 'cc_search_analytics_db_version';
 
 add_action( 'init', __NAMESPACE__ . '\\maybe_create_table' );
@@ -34,13 +34,13 @@ function maybe_create_table(): void {
 		return;
 	}
 	global $wpdb;
-	$table           = get_table_name();
+	$table = get_table_name();
 	$charset_collate = $wpdb->get_charset_collate();
 
 	$sql = "CREATE TABLE {$table} (
-		id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-		term        VARCHAR(200)    NOT NULL,
-		results     MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
+		id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+		term VARCHAR(200) NOT NULL,
+		results MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
 		searched_at DATETIME NOT NULL,
 		PRIMARY KEY (id),
 		KEY term (term(50)),
@@ -133,8 +133,8 @@ function register_ep_proxy_endpoint(): void {
 		'community-code/v1',
 		'/ep-search',
 		[
-			'methods'             => \WP_REST_Server::READABLE,
-			'callback'            => __NAMESPACE__ . '\\handle_ep_search_proxy',
+			'methods' => \WP_REST_Server::READABLE,
+			'callback' => __NAMESPACE__ . '\\handle_ep_search_proxy',
 			'permission_callback' => '__return_true',
 		]
 	);
@@ -157,7 +157,7 @@ function handle_ep_search_proxy( \WP_REST_Request $request ) {
 		return new \WP_Error( 'ep_proxy_error', 'EP endpoint not configured.', [ 'status' => 500 ] );
 	}
 
-	$ep_url      = add_query_arg( $request->get_query_params(), $ep_endpoint );
+	$ep_url = add_query_arg( $request->get_query_params(), $ep_endpoint );
 	$ep_response = wp_remote_get(
 		$ep_url,
 		[
@@ -170,8 +170,8 @@ function handle_ep_search_proxy( \WP_REST_Request $request ) {
 		return new \WP_Error( 'ep_proxy_upstream', $ep_response->get_error_message(), [ 'status' => 502 ] );
 	}
 
-	$status   = wp_remote_retrieve_response_code( $ep_response );
-	$data     = json_decode( wp_remote_retrieve_body( $ep_response ), true );
+	$status = wp_remote_retrieve_response_code( $ep_response );
+	$data = json_decode( wp_remote_retrieve_body( $ep_response ), true );
 	$response = new \WP_REST_Response( $data, $status );
 	$response->header( 'Cache-Control', 'no-store' );
 	return $response;
@@ -219,7 +219,7 @@ function query_db( int $days ): array {
 	$empty = [ 'top_terms' => [], 'daily_counts' => [], 'total' => 0, 'unique' => 0 ];
 
 	if ( $days > 0 ) {
-		$since     = gmdate( 'Y-m-d H:i:s', strtotime( "-{$days} days" ) );
+		$since = gmdate( 'Y-m-d H:i:s', strtotime( "-{$days} days" ) );
 		$where_sql = $wpdb->prepare( 'WHERE searched_at >= %s', $since );
 	} else {
 		$where_sql = '';
@@ -236,15 +236,15 @@ function query_db( int $days ): array {
 		ARRAY_A
 	) ?: [];
 
-	$total  = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table} {$where_sql}" );
+	$total = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table} {$where_sql}" );
 	$unique = (int) $wpdb->get_var( "SELECT COUNT(DISTINCT term) FROM {$table} {$where_sql}" );
 	// phpcs:enable
 
 	return [
-		'top_terms'    => $top_terms,
+		'top_terms' => $top_terms,
 		// Stored DESC (most-recent-first) for the table; enqueue_admin_assets() reverses for the chart.
 		'daily_counts' => $daily_counts,
-		'total'        => $total,
+		'total' => $total,
 		'unique'       => $unique,
 	];
 }
@@ -402,10 +402,10 @@ function render_admin_page(): void {
 		wp_die( esc_html__( 'Permission denied.', 'community-code' ) );
 	}
 
-	$days    = get_requested_days();
+	$days = get_requested_days();
 	$periods = [ 7 => '7 days', 30 => '30 days', 90 => '90 days', 0 => 'All time' ];
-	$data    = get_analytics_data( $days );
-	$terms   = $data['top_terms'];
+	$data = get_analytics_data( $days );
+	$terms = $data['top_terms'];
 	$terms_h = max( count( $terms ) * 28 + 40, 120 ); // px height for bar chart
 	?>
 	<div class="wrap">
