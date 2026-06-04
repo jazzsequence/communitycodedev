@@ -45,3 +45,10 @@
 .sa-terms-wrap {
 	position: relative;
 }
+
+.sa-truncate {
+	max-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}

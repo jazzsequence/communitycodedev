@@ -9,7 +9,7 @@
 namespace CommunityCode\SearchAnalytics;
 
 const ADMIN_SLUG = 'cc-search-analytics';
-const DB_VERSION = '1.0';
+const DB_VERSION = '1.1';
 const DB_VERSION_OPTION = 'cc_search_analytics_db_version';
 
 define( 'CC_SEARCH_ANALYTICS_DIR', __DIR__ . '/' );
@@ -31,5 +31,7 @@ add_action( 'rest_api_init', __NAMESPACE__ . '\\register_ep_proxy_endpoint' );
 add_filter( 'ep_instant_results_search_endpoint', __NAMESPACE__ . '\\redirect_ep_to_proxy', 20 );
 
 // Admin
+add_action( 'admin_init', __NAMESPACE__ . '\\handle_screen_options' );
+add_filter( 'set-screen-option', __NAMESPACE__ . '\\save_screen_option', 10, 3 );
 add_action( 'admin_menu', __NAMESPACE__ . '\\register_admin_page' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_admin_assets' );

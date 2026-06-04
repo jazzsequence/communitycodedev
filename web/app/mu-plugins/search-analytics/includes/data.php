@@ -73,3 +73,38 @@ function query_db( int $days ): array {
 		'unique' => $unique,
 	];
 }
+
+/**
+ * Return the most recent individual search events for the admin dashboard.
+ *
+ * Unlike query_db() which returns aggregated data, this returns raw rows so
+ * the admin can inspect per-search metadata (country, user agent, referrer)
+ * to distinguish real visitors from bots or self-testing.
+ *
+ * @since 1.1.0
+ *
+ * @param int $days  Days to look back. 0 = all time.
+ * @param int $limit Maximum rows to return. Default 50.
+ * @return array[] Rows with keys: term, results, searched_at, country, user_agent, referrer.
+ */
+function query_recent_searches( int $days, int $limit = 50 ): array {
+	global $wpdb;
+	$table = get_table_name();
+
+	if ( $days > 0 ) {
+		$since = gmdate( 'Y-m-d H:i:s', strtotime( "-{$days} days" ) );
+		$where_sql = $wpdb->prepare( 'WHERE searched_at >= %s', $since );
+	} else {
+		$where_sql = '';
+	}
+
+	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	return $wpdb->get_results(
+		$wpdb->prepare(
+			"SELECT term, results, searched_at, country, user_agent, referrer FROM {$table} {$where_sql} ORDER BY searched_at DESC LIMIT %d",
+			$limit
+		),
+		ARRAY_A
+	) ?: [];
+	// phpcs:enable
+}
