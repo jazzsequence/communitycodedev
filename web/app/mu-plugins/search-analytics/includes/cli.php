@@ -48,9 +48,12 @@ class Tag_Gaps_Command extends \WP_CLI_Command {
 	 * default: 30
 	 * ---
 	 *
+	 * [--dry-run]
+	 * : Preview suggestions without creating or applying any tags. Default behaviour.
+	 *
 	 * [--apply]
 	 * : Create the suggested tags and apply them to EP-matched posts.
-	 *   Without this flag the command runs as a dry run.
+	 *   Omit this flag (or pass --dry-run) to preview only.
 	 *
 	 * [--format=<format>]
 	 * : Output format.
@@ -70,8 +73,14 @@ class Tag_Gaps_Command extends \WP_CLI_Command {
 	public function __invoke( array $args, array $assoc_args ): void {
 		$min_count = (int) \WP_CLI\Utils\get_flag_value( $assoc_args, 'min-count', 5 );
 		$days = (int) \WP_CLI\Utils\get_flag_value( $assoc_args, 'days', 30 );
-		$apply = (bool) \WP_CLI\Utils\get_flag_value( $assoc_args, 'apply', false );
+		$dry_run = \WP_CLI\Utils\get_flag_value( $assoc_args, 'dry-run', false );
+		$apply = \WP_CLI\Utils\get_flag_value( $assoc_args, 'apply', false );
 		$format = \WP_CLI\Utils\get_flag_value( $assoc_args, 'format', 'table' );
+
+		// --dry-run and --apply are mutually exclusive; --dry-run takes precedence.
+		if ( $dry_run ) {
+			$apply = false;
+		}
 
 		$gaps = get_tag_gaps( $min_count, $days );
 
@@ -86,22 +95,19 @@ class Tag_Gaps_Command extends \WP_CLI_Command {
 		}
 
 		$slugs = normalize_terms_with_ai( $gaps );
-		$rows = [];
 
-		foreach ( $gaps as $gap ) {
-			$term = $gap['term'];
-			$posts = get_posts_for_term( $term );
-			$rows[] = [
-				'term' => $term,
-				'count' => (int) $gap['count'],
-				'canonical' => $slugs[ $term ] ?? sanitize_title( $term ),
-				'candidate_posts' => count( $posts ),
-			];
-		}
-
-		\WP_CLI\Utils\format_items( $format, $rows, [ 'term', 'count', 'canonical', 'candidate_posts' ] );
-
+		// During dry run, skip EP queries and just show term + count.
 		if ( ! $apply ) {
+			$rows = [];
+			foreach ( $gaps as $gap ) {
+				$term = $gap['term'];
+				$rows[] = [
+					'term' => $term,
+					'count' => (int) $gap['count'],
+					'canonical' => $slugs[ $term ] ?? sanitize_title( $term ),
+				];
+			}
+			\WP_CLI\Utils\format_items( $format, $rows, [ 'term', 'count', 'canonical' ] );
 			\WP_CLI::log( '' );
 			\WP_CLI::log( 'Dry run. Pass --apply to create tags and apply them to matching posts.' );
 			return;
