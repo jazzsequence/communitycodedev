@@ -19,6 +19,17 @@ function get_rows_per_page(): int {
 }
 
 /**
+ * Minimum number of searches required to surface a term as a suggested tag.
+ *
+ * @since 1.2.0
+ * @return int
+ */
+function get_min_count(): int {
+	$saved = (int) get_user_meta( get_current_user_id(), 'cc_search_analytics_min_count', true );
+	return $saved > 0 ? $saved : 1;
+}
+
+/**
  * Default analytics period in days. 0 = all time.
  *
  * Uses the empty-string check because 0 is a valid saved value (all time).
@@ -52,8 +63,9 @@ function render_screen_options( string $settings, \WP_Screen $screen ): string {
 		return $settings;
 	}
 
-	$rows   = get_rows_per_page();
-	$period = get_default_period();
+	$rows      = get_rows_per_page();
+	$min_count = get_min_count();
+	$period    = get_default_period();
 	$valid_periods = [ 7 => __( '7 days', 'community-code' ), 30 => __( '30 days', 'community-code' ), 90 => __( '90 days', 'community-code' ), 0 => __( 'All time', 'community-code' ) ];
 
 	ob_start();
@@ -64,6 +76,14 @@ function render_screen_options( string $settings, \WP_Screen $screen ): string {
 			<?php esc_html_e( 'Number of rows:', 'community-code' ); ?>
 			<input type="number" id="cc-sa-rows" name="cc_search_analytics_rows"
 				value="<?php echo esc_attr( $rows ); ?>" min="1" max="200" step="1" class="small-text" />
+		</label>
+	</fieldset>
+	<fieldset class="screen-options">
+		<legend><?php esc_html_e( 'Suggested Tags', 'community-code' ); ?></legend>
+		<label for="cc-sa-min-count">
+			<?php esc_html_e( 'Minimum searches to suggest:', 'community-code' ); ?>
+			<input type="number" id="cc-sa-min-count" name="cc_search_analytics_min_count"
+				value="<?php echo esc_attr( $min_count ); ?>" min="1" max="100" step="1" class="small-text" />
 		</label>
 	</fieldset>
 	<fieldset class="screen-options">
@@ -107,6 +127,9 @@ function handle_screen_options(): void {
 	if ( isset( $_POST['cc_search_analytics_rows'] ) ) {
 		update_user_meta( $user_id, 'cc_search_analytics_rows', max( 1, min( 200, (int) $_POST['cc_search_analytics_rows'] ) ) );
 	}
+	if ( isset( $_POST['cc_search_analytics_min_count'] ) ) {
+		update_user_meta( $user_id, 'cc_search_analytics_min_count', max( 1, min( 100, (int) $_POST['cc_search_analytics_min_count'] ) ) );
+	}
 	if ( isset( $_POST['cc_search_analytics_period'] ) ) {
 		$val = (int) $_POST['cc_search_analytics_period'];
 		if ( in_array( $val, [ 7, 30, 90, 0 ], true ) ) {
@@ -133,6 +156,8 @@ function save_screen_option( $status, string $option, $value ) {
 	switch ( $option ) {
 		case 'cc_search_analytics_rows':
 			return max( 1, min( 200, (int) $value ) );
+		case 'cc_search_analytics_min_count':
+			return max( 1, min( 100, (int) $value ) );
 		case 'cc_search_analytics_period':
 			$val = (int) $value;
 			return in_array( $val, [ 7, 30, 90, 0 ], true ) ? $val : $status;
@@ -382,7 +407,7 @@ function render_admin_page(): void {
  * @return void
  */
 function render_suggested_tags( int $days ): void {
-	$gaps = get_tag_gaps( 3, $days );
+	$gaps = get_tag_gaps( get_min_count(), $days );
 
 	if ( empty( $gaps ) ) {
 		echo '<p class="sa-zero">' . esc_html__( 'No suggested tags — all frequently searched terms already exist as tags.', 'community-code' ) . '</p>';
