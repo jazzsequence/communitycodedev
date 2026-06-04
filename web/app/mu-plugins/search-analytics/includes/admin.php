@@ -102,8 +102,9 @@ function get_requested_days(): int {
  * Render the Search Analytics dashboard page.
  *
  * Outputs the period selector, summary stats, daily volume chart, top terms
- * chart, and daily volume table. Chart rendering is handled by admin.js via
- * the ccSearchAnalytics localised object.
+ * chart, daily volume table, and a Recent Searches table showing individual
+ * search events with country, user agent, and referrer for bot/human analysis.
+ * Chart rendering is handled by admin.js via the ccSearchAnalytics localised object.
  *
  * @since 1.0.0
  *
@@ -189,6 +190,45 @@ function render_admin_page(): void {
 			</div>
 
 		</div>
+
+		<div class="sa-card">
+			<h2 style="margin-top:0"><?php esc_html_e( 'Recent Searches', 'community-code' ); ?></h2>
+			<?php
+			$recent = query_recent_searches( $days );
+			if ( empty( $recent ) ) :
+			?>
+				<p class="sa-zero"><?php esc_html_e( 'No searches recorded for this period.', 'community-code' ); ?></p>
+			<?php else : ?>
+			<table class="wp-list-table widefat fixed striped" style="margin-top:0">
+				<thead>
+					<tr>
+						<th style="width:140px"><?php esc_html_e( 'Term', 'community-code' ); ?></th>
+						<th style="width:130px"><?php esc_html_e( 'Date', 'community-code' ); ?></th>
+						<th style="width:40px"><?php esc_html_e( 'CC', 'community-code' ); ?></th>
+						<th><?php esc_html_e( 'User Agent', 'community-code' ); ?></th>
+						<th><?php esc_html_e( 'Referrer', 'community-code' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $recent as $row ) :
+						$country = $row['country'] ?: '—';
+						$ua = $row['user_agent'];
+						$referrer = $row['referrer'];
+						$referrer_display = $referrer ? wp_parse_url( $referrer, PHP_URL_HOST ) . wp_parse_url( $referrer, PHP_URL_PATH ) : '—';
+					?>
+					<tr>
+						<td><?php echo esc_html( $row['term'] ); ?></td>
+						<td><?php echo esc_html( get_date_from_gmt( $row['searched_at'], 'Y-m-d H:i' ) ); ?></td>
+						<td><?php echo esc_html( $country ); ?></td>
+						<td class="sa-truncate" title="<?php echo esc_attr( $ua ); ?>"><?php echo esc_html( $ua ); ?></td>
+						<td class="sa-truncate" title="<?php echo esc_attr( $referrer ); ?>"><?php echo esc_html( $referrer_display ); ?></td>
+					</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+			<?php endif; ?>
+		</div>
+
 		<?php endif; ?>
 	</div>
 	<?php

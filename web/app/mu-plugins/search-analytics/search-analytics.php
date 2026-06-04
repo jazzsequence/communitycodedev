@@ -9,7 +9,7 @@
 namespace CommunityCode\SearchAnalytics;
 
 const ADMIN_SLUG = 'cc-search-analytics';
-const DB_VERSION = '1.0';
+const DB_VERSION = '1.1';
 const DB_VERSION_OPTION = 'cc_search_analytics_db_version';
 
 define( 'CC_SEARCH_ANALYTICS_DIR', __DIR__ . '/' );
