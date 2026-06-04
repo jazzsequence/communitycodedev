@@ -17,7 +17,7 @@
 		},
 		scales: {
 			x: { grid: { display: false }, ticks: { font: { size: 11 } } },
-			y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 } } },
+			y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 }, precision: 0 } },
 		},
 	};
 
@@ -69,7 +69,7 @@
 					tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', padding: 10 },
 				},
 				scales: {
-					x: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 } } },
+					x: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 }, precision: 0 } },
 					y: { grid: { display: false }, ticks: { font: { size: 11 } } },
 				},
 			},
