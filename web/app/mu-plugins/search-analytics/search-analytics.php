@@ -33,3 +33,27 @@ add_filter( 'ep_instant_results_search_endpoint', __NAMESPACE__ . '\\redirect_ep
 // Admin
 add_action( 'admin_menu', __NAMESPACE__ . '\\register_admin_page' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_admin_assets' );
+
+// Temporary diagnostic — remove before merge.
+add_action( 'rest_api_init', function () {
+	register_rest_route( 'community-code/v1', '/ip-diag', [
+		'methods'             => 'GET',
+		'callback'            => function () {
+			$keys = [
+				'REMOTE_ADDR',
+				'HTTP_X_FORWARDED_FOR',
+				'HTTP_CF_CONNECTING_IP',
+				'HTTP_CF_IPCOUNTRY',
+				'HTTP_TRUE_CLIENT_IP',
+				'HTTP_X_REAL_IP',
+				'HTTP_X_CLUSTER_CLIENT_IP',
+			];
+			$out = [];
+			foreach ( $keys as $k ) {
+				$out[ $k ] = $_SERVER[ $k ] ?? '(not set)';
+			}
+			return $out;
+		},
+		'permission_callback' => '__return_true',
+	] );
+} );
