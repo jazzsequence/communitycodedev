@@ -32,6 +32,6 @@ add_filter( 'ep_instant_results_search_endpoint', __NAMESPACE__ . '\\redirect_ep
 
 // Admin
 add_action( 'admin_init', __NAMESPACE__ . '\\handle_screen_options' );
-add_filter( 'screen_settings', __NAMESPACE__ . '\\render_screen_options', 10, 2 );
+add_filter( 'set-screen-option', __NAMESPACE__ . '\\save_screen_option', 10, 3 );
 add_action( 'admin_menu', __NAMESPACE__ . '\\register_admin_page' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_admin_assets' );

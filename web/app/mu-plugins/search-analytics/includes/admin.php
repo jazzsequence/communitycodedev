@@ -139,19 +139,53 @@ function handle_screen_options(): void {
 }
 
 /**
+ * Sanitize and return a screen option value for saving.
+ *
+ * Called via the set-screen-option filter, which WordPress fires when
+ * processing Screen Options form submissions. Returning a non-false value
+ * causes WordPress to persist it to user meta.
+ *
+ * @since 1.1.0
+ *
+ * @param mixed  $status Default return value (false).
+ * @param string $option Option name from the form.
+ * @param mixed  $value  Raw submitted value.
+ * @return mixed Sanitized value to save, or $status to skip.
+ */
+function save_screen_option( $status, string $option, $value ) {
+	switch ( $option ) {
+		case 'cc_search_analytics_rows':
+			return max( 1, min( 200, (int) $value ) );
+		case 'cc_search_analytics_daily':
+			return max( 1, min( 90, (int) $value ) );
+		case 'cc_search_analytics_period':
+			$val = (int) $value;
+			return in_array( $val, [ 7, 30, 90, 0 ], true ) ? $val : $status;
+	}
+	return $status;
+}
+
+/**
  * Register the Search Analytics page under Dashboard in wp-admin.
+ *
+ * Registers the screen_settings filter inside the load-{hook} action so
+ * it only fires on this specific admin page (matching the ash-nazg pattern).
  *
  * @since 1.0.0
  * @return void
  */
 function register_admin_page(): void {
-	add_dashboard_page(
+	$hook = add_dashboard_page(
 		__( 'Search Analytics', 'community-code' ),
 		__( 'Search Analytics', 'community-code' ),
 		'manage_options',
 		ADMIN_SLUG,
 		__NAMESPACE__ . '\\render_admin_page'
 	);
+
+	add_action( 'load-' . $hook, function () {
+		add_filter( 'screen_settings', __NAMESPACE__ . '\\render_screen_options', 10, 2 );
+	} );
 }
 
 /**
