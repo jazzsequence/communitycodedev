@@ -166,6 +166,39 @@ function save_screen_option( $status, string $option, $value ) {
 }
 
 /**
+ * Output all recent searches as a CSV file download.
+ *
+ * Exports all rows across all time (not bounded by the current period) so the
+ * export is a complete record. Outputs CSV headers and exits.
+ *
+ * @since 1.1.0
+ * @return void
+ */
+function export_recent_searches_csv(): void {
+	$rows = query_recent_searches( 0, PHP_INT_MAX );
+	$filename = 'search-analytics-' . gmdate( 'Y-m-d' ) . '.csv';
+
+	header( 'Content-Type: text/csv; charset=UTF-8' );
+	header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+	header( 'Pragma: no-cache' );
+	header( 'Expires: 0' );
+
+	$out = fopen( 'php://output', 'w' );
+	fputcsv( $out, [ 'Term', 'Date (UTC)', 'Country', 'User Agent', 'Referrer' ] );
+	foreach ( $rows as $row ) {
+		fputcsv( $out, [
+			$row['term'],
+			$row['searched_at'],
+			$row['country'],
+			$row['user_agent'],
+			$row['referrer'],
+		] );
+	}
+	fclose( $out );
+	exit;
+}
+
+/**
  * Register the Search Analytics page under Dashboard in wp-admin.
  *
  * Registers the screen_settings filter inside the load-{hook} action so
@@ -184,6 +217,9 @@ function register_admin_page(): void {
 	);
 
 	add_action( 'load-' . $hook, function () {
+		if ( isset( $_GET['cc-sa-export'] ) && 'csv' === $_GET['cc-sa-export'] && current_user_can( 'manage_options' ) ) {
+			export_recent_searches_csv();
+		}
 		add_filter( 'screen_settings', __NAMESPACE__ . '\\render_screen_options', 10, 2 );
 	} );
 }
@@ -349,7 +385,18 @@ function render_admin_page(): void {
 		</div>
 
 		<div class="sa-card">
-			<h2 style="margin-top:0"><?php esc_html_e( 'Recent Searches', 'community-code' ); ?></h2>
+			<h2 style="margin-top:0"><?php esc_html_e( 'Suggested Tags', 'community-code' ); ?></h2>
+			<?php render_suggested_tags( $days ); ?>
+		</div>
+
+		<div class="sa-card">
+			<h2 style="margin-top:0">
+				<?php esc_html_e( 'Recent Searches', 'community-code' ); ?>
+				<a href="<?php echo esc_url( add_query_arg( [ 'page' => ADMIN_SLUG, 'days' => $days, 'cc-sa-export' => 'csv' ], admin_url( 'index.php' ) ) ); ?>"
+				   class="page-title-action" style="margin-left:8px">
+					<?php esc_html_e( 'Download CSV', 'community-code' ); ?>
+				</a>
+			</h2>
 			<?php $recent = query_recent_searches( $days, get_rows_per_page() ); ?>
 			<?php if ( empty( $recent ) ) : ?>
 				<p class="sa-zero"><?php esc_html_e( 'No searches recorded for this period.', 'community-code' ); ?></p>
@@ -382,11 +429,6 @@ function render_admin_page(): void {
 				</tbody>
 			</table>
 			<?php endif; ?>
-		</div>
-
-		<div class="sa-card">
-			<h2 style="margin-top:0"><?php esc_html_e( 'Suggested Tags', 'community-code' ); ?></h2>
-			<?php render_suggested_tags( $days ); ?>
 		</div>
 
 		<?php endif; ?>

@@ -19,7 +19,8 @@ namespace CommunityCode\SearchAnalytics;
  */
 function is_bot(): bool {
 	$agent = strtolower( sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ?? '' ) ) );
-	foreach ( [ 'bot', 'crawl', 'spider', 'slurp', 'mediapartners', 'wget', 'curl' ] as $indicator ) {
+	// 'WordPress/' matches WP's own HTTP client (loopback/cron requests like "WordPress/7.0; https://...").
+	foreach ( [ 'bot', 'crawl', 'spider', 'slurp', 'mediapartners', 'wget', 'curl', 'wordpress/' ] as $indicator ) {
 		if ( str_contains( $agent, $indicator ) ) {
 			return true;
 		}
