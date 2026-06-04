@@ -96,18 +96,35 @@ class Tag_Gaps_Command extends \WP_CLI_Command {
 
 		$slugs = normalize_terms_with_ai( $gaps );
 
-		// During dry run, skip EP queries and just show term + count.
+		// Fetch candidate posts once; filter out terms with no matches (same as admin UI).
+		$candidates = [];
+		foreach ( $gaps as $gap ) {
+			$posts = get_posts_for_term( $gap['term'] );
+			if ( ! empty( $posts ) ) {
+				$candidates[ $gap['term'] ] = $posts;
+			}
+		}
+
+		if ( empty( $candidates ) ) {
+			\WP_CLI::success( 'No actionable suggestions — all qualifying terms either already exist as tags or matched no posts.' );
+			return;
+		}
+
 		if ( ! $apply ) {
 			$rows = [];
 			foreach ( $gaps as $gap ) {
 				$term = $gap['term'];
+				if ( ! isset( $candidates[ $term ] ) ) {
+					continue;
+				}
 				$rows[] = [
 					'term' => $term,
 					'count' => (int) $gap['count'],
 					'canonical' => $slugs[ $term ] ?? sanitize_title( $term ),
+					'candidate_posts' => count( $candidates[ $term ] ),
 				];
 			}
-			\WP_CLI\Utils\format_items( $format, $rows, [ 'term', 'count', 'canonical' ] );
+			\WP_CLI\Utils\format_items( $format, $rows, [ 'term', 'count', 'canonical', 'candidate_posts' ] );
 			\WP_CLI::log( '' );
 			\WP_CLI::log( 'Dry run. Pass --apply to create tags and apply them to matching posts.' );
 			return;
@@ -116,6 +133,9 @@ class Tag_Gaps_Command extends \WP_CLI_Command {
 		\WP_CLI::log( '' );
 		foreach ( $gaps as $gap ) {
 			$term = $gap['term'];
+			if ( ! isset( $candidates[ $term ] ) ) {
+				continue;
+			}
 			$slug = $slugs[ $term ] ?? sanitize_title( $term );
 
 			$result = wp_insert_term( $term, 'post_tag', [ 'slug' => $slug ] );
@@ -125,9 +145,8 @@ class Tag_Gaps_Command extends \WP_CLI_Command {
 			}
 
 			$tag_id = $result['term_id'];
-			$posts = get_posts_for_term( $term );
 			$applied = 0;
-			foreach ( $posts as $post ) {
+			foreach ( $candidates[ $term ] as $post ) {
 				wp_set_post_tags( $post['ID'], [ $tag_id ], true );
 				$applied++;
 			}
