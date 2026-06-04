@@ -421,7 +421,7 @@ function render_suggested_tags( int $days ): void {
 	// Pre-fetch candidate posts and discard terms with no matches.
 	$rows = [];
 	foreach ( $gaps as $gap ) {
-		$posts = get_posts_for_term( $gap['term'], 10 );
+		$posts = get_posts_for_term( $gap['term'] );
 		if ( empty( $posts ) ) {
 			continue;
 		}

@@ -47,35 +47,46 @@ function get_tag_gaps( int $min_count = 5, int $days = 30 ): array {
 }
 
 /**
- * Find published posts whose content matches a search term via ElasticPress.
+ * Find published posts and episodes whose content matches a search term via ElasticPress.
  *
- * Uses ep_integrate=true so the search is powered by Elasticsearch. Returns an
- * empty array if EP is not available or the query produces no results.
+ * Runs separate queries for posts and episodes so both post types get their own
+ * relevance-ranked candidates regardless of which scores higher globally. This
+ * ensures that if a blog post is a candidate for a tag, the related episode is
+ * always considered too. Results are merged and deduplicated.
  *
  * @since 1.2.0
  *
  * @param string $term  The search term to match against.
- * @param int    $limit Maximum number of posts to return. Default 10.
+ * @param int    $limit Maximum results per post type. Default 5.
  * @return array[] Rows with keys: ID (int), title (string), edit_url (string).
  */
-function get_posts_for_term( string $term, int $limit = 10 ): array {
-	$query = new \WP_Query( [
+function get_posts_for_term( string $term, int $limit = 5 ): array {
+	$base_args = [
 		's' => $term,
 		'ep_integrate' => true,
 		'posts_per_page' => $limit,
-		'post_type' => [ 'post', 'episodes' ],
 		'post_status' => 'publish',
 		'no_found_rows' => true,
-	] );
+	];
 
+	$seen = [];
 	$results = [];
-	foreach ( $query->posts as $post ) {
-		$results[] = [
-			'ID' => $post->ID,
-			'title' => $post->post_title,
-			'edit_url' => get_edit_post_link( $post->ID, 'raw' ),
-		];
+
+	foreach ( [ 'post', 'episodes' ] as $type ) {
+		$query = new \WP_Query( array_merge( $base_args, [ 'post_type' => $type ] ) );
+		foreach ( $query->posts as $post ) {
+			if ( isset( $seen[ $post->ID ] ) ) {
+				continue;
+			}
+			$seen[ $post->ID ] = true;
+			$results[] = [
+				'ID' => $post->ID,
+				'title' => $post->post_title,
+				'edit_url' => get_edit_post_link( $post->ID, 'raw' ),
+			];
+		}
 	}
+
 	return $results;
 }
 
