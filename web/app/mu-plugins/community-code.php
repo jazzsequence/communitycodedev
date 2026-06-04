@@ -60,7 +60,8 @@ function init() {
 		$post_types[] = 'episodes'; // Allow PowerPress fields on episodes
 		return $post_types;
 	});
-    add_filter('the_guid', __NAMESPACE__ . '\\feed_guid_fix', 9999, 2);
+	add_filter( 'the_guid', __NAMESPACE__ . '\\feed_guid_fix', 9999, 2 );
+	add_filter( 'the_content', __NAMESPACE__ . '\\append_transcript_link' );
 }
 
 /**
@@ -360,6 +361,65 @@ function modified_activity_widget() {
 	</div>
 	<?php
 	wp_reset_postdata();
+}
+
+/**
+ * Extract the transcript URL from PowerPress enclosure meta for an episode.
+ *
+ * PowerPress stores enclosure data as a multi-line string in `_episodes:enclosure`.
+ * The fourth line is a serialized PHP array that includes `pci_transcript_url`.
+ * Because the byte counts in the serialized string can become incorrect after a
+ * database search-replace (e.g. a domain change), `unserialize()` is unreliable.
+ * This function uses a regex to pull the URL directly from the raw string so that
+ * both correctly-stored and search-replace-corrupted data work.
+ *
+ * @param int $post_id Episode post ID.
+ * @return string Escaped transcript URL, or empty string if none is set.
+ */
+function get_episode_transcript_url( int $post_id ): string {
+	$enclosure = get_post_meta( $post_id, '_episodes:enclosure', true );
+	if ( ! $enclosure ) {
+		return '';
+	}
+
+	$parts = explode( "\n", trim( $enclosure ) );
+	if ( count( $parts ) < 4 || empty( $parts[3] ) ) {
+		return '';
+	}
+
+	if ( preg_match( '/"pci_transcript_url";s:\d+:"([^"]+)"/', $parts[3], $matches ) ) {
+		return esc_url( $matches[1] );
+	}
+
+	return '';
+}
+
+/**
+ * Append a transcript download link to the content of single episode posts.
+ *
+ * When a transcript URL is set in PowerPress, a download link is injected
+ * after the episode content so visitors can retrieve the file directly.
+ *
+ * @param string $content The post content.
+ * @return string Content with the transcript link appended, or unchanged if no transcript exists.
+ */
+function append_transcript_link( string $content ): string {
+	if ( ! is_singular( 'episodes' ) ) {
+		return $content;
+	}
+
+	$transcript_url = get_episode_transcript_url( get_the_ID() );
+	if ( ! $transcript_url ) {
+		return $content;
+	}
+
+	$link = sprintf(
+		'<p class="episode-transcript-link"><a href="%s" download>%s</a></p>',
+		$transcript_url,
+		esc_html__( 'Download transcript', 'community-code' )
+	);
+
+	return $content . "\n" . $link;
 }
 
 /**
