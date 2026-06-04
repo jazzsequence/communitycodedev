@@ -7,8 +7,6 @@
 
 namespace CommunityCode\SearchAnalytics;
 
-// ─── Screen option getters ────────────────────────────────────────────────────
-
 /**
  * Number of rows to show in the Recent Searches table.
  *
@@ -46,8 +44,6 @@ function get_default_period(): int {
 	}
 	return (int) $saved;
 }
-
-// ─── Screen options ───────────────────────────────────────────────────────────
 
 /**
  * Render the Screen Options fieldsets for the analytics dashboard.
@@ -141,8 +137,6 @@ function handle_screen_options(): void {
 		}
 	}
 }
-
-// ─── Admin page ───────────────────────────────────────────────────────────────
 
 /**
  * Register the Search Analytics page under Dashboard in wp-admin.
