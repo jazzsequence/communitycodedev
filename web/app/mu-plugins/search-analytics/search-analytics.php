@@ -33,4 +33,3 @@ add_filter( 'ep_instant_results_search_endpoint', __NAMESPACE__ . '\\redirect_ep
 // Admin
 add_action( 'admin_menu', __NAMESPACE__ . '\\register_admin_page' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_admin_assets' );
-add_filter( 'set_screen_option_cc_search_analytics_per_page', __NAMESPACE__ . '\\save_per_page_screen_option', 10, 3 );

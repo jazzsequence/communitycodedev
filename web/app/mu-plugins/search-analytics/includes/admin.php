@@ -22,23 +22,6 @@ function get_per_page(): int {
 	return $saved > 0 ? $saved : 50;
 }
 
-/**
- * Sanitize and save the per_page value when Screen Options are submitted.
- *
- * WordPress calls set_screen_option_{$option} filters during wp_save_screen_options()
- * for any POST field whose filter returns non-false. The return value is then
- * passed to update_user_meta() automatically.
- *
- * @since 1.1.0
- *
- * @param mixed  $status Unused default return value.
- * @param string $option Option name (cc_search_analytics_per_page).
- * @param mixed  $value  Raw posted value.
- * @return int Sanitized row count.
- */
-function save_per_page_screen_option( $status, string $option, $value ): int {
-	return max( 1, (int) $value );
-}
 
 /**
  * Render the per-page input inside the Screen Options panel.
@@ -88,6 +71,14 @@ function register_admin_page(): void {
 	add_action(
 		'load-' . $hook,
 		function () {
+			// wp_save_screen_options() only processes $_POST['wp_screen_options'][option/value],
+			// not arbitrary POST fields, so saving must be handled here manually.
+			if ( isset( $_POST['screenoptionnonce'], $_POST['cc_search_analytics_per_page'] ) ) {
+				check_admin_referer( 'screen-options-nonce', 'screenoptionnonce' );
+				$per_page = max( 1, min( 200, (int) $_POST['cc_search_analytics_per_page'] ) );
+				update_user_meta( get_current_user_id(), 'cc_search_analytics_per_page', $per_page );
+			}
+
 			add_filter( 'screen_settings', __NAMESPACE__ . '\\render_per_page_screen_option', 10, 2 );
 		}
 	);
