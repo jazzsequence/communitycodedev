@@ -60,7 +60,8 @@ function init() {
 		$post_types[] = 'episodes'; // Allow PowerPress fields on episodes
 		return $post_types;
 	});
-    add_filter('the_guid', __NAMESPACE__ . '\\feed_guid_fix', 9999, 2);
+	add_filter( 'the_guid', __NAMESPACE__ . '\\feed_guid_fix', 9999, 2 );
+	add_filter( 'the_content', __NAMESPACE__ . '\\append_transcript_link' );
 }
 
 /**
@@ -360,6 +361,40 @@ function modified_activity_widget() {
 	</div>
 	<?php
 	wp_reset_postdata();
+}
+
+/**
+ * Append a transcript download link to the content of single episode posts.
+ *
+ * PowerPress stores the transcript file URL in the `pci_transcript_url` field
+ * of its enclosure data. When that URL is present, a download link is injected
+ * after the episode content so visitors can retrieve the transcript directly.
+ *
+ * Skips all non-episode contexts and bails gracefully if the PowerPress
+ * function is unavailable.
+ *
+ * @param string $content The post content.
+ * @return string Content with the transcript link appended, or unchanged if no transcript exists.
+ */
+function append_transcript_link( string $content ): string {
+	if ( ! is_singular( 'episodes' ) || ! function_exists( 'powerpress_get_enclosure_data' ) ) {
+		return $content;
+	}
+
+	$data = powerpress_get_enclosure_data( get_the_ID(), 'episodes' );
+	$transcript_url = isset( $data['pci_transcript_url'] ) ? esc_url( $data['pci_transcript_url'] ) : '';
+
+	if ( ! $transcript_url ) {
+		return $content;
+	}
+
+	$link = sprintf(
+		'<p class="episode-transcript-link"><a href="%s" download>%s</a></p>',
+		$transcript_url,
+		esc_html__( 'Download transcript', 'community-code' )
+	);
+
+	return $content . "\n" . $link;
 }
 
 /**
