@@ -549,16 +549,16 @@
         },
         {
             "name": "jazzsequence/ai-connector-priority",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jazzsequence/ai-connector-priority.git",
-                "reference": "8a1a329dc63cc5a583bbe901c29a441a7a7dabf3"
+                "reference": "1667f1dff5eea5b5cc16d09d34931d021cda1449"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jazzsequence/ai-connector-priority/zipball/8a1a329dc63cc5a583bbe901c29a441a7a7dabf3",
-                "reference": "8a1a329dc63cc5a583bbe901c29a441a7a7dabf3",
+                "url": "https://api.github.com/repos/jazzsequence/ai-connector-priority/zipball/1667f1dff5eea5b5cc16d09d34931d021cda1449",
+                "reference": "1667f1dff5eea5b5cc16d09d34931d021cda1449",
                 "shasum": ""
             },
             "require": {
@@ -586,9 +586,9 @@
             "description": "Admin settings page to choose which AI provider to use for each task type (text, image, vision). Requires the WordPress AI plugin.",
             "support": {
                 "issues": "https://github.com/jazzsequence/ai-connector-priority/issues",
-                "source": "https://github.com/jazzsequence/ai-connector-priority/tree/1.1.0"
+                "source": "https://github.com/jazzsequence/ai-connector-priority/tree/1.1.1"
             },
-            "time": "2026-06-01T21:46:39+00:00"
+            "time": "2026-06-08T21:40:39+00:00"
         },
         {
             "name": "jazzsequence/ai-connector-secure-layer",
@@ -2108,15 +2108,15 @@
         },
         {
             "name": "wp-plugin/ninja-forms",
-            "version": "3.14.5",
+            "version": "3.14.6",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/ninja-forms/",
-                "reference": "tags/3.14.5"
+                "reference": "tags/3.14.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.14.5.zip"
+                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.14.6.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2135,7 +2135,7 @@
                 "issues": "https://wordpress.org/support/plugin/ninja-forms",
                 "source": "https://plugins.svn.wordpress.org/ninja-forms"
             },
-            "time": "2026-05-26T15:41:10+00:00"
+            "time": "2026-06-08T14:06:53+00:00"
         },
         {
             "name": "wp-plugin/powerpress",
