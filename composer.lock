@@ -1770,15 +1770,15 @@
         },
         {
             "name": "wp-plugin/ai",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/ai/",
-                "reference": "tags/1.0.1"
+                "reference": "tags/1.0.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/ai.1.0.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/ai.1.0.2.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -1797,7 +1797,7 @@
                 "issues": "https://wordpress.org/support/plugin/ai",
                 "source": "https://plugins.svn.wordpress.org/ai"
             },
-            "time": "2026-05-27T22:16:17+00:00"
+            "time": "2026-06-16T18:36:48+00:00"
         },
         {
             "name": "wp-plugin/ai-provider-for-anthropic",
@@ -4508,5 +4508,5 @@
     "platform-overrides": {
         "php": "8.3.14"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
