@@ -1770,15 +1770,15 @@
         },
         {
             "name": "wp-plugin/ai",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/ai/",
-                "reference": "tags/1.0.1"
+                "reference": "tags/1.0.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/ai.1.0.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/ai.1.0.2.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -1797,7 +1797,7 @@
                 "issues": "https://wordpress.org/support/plugin/ai",
                 "source": "https://plugins.svn.wordpress.org/ai"
             },
-            "time": "2026-05-27T22:16:17+00:00"
+            "time": "2026-06-16T18:36:48+00:00"
         },
         {
             "name": "wp-plugin/ai-provider-for-anthropic",
@@ -2077,15 +2077,15 @@
         },
         {
             "name": "wp-plugin/mailpoet",
-            "version": "5.29.0",
+            "version": "5.30.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/mailpoet/",
-                "reference": "tags/5.29.0"
+                "reference": "tags/5.30.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.29.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.30.0.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2104,7 +2104,7 @@
                 "issues": "https://wordpress.org/support/plugin/mailpoet",
                 "source": "https://plugins.svn.wordpress.org/mailpoet"
             },
-            "time": "2026-06-09T13:56:07+00:00"
+            "time": "2026-06-17T02:26:44+00:00"
         },
         {
             "name": "wp-plugin/ninja-forms",
@@ -2139,15 +2139,15 @@
         },
         {
             "name": "wp-plugin/powerpress",
-            "version": "11.16.8",
+            "version": "11.16.9",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/powerpress/",
-                "reference": "tags/11.16.8"
+                "reference": "tags/11.16.9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/powerpress.11.16.8.zip"
+                "url": "https://downloads.wordpress.org/plugin/powerpress.11.16.9.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2166,7 +2166,7 @@
                 "issues": "https://wordpress.org/support/plugin/powerpress",
                 "source": "https://plugins.svn.wordpress.org/powerpress"
             },
-            "time": "2026-06-02T14:05:50+00:00"
+            "time": "2026-06-17T13:45:42+00:00"
         },
         {
             "name": "wp-plugin/progress-planner",
@@ -4508,5 +4508,5 @@
     "platform-overrides": {
         "php": "8.3.14"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
