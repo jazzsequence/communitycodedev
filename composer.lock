@@ -1686,16 +1686,16 @@
         },
         {
             "name": "vlucas/phpdotenv",
-            "version": "v5.6.3",
+            "version": "v5.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vlucas/phpdotenv.git",
-                "reference": "955e7815d677a3eaa7075231212f2110983adecc"
+                "reference": "416df702837983f8d5ff48c9c3fee4f5f57b980b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/955e7815d677a3eaa7075231212f2110983adecc",
-                "reference": "955e7815d677a3eaa7075231212f2110983adecc",
+                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/416df702837983f8d5ff48c9c3fee4f5f57b980b",
+                "reference": "416df702837983f8d5ff48c9c3fee4f5f57b980b",
                 "shasum": ""
             },
             "require": {
@@ -1754,7 +1754,7 @@
             ],
             "support": {
                 "issues": "https://github.com/vlucas/phpdotenv/issues",
-                "source": "https://github.com/vlucas/phpdotenv/tree/v5.6.3"
+                "source": "https://github.com/vlucas/phpdotenv/tree/v5.6.4"
             },
             "funding": [
                 {
@@ -1766,19 +1766,19 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-12-27T19:49:13+00:00"
+            "time": "2026-07-06T19:11:50+00:00"
         },
         {
             "name": "wp-plugin/ai",
-            "version": "1.0.2",
+            "version": "1.1.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/ai/",
-                "reference": "tags/1.0.2"
+                "reference": "tags/1.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/ai.1.0.2.zip"
+                "url": "https://downloads.wordpress.org/plugin/ai.1.1.0.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -1797,7 +1797,7 @@
                 "issues": "https://wordpress.org/support/plugin/ai",
                 "source": "https://plugins.svn.wordpress.org/ai"
             },
-            "time": "2026-06-16T18:36:48+00:00"
+            "time": "2026-07-01T00:15:37+00:00"
         },
         {
             "name": "wp-plugin/ai-provider-for-anthropic",
@@ -1925,15 +1925,15 @@
         },
         {
             "name": "wp-plugin/altis-accelerate",
-            "version": "4.3.0",
+            "version": "4.3.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/altis-accelerate/",
-                "reference": "tags/4.3.0"
+                "reference": "tags/4.3.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/altis-accelerate.4.3.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/altis-accelerate.4.3.2.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -1951,7 +1951,7 @@
                 "issues": "https://wordpress.org/support/plugin/altis-accelerate",
                 "source": "https://plugins.svn.wordpress.org/altis-accelerate"
             },
-            "time": "2026-06-22T16:01:23+00:00"
+            "time": "2026-07-04T00:51:23+00:00"
         },
         {
             "name": "wp-plugin/autoblue",
@@ -2077,15 +2077,15 @@
         },
         {
             "name": "wp-plugin/mailpoet",
-            "version": "5.32.0",
+            "version": "5.33.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/mailpoet/",
-                "reference": "tags/5.32.0"
+                "reference": "tags/5.33.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.32.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.33.0.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2104,7 +2104,7 @@
                 "issues": "https://wordpress.org/support/plugin/mailpoet",
                 "source": "https://plugins.svn.wordpress.org/mailpoet"
             },
-            "time": "2026-06-25T13:10:40+00:00"
+            "time": "2026-06-30T10:35:49+00:00"
         },
         {
             "name": "wp-plugin/ninja-forms",
@@ -2258,16 +2258,16 @@
         },
         {
             "name": "yoast/wordpress-seo",
-            "version": "27.9",
+            "version": "28.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Yoast-dist/wordpress-seo.git",
-                "reference": "4124bfda6e10b586882028c3634a89461953e95d"
+                "reference": "a39bae96b3c266cc725f2dc39e67ddcc8bdcd82b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Yoast-dist/wordpress-seo/zipball/4124bfda6e10b586882028c3634a89461953e95d",
-                "reference": "4124bfda6e10b586882028c3634a89461953e95d",
+                "url": "https://api.github.com/repos/Yoast-dist/wordpress-seo/zipball/a39bae96b3c266cc725f2dc39e67ddcc8bdcd82b",
+                "reference": "a39bae96b3c266cc725f2dc39e67ddcc8bdcd82b",
                 "shasum": ""
             },
             "require": {
@@ -2276,7 +2276,7 @@
                 "php": "^7.4 || ^8.0"
             },
             "require-dev": {
-                "guzzlehttp/guzzle": "7.10.0",
+                "guzzlehttp/guzzle": "7.12.1",
                 "humbug/php-scoper": "^0.13.4",
                 "league/oauth2-client": "2.9.0",
                 "psr/container": "1.1.1",
@@ -2338,7 +2338,7 @@
                 "source": "https://github.com/Yoast/wordpress-seo",
                 "wiki": "https://github.com/Yoast/wordpress-seo/wiki"
             },
-            "time": "2026-06-22T09:24:53+00:00"
+            "time": "2026-07-06T08:59:42+00:00"
         }
     ],
     "packages-dev": [
