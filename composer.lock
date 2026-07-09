@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "37d0e3ec5f16666c224009d8ce4095ad",
+    "content-hash": "7aca78264577d468462c74fbc59d9428",
     "packages": [
         {
             "name": "10up/elasticpress",
@@ -1986,15 +1986,15 @@
         },
         {
             "name": "wp-plugin/block-accessibility-checks",
-            "version": "3.0.2",
+            "version": "4.0.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/block-accessibility-checks/",
-                "reference": "tags/3.0.2"
+                "reference": "tags/4.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/block-accessibility-checks.3.0.2.zip"
+                "url": "https://downloads.wordpress.org/plugin/block-accessibility-checks.4.0.0.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2012,19 +2012,19 @@
                 "issues": "https://wordpress.org/support/plugin/block-accessibility-checks",
                 "source": "https://plugins.svn.wordpress.org/block-accessibility-checks"
             },
-            "time": "2026-04-15T03:10:47+00:00"
+            "time": "2026-07-08T14:26:17+00:00"
         },
         {
             "name": "wp-plugin/imagify",
-            "version": "2.2.9",
+            "version": "2.3.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/imagify/",
-                "reference": "tags/2.2.9"
+                "reference": "tags/2.3.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/imagify.2.2.9.zip"
+                "url": "https://downloads.wordpress.org/plugin/imagify.2.3.0.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2043,7 +2043,7 @@
                 "issues": "https://wordpress.org/support/plugin/imagify",
                 "source": "https://plugins.svn.wordpress.org/imagify"
             },
-            "time": "2026-06-24T11:01:51+00:00"
+            "time": "2026-07-08T07:25:58+00:00"
         },
         {
             "name": "wp-plugin/integromat-connector",
@@ -2077,15 +2077,15 @@
         },
         {
             "name": "wp-plugin/mailpoet",
-            "version": "5.33.0",
+            "version": "5.33.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/mailpoet/",
-                "reference": "tags/5.33.0"
+                "reference": "tags/5.33.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.33.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.33.1.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2104,7 +2104,7 @@
                 "issues": "https://wordpress.org/support/plugin/mailpoet",
                 "source": "https://plugins.svn.wordpress.org/mailpoet"
             },
-            "time": "2026-06-30T10:35:49+00:00"
+            "time": "2026-07-07T11:40:48+00:00"
         },
         {
             "name": "wp-plugin/ninja-forms",
