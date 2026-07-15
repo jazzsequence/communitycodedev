@@ -102,7 +102,7 @@
         "wp-plugin/akismet": "*",
         "wp-plugin/altis-accelerate": "^4.1",
         "wp-plugin/autoblue": "*",
-        "wp-plugin/block-accessibility-checks": "^3.0",
+        "wp-plugin/block-accessibility-checks": "^4.0",
         "wp-plugin/imagify": "*",
         "wp-plugin/integromat-connector": "*",
         "wp-plugin/mailpoet": "*",
