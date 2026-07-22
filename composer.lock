@@ -1207,7 +1207,7 @@
         },
         {
             "name": "roots/wordpress",
-            "version": "7.0.1",
+            "version": "7.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/roots/wordpress.git",
@@ -1238,7 +1238,7 @@
             ],
             "support": {
                 "issues": "https://github.com/roots/wordpress/issues",
-                "source": "https://github.com/roots/wordpress/tree/7.0.1"
+                "source": "https://github.com/roots/wordpress/tree/7.0.2"
             },
             "funding": [
                 {
@@ -1317,23 +1317,23 @@
         },
         {
             "name": "roots/wordpress-no-content",
-            "version": "7.0.1",
+            "version": "7.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WordPress/WordPress.git",
-                "reference": "7.0.1"
+                "reference": "7.0.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.w.org/release/wordpress-7.0.1-no-content.zip",
-                "reference": "7.0.1",
-                "shasum": "808ab53004d9c6fe69175855cd7d2317fe9502b3"
+                "url": "https://downloads.w.org/release/wordpress-7.0.2-no-content.zip",
+                "reference": "7.0.2",
+                "shasum": "52d2ca801cbfd75d1f2716d057095323b6ca424a"
             },
             "require": {
                 "php": ">= 7.4"
             },
             "provide": {
-                "wordpress/core-implementation": "7.0.1"
+                "wordpress/core-implementation": "7.0.2"
             },
             "suggest": {
                 "ext-curl": "Performs remote request operations.",
@@ -1384,7 +1384,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-07-09T17:26:02+00:00"
+            "time": "2026-07-17T18:39:03+00:00"
         },
         {
             "name": "roots/wp-config",
@@ -2077,15 +2077,15 @@
         },
         {
             "name": "wp-plugin/mailpoet",
-            "version": "5.34.0",
+            "version": "5.34.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/mailpoet/",
-                "reference": "tags/5.34.0"
+                "reference": "tags/5.34.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.34.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.34.1.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2104,19 +2104,19 @@
                 "issues": "https://wordpress.org/support/plugin/mailpoet",
                 "source": "https://plugins.svn.wordpress.org/mailpoet"
             },
-            "time": "2026-07-14T11:05:58+00:00"
+            "time": "2026-07-21T08:26:03+00:00"
         },
         {
             "name": "wp-plugin/ninja-forms",
-            "version": "3.14.9",
+            "version": "3.14.10",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/ninja-forms/",
-                "reference": "tags/3.14.9"
+                "reference": "tags/3.14.10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.14.9.zip"
+                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.14.10.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2135,7 +2135,7 @@
                 "issues": "https://wordpress.org/support/plugin/ninja-forms",
                 "source": "https://plugins.svn.wordpress.org/ninja-forms"
             },
-            "time": "2026-07-13T10:50:54+00:00"
+            "time": "2026-07-20T14:10:50+00:00"
         },
         {
             "name": "wp-plugin/powerpress",
@@ -2258,16 +2258,16 @@
         },
         {
             "name": "yoast/wordpress-seo",
-            "version": "28.0",
+            "version": "28.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Yoast-dist/wordpress-seo.git",
-                "reference": "a39bae96b3c266cc725f2dc39e67ddcc8bdcd82b"
+                "reference": "4bbb0ab9c81806480c0727ad8178d0b1e0157e62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Yoast-dist/wordpress-seo/zipball/a39bae96b3c266cc725f2dc39e67ddcc8bdcd82b",
-                "reference": "a39bae96b3c266cc725f2dc39e67ddcc8bdcd82b",
+                "url": "https://api.github.com/repos/Yoast-dist/wordpress-seo/zipball/4bbb0ab9c81806480c0727ad8178d0b1e0157e62",
+                "reference": "4bbb0ab9c81806480c0727ad8178d0b1e0157e62",
                 "shasum": ""
             },
             "require": {
@@ -2338,7 +2338,7 @@
                 "source": "https://github.com/Yoast/wordpress-seo",
                 "wiki": "https://github.com/Yoast/wordpress-seo/wiki"
             },
-            "time": "2026-07-06T08:59:42+00:00"
+            "time": "2026-07-21T05:07:14+00:00"
         }
     ],
     "packages-dev": [
