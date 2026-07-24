@@ -2077,15 +2077,15 @@
         },
         {
             "name": "wp-plugin/mailpoet",
-            "version": "5.34.1",
+            "version": "5.34.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/mailpoet/",
-                "reference": "tags/5.34.1"
+                "reference": "tags/5.34.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.34.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.34.2.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2104,7 +2104,7 @@
                 "issues": "https://wordpress.org/support/plugin/mailpoet",
                 "source": "https://plugins.svn.wordpress.org/mailpoet"
             },
-            "time": "2026-07-21T08:26:03+00:00"
+            "time": "2026-07-22T16:26:20+00:00"
         },
         {
             "name": "wp-plugin/ninja-forms",
@@ -2139,15 +2139,15 @@
         },
         {
             "name": "wp-plugin/powerpress",
-            "version": "11.16.10",
+            "version": "11.16.11",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/powerpress/",
-                "reference": "tags/11.16.10"
+                "reference": "tags/11.16.11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/powerpress.11.16.10.zip"
+                "url": "https://downloads.wordpress.org/plugin/powerpress.11.16.11.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2166,7 +2166,7 @@
                 "issues": "https://wordpress.org/support/plugin/powerpress",
                 "source": "https://plugins.svn.wordpress.org/powerpress"
             },
-            "time": "2026-07-14T14:10:59+00:00"
+            "time": "2026-07-23T14:06:01+00:00"
         },
         {
             "name": "wp-plugin/progress-planner",
