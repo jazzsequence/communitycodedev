@@ -76,6 +76,7 @@
     "require": {
         "php": ">=8.1",
         "10up/elasticpress": "^5.3",
+        "10up/elasticpress-labs": "^2.5",
         "composer/installers": "^2.2",
         "cweagans/composer-patches": "^2.0",
         "fairpm/fair-plugin": "*",
