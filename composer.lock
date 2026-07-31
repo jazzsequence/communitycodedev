@@ -2016,15 +2016,15 @@
         },
         {
             "name": "wp-plugin/imagify",
-            "version": "2.3.0",
+            "version": "2.3.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/imagify/",
-                "reference": "tags/2.3.0"
+                "reference": "tags/2.3.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/imagify.2.3.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/imagify.2.3.1.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2043,7 +2043,7 @@
                 "issues": "https://wordpress.org/support/plugin/imagify",
                 "source": "https://plugins.svn.wordpress.org/imagify"
             },
-            "time": "2026-07-08T07:25:58+00:00"
+            "time": "2026-07-29T01:56:35+00:00"
         },
         {
             "name": "wp-plugin/integromat-connector",
@@ -2077,15 +2077,15 @@
         },
         {
             "name": "wp-plugin/mailpoet",
-            "version": "5.34.1",
+            "version": "5.34.3",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/mailpoet/",
-                "reference": "tags/5.34.1"
+                "reference": "tags/5.34.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.34.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.34.3.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2104,19 +2104,19 @@
                 "issues": "https://wordpress.org/support/plugin/mailpoet",
                 "source": "https://plugins.svn.wordpress.org/mailpoet"
             },
-            "time": "2026-07-21T08:26:03+00:00"
+            "time": "2026-07-28T14:55:56+00:00"
         },
         {
             "name": "wp-plugin/ninja-forms",
-            "version": "3.14.10",
+            "version": "3.14.11",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/ninja-forms/",
-                "reference": "tags/3.14.10"
+                "reference": "tags/3.14.11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.14.10.zip"
+                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.14.11.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2135,19 +2135,19 @@
                 "issues": "https://wordpress.org/support/plugin/ninja-forms",
                 "source": "https://plugins.svn.wordpress.org/ninja-forms"
             },
-            "time": "2026-07-20T14:10:50+00:00"
+            "time": "2026-07-27T11:50:43+00:00"
         },
         {
             "name": "wp-plugin/powerpress",
-            "version": "11.16.10",
+            "version": "11.17",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/powerpress/",
-                "reference": "tags/11.16.10"
+                "reference": "tags/11.17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/powerpress.11.16.10.zip"
+                "url": "https://downloads.wordpress.org/plugin/powerpress.11.17.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2166,7 +2166,7 @@
                 "issues": "https://wordpress.org/support/plugin/powerpress",
                 "source": "https://plugins.svn.wordpress.org/powerpress"
             },
-            "time": "2026-07-14T14:10:59+00:00"
+            "time": "2026-07-29T13:51:23+00:00"
         },
         {
             "name": "wp-plugin/progress-planner",
