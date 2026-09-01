@@ -17,6 +17,7 @@ function init() {
 	add_action( 'init', __NAMESPACE__ . '\\register_related_episodes_block' );
 	add_action( 'init', __NAMESPACE__ . '\\register_related_posts_block' );
 	add_action( 'pre_get_posts', __NAMESPACE__ . '\\integrate_ep_on_archives' );
+	add_action( 'rest_api_init', __NAMESPACE__ . '\\register_ep_proxy_routes' );
 
 	add_filter( 'ep_post_sync_args', __NAMESPACE__ . '\\add_yoast_description_field', 11, 2 );
 	add_filter( 'ep_post_sync_args', __NAMESPACE__ . '\\include_episode_transcript_in_index', 15, 2 );
@@ -28,6 +29,163 @@ function init() {
 	add_filter( 'ep_related_posts_fields', __NAMESPACE__ . '\\add_transcript_to_related_posts_fields' );
 	add_filter( 'ep_post_mapping', __NAMESPACE__ . '\\add_transcript_field_mapping' );
 	add_filter( 'ep_formatted_args', __NAMESPACE__ . '\\customize_related_posts_query', 999, 3 );
+	add_filter( 'ep_autosuggest_options', __NAMESPACE__ . '\\proxy_autosuggest_through_rest_api' );
+	add_filter( 'ep_instant_results_search_endpoint', __NAMESPACE__ . '\\proxy_instant_results_through_rest_api', 10, 2 );
+	add_filter( 'ep_instant_results_available', '__return_true' );
+}
+
+/**
+ * Redirect autosuggest requests through a WordPress REST API proxy.
+ *
+ * The browser cannot reach http://mtlsproxyhost:9008 directly — it is an
+ * internal network alias only reachable from PHP on the server. Without this
+ * filter ElasticPress injects that URL into the page HTML and the browser
+ * triggers a Mixed Content block (http on an https page).
+ *
+ * Pointing endpointUrl at our REST proxy means the browser sends a request to
+ * the site's own HTTPS origin; WordPress handles it server-side and forwards
+ * the query to the internal proxy.
+ *
+ * @param array $options EP autosuggest JS options.
+ * @return array
+ */
+function proxy_autosuggest_through_rest_api( array $options ) : array {
+	$options['endpointUrl'] = rest_url( 'community-code/v1/ep-autosuggest' );
+	return $options;
+}
+
+/**
+ * Register REST API proxy routes for ElasticPress autosuggest and instant results.
+ */
+function register_ep_proxy_routes() : void {
+	register_rest_route(
+		'community-code/v1',
+		'/ep-autosuggest',
+		[
+			'methods'             => \WP_REST_Server::CREATABLE,
+			'callback'            => __NAMESPACE__ . '\\handle_autosuggest_proxy',
+			'permission_callback' => '__return_true',
+		]
+	);
+
+	register_rest_route(
+		'community-code/v1',
+		'/ep-search',
+		[
+			'methods'             => \WP_REST_Server::READABLE,
+			'callback'            => __NAMESPACE__ . '\\handle_instant_results_proxy',
+			'permission_callback' => '__return_true',
+		]
+	);
+}
+
+/**
+ * Override the Instant Results search endpoint to route through our REST proxy.
+ *
+ * EP constructs the upstream URL as {apiHost}{apiEndpoint}. When we return an
+ * absolute URL here, EP sets apiHost to '' and apiEndpoint to this URL, so
+ * the browser calls our HTTPS WordPress endpoint instead of the internal proxy.
+ *
+ * @param string $endpoint Default endpoint path.
+ * @param string $index    Elasticsearch index name.
+ * @return string
+ */
+function proxy_instant_results_through_rest_api( string $endpoint, string $index ) : string {
+	return rest_url( 'community-code/v1/ep-search' );
+}
+
+/**
+ * Proxy an autosuggest request to the internal Elasticsearch endpoint.
+ *
+ * ElasticPress's autosuggest JavaScript sends a POST request with the full
+ * Elasticsearch query in the body (the search term is already substituted
+ * client-side). This handler forwards that body as-is to the internal
+ * mtlsproxy — only reachable server-side — and streams the response back.
+ *
+ * @param \WP_REST_Request $request The incoming REST request.
+ * @return \WP_REST_Response|\WP_Error
+ */
+function handle_autosuggest_proxy( \WP_REST_Request $request ) {
+	$ep_host        = defined( 'EP_HOST' ) ? EP_HOST : getenv( 'PANTHEON_SEARCH_HOST' );
+	$ep_endpoint_id = getenv( 'PANTHEON_SEARCH_ENDPOINT_ID' );
+	$ep_credentials = defined( 'EP_CREDENTIALS' ) ? EP_CREDENTIALS : getenv( 'PANTHEON_SEARCH_CREDENTIALS' );
+
+	if ( ! $ep_host || ! $ep_endpoint_id ) {
+		return new \WP_Error( 'ep_proxy_misconfigured', 'ElasticPress proxy is not configured.', [ 'status' => 503 ] );
+	}
+
+	$upstream = trailingslashit( $ep_host ) . trailingslashit( $ep_endpoint_id ) . 'autosuggest';
+
+	$args = [
+		'method'  => 'POST',
+		'timeout' => 5,
+		'headers' => [ 'Content-Type' => 'application/json' ],
+		'body'    => $request->get_body(),
+	];
+
+	if ( $ep_credentials ) {
+		$args['headers']['Authorization'] = 'Basic ' . base64_encode( $ep_credentials ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+	}
+
+	$response = wp_remote_post( $upstream, $args );
+
+	if ( is_wp_error( $response ) ) {
+		return new \WP_Error( 'ep_proxy_error', $response->get_error_message(), [ 'status' => 502 ] );
+	}
+
+	$body   = wp_remote_retrieve_body( $response );
+	$status = wp_remote_retrieve_response_code( $response );
+
+	return new \WP_REST_Response( json_decode( $body, true ), $status );
+}
+
+/**
+ * Proxy an Instant Results search request to the internal Elasticsearch endpoint.
+ *
+ * Instant Results JS sends a GET request with search params as query string args.
+ * We forward those to the internal EP host using the ep/v2/search REST path that
+ * mtlsproxy exposes, then return the response to the browser over HTTPS.
+ *
+ * @param \WP_REST_Request $request The incoming REST request.
+ * @return \WP_REST_Response|\WP_Error
+ */
+function handle_instant_results_proxy( \WP_REST_Request $request ) {
+	$ep_host        = defined( 'EP_HOST' ) ? EP_HOST : getenv( 'PANTHEON_SEARCH_HOST' );
+	$ep_endpoint_id = getenv( 'PANTHEON_SEARCH_ENDPOINT_ID' );
+	$ep_credentials = defined( 'EP_CREDENTIALS' ) ? EP_CREDENTIALS : getenv( 'PANTHEON_SEARCH_CREDENTIALS' );
+
+	if ( ! $ep_host || ! $ep_endpoint_id ) {
+		return new \WP_Error( 'ep_proxy_misconfigured', 'ElasticPress proxy is not configured.', [ 'status' => 503 ] );
+	}
+
+	// Reconstruct the upstream URL with query params forwarded as-is.
+	$upstream = trailingslashit( $ep_host ) . 'api/v1/search/posts/' . rawurlencode( $ep_endpoint_id );
+	$params   = $request->get_query_params();
+	unset( $params['_locale'] ); // WP REST internal param.
+	if ( ! empty( $params ) ) {
+		$upstream .= '?' . http_build_query( $params );
+	}
+
+	$args = [
+		'method'  => 'GET',
+		'timeout' => 5,
+		'headers' => [],
+	];
+
+	if ( $ep_credentials ) {
+		$args['headers']['Authorization'] = 'Basic ' . base64_encode( $ep_credentials ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+	}
+
+	$response = wp_remote_get( $upstream, $args );
+
+	if ( is_wp_error( $response ) ) {
+		return new \WP_Error( 'ep_proxy_error', $response->get_error_message(), [ 'status' => 502 ] );
+	}
+
+	$body   = wp_remote_retrieve_body( $response );
+	$status = wp_remote_retrieve_response_code( $response );
+
+	return new \WP_REST_Response( json_decode( $body, true ), $status );
 
 	// Cloudflare blocks PUT from browser User-Agents, so also register POST for the
 	// features endpoint so EP's JS fallback succeeds.
