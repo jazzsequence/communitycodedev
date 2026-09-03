@@ -90,6 +90,8 @@ web/app/mu-plugins/*/
 !web/app/mu-plugins/community-code-elasticpress/**
 !web/app/mu-plugins/search-analytics/
 !web/app/mu-plugins/search-analytics/**
+!web/app/mu-plugins/cc-require-meta-description/
+!web/app/mu-plugins/cc-require-meta-description/**
 
 # Plugins
 # Ignore the plugins directory by default. WordPress plugins should be managed
