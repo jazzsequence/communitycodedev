@@ -2601,15 +2601,15 @@
         },
         {
             "name": "wp-plugin/mailpoet",
-            "version": "5.36.1",
+            "version": "5.37.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/mailpoet/",
-                "reference": "tags/5.36.1"
+                "reference": "tags/5.37.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.36.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.37.0.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2628,19 +2628,19 @@
                 "issues": "https://wordpress.org/support/plugin/mailpoet",
                 "source": "https://plugins.svn.wordpress.org/mailpoet"
             },
-            "time": "2026-08-25T04:56:02+00:00"
+            "time": "2026-09-01T15:45:51+00:00"
         },
         {
             "name": "wp-plugin/ninja-forms",
-            "version": "3.15.1",
+            "version": "3.15.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/ninja-forms/",
-                "reference": "tags/3.15.1"
+                "reference": "tags/3.15.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.15.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.15.2.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2659,7 +2659,7 @@
                 "issues": "https://wordpress.org/support/plugin/ninja-forms",
                 "source": "https://plugins.svn.wordpress.org/ninja-forms"
             },
-            "time": "2026-08-24T14:46:04+00:00"
+            "time": "2026-08-31T14:06:15+00:00"
         },
         {
             "name": "wp-plugin/powerpress",
