@@ -48,6 +48,7 @@ function init() {
 
 	add_action( 'admin_menu', __NAMESPACE__ . '\\add_accelerate_analytics_page', 100 );
 	add_action( 'init', __NAMESPACE__ . '\\register_episodes' );
+	add_action( 'init', __NAMESPACE__ . '\\register_youtube_url_meta' );
 	add_action( 'rest_api_init', __NAMESPACE__ . '\\register_youtube_url' );
 	add_action( 'rest_api_init', __NAMESPACE__ . '\\register_yoast_meta_description_to_rest' );
 	add_action( 'wp_dashboard_setup', __NAMESPACE__ . '\\dashboard_setup' );
@@ -151,6 +152,29 @@ function register_episodes() {
 	];
 
 	register_post_type( 'episodes', $args );
+}
+
+/**
+ * Register the youtube_url post meta.
+ *
+ * 8289339 registered this against the post type 'episode' -- singular, while the
+ * CPT is 'episodes' -- so it never bound to anything and the meta stayed
+ * unregistered. Registering it for real exposes it to REST, which is what lets
+ * the block editor read and write it; the value is stored under the same
+ * unprotected key as before, so the Custom Fields box keeps working unchanged.
+ */
+function register_youtube_url_meta() {
+	foreach ( [ 'episodes', 'post' ] as $post_type ) {
+		register_post_meta( $post_type, 'youtube_url', [
+			'type' => 'string',
+			'single' => true,
+			'show_in_rest' => true,
+			'sanitize_callback' => 'esc_url_raw',
+			'auth_callback' => function ( $allowed, $meta_key, $post_id ) {
+				return current_user_can( 'edit_post', $post_id );
+			},
+		] );
+	}
 }
 
 /**
