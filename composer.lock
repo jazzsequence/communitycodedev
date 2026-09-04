@@ -2694,15 +2694,15 @@
         },
         {
             "name": "wp-plugin/progress-planner",
-            "version": "1.9.1",
+            "version": "1.10.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/progress-planner/",
-                "reference": "tags/1.9.1"
+                "reference": "tags/1.10.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/progress-planner.1.9.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/progress-planner.1.10.0.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2721,7 +2721,7 @@
                 "issues": "https://wordpress.org/support/plugin/progress-planner",
                 "source": "https://plugins.svn.wordpress.org/progress-planner"
             },
-            "time": "2026-05-29T12:40:51+00:00"
+            "time": "2026-09-03T09:41:15+00:00"
         },
         {
             "name": "wp-plugin/wp-mail-smtp",
