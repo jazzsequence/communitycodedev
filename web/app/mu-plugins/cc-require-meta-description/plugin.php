@@ -53,7 +53,7 @@ function enqueue_gate() {
 	wp_enqueue_script(
 		SCRIPT_HANDLE,
 		plugins_url( 'js/gate.js', __FILE__ ),
-		[ 'wp-data', 'wp-dom-ready', 'wp-i18n', 'wp-editor' ],
+		[ 'wp-components', 'wp-data', 'wp-dom-ready', 'wp-editor', 'wp-element', 'wp-i18n', 'wp-plugins' ],
 		file_exists( $path ) ? (string) filemtime( $path ) : '1.0.0',
 		true
 	);

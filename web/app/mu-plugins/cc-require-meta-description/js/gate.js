@@ -5,14 +5,14 @@
  *
  * Yoast renders the description in a classic metabox rather than the block editor's
  * data store, so the live value only exists in the metabox's hidden input. Yoast's
- * React snippet editor writes to that input's .value directly, which does not touch
- * the DOM attribute, so neither a change event nor a MutationObserver sees it --
- * polling the input is the only reliable read.
+ * post-edit.js writes to that input's .value directly, which does not touch the DOM
+ * attribute, so neither a change event nor a MutationObserver sees it -- polling the
+ * input is the only reliable read.
  */
 ( function ( wp ) {
 	'use strict';
 
-	if ( ! wp || ! wp.data || ! wp.domReady ) {
+	if ( ! wp || ! wp.data || ! wp.domReady || ! wp.element || ! wp.plugins ) {
 		return;
 	}
 
@@ -22,14 +22,26 @@
 	var POLL_MS = 500;
 
 	var __ = wp.i18n.__;
+	var el = wp.element.createElement;
+
+	// The pre-publish panel moved from core/edit-post to core/editor; the old export
+	// still resolves but logs a deprecation on every render.
+	var PrePublishPanel = ( wp.editor && wp.editor.PluginPrePublishPanel )
+		|| ( wp.editPost && wp.editPost.PluginPrePublishPanel );
+
 	var locked = null;
+
+	// Last polled value, shared by the lock and the panel so both read one source.
+	// null means the metabox is not in the DOM yet.
+	var description = null;
+	var listeners = [];
 
 	/**
 	 * Read the description the user can actually see in the metabox.
 	 *
 	 * @return {string|null} Trimmed value, or null when the metabox is not rendered yet.
 	 */
-	function getDescription() {
+	function readDescription() {
 		var input = document.getElementById( INPUT_ID );
 
 		return input ? String( input.value ).trim() : null;
@@ -90,9 +102,13 @@
 	/**
 	 * Engage or release the lock, only on an actual change of state.
 	 *
+	 * The notice renders in the editor canvas, which the publish sidebar covers, so
+	 * it is really only visible when updating an already published post. The
+	 * pre-publish panel carries the message at the point the user is blocked.
+	 *
 	 * @param {boolean} shouldLock Whether saving should be locked.
 	 */
-	function apply( shouldLock ) {
+	function applyLock( shouldLock ) {
 		if ( shouldLock === locked ) {
 			return;
 		}
@@ -106,7 +122,7 @@
 			editor.lockPostSaving( LOCK_KEY );
 			notices.createNotice(
 				'warning',
-				__( 'Add a Yoast SEO meta description before publishing or scheduling. It feeds site search and the syndication that announces new episodes.', 'community-code' ),
+				__( 'A Yoast SEO meta description is required before publishing or scheduling. Add one in the Yoast SEO box below the editor.', 'community-code' ),
 				{ id: NOTICE_ID, isDismissible: false }
 			);
 
@@ -117,19 +133,86 @@
 		notices.removeNotice( NOTICE_ID );
 	}
 
+	/**
+	 * Subscribe a component to polled changes of the description.
+	 *
+	 * @return {string|null} Current description.
+	 */
+	function useDescription() {
+		var state = wp.element.useState( description );
+		var value = state[ 0 ];
+		var setValue = state[ 1 ];
+
+		wp.element.useEffect( function () {
+			listeners.push( setValue );
+			setValue( description );
+
+			return function () {
+				listeners = listeners.filter( function ( listener ) {
+					return listener !== setValue;
+				} );
+			};
+		}, [] );
+
+		return value;
+	}
+
+	/**
+	 * Pre-publish checklist entry explaining the requirement.
+	 *
+	 * @return {Object|null} Element, or null when there is nothing to report.
+	 */
+	function MetaDescriptionPanel() {
+		var value = useDescription();
+
+		if ( ! PrePublishPanel || value === null ) {
+			return null;
+		}
+
+		var body = value === ''
+			? el(
+				wp.components.Notice,
+				{ status: 'warning', isDismissible: false },
+				__( 'Required before this post can be published or scheduled. Add one in the Yoast SEO box below the editor. It also feeds site search and the syndication that announces new episodes.', 'community-code' )
+			)
+			: el( 'p', { style: { margin: 0 } }, value );
+
+		return el(
+			PrePublishPanel,
+			{
+				title: __( 'SEO meta description', 'community-code' ),
+				initialOpen: true,
+				className: 'cc-require-meta-description'
+			},
+			body
+		);
+	}
+
+	/**
+	 * Poll the metabox, fan the value out to the panel, and set the lock.
+	 */
 	function check() {
-		var description = getDescription();
+		var value = readDescription();
+
+		if ( value !== description ) {
+			description = value;
+			listeners.slice().forEach( function ( listener ) {
+				listener( value );
+			} );
+		}
 
 		// Metabox has not rendered yet -- stay out of the way rather than locking
 		// a post the editor has not finished loading.
-		if ( description === null ) {
-			apply( false );
+		if ( value === null ) {
+			applyLock( false );
 
 			return;
 		}
 
-		apply( description === '' && shouldGuard() );
+		applyLock( value === '' && shouldGuard() );
 	}
+
+	wp.plugins.registerPlugin( 'cc-require-meta-description', { render: MetaDescriptionPanel } );
 
 	wp.domReady( function () {
 		check();
