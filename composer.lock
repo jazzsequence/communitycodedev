@@ -855,16 +855,16 @@
         },
         {
             "name": "jazzsequence/ai-connector-secure-layer",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jazzsequence/ai-connector-secure-layer.git",
-                "reference": "c8d72c41ea3519caddb95159b33c365263c88a44"
+                "reference": "b945ee5a596c54fb314496d61f0f14216a75eba0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jazzsequence/ai-connector-secure-layer/zipball/c8d72c41ea3519caddb95159b33c365263c88a44",
-                "reference": "c8d72c41ea3519caddb95159b33c365263c88a44",
+                "url": "https://api.github.com/repos/jazzsequence/ai-connector-secure-layer/zipball/b945ee5a596c54fb314496d61f0f14216a75eba0",
+                "reference": "b945ee5a596c54fb314496d61f0f14216a75eba0",
                 "shasum": ""
             },
             "require": {
@@ -892,9 +892,9 @@
             "description": "Keeps LLM API keys out of the WordPress database. Fetches keys from Pantheon Secrets or environment variables on-demand at the moment an LLM request fires — never stored in wp_options, never pre-loaded as a PHP constant.",
             "support": {
                 "issues": "https://github.com/jazzsequence/ai-connector-secure-layer/issues",
-                "source": "https://github.com/jazzsequence/ai-connector-secure-layer/tree/1.0.0"
+                "source": "https://github.com/jazzsequence/ai-connector-secure-layer/tree/1.1.0"
             },
-            "time": "2026-05-27T16:50:44+00:00"
+            "time": "2026-09-12T20:21:57+00:00"
         },
         {
             "name": "jazzsequence/ash-nazg",
@@ -2601,15 +2601,15 @@
         },
         {
             "name": "wp-plugin/mailpoet",
-            "version": "5.38.0",
+            "version": "5.38.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/mailpoet/",
-                "reference": "tags/5.38.0"
+                "reference": "tags/5.38.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.38.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.38.1.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2628,7 +2628,7 @@
                 "issues": "https://wordpress.org/support/plugin/mailpoet",
                 "source": "https://plugins.svn.wordpress.org/mailpoet"
             },
-            "time": "2026-09-08T14:01:51+00:00"
+            "time": "2026-09-15T08:26:43+00:00"
         },
         {
             "name": "wp-plugin/ninja-forms",
