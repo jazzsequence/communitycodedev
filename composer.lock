@@ -855,16 +855,16 @@
         },
         {
             "name": "jazzsequence/ai-connector-secure-layer",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jazzsequence/ai-connector-secure-layer.git",
-                "reference": "c8d72c41ea3519caddb95159b33c365263c88a44"
+                "reference": "b945ee5a596c54fb314496d61f0f14216a75eba0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jazzsequence/ai-connector-secure-layer/zipball/c8d72c41ea3519caddb95159b33c365263c88a44",
-                "reference": "c8d72c41ea3519caddb95159b33c365263c88a44",
+                "url": "https://api.github.com/repos/jazzsequence/ai-connector-secure-layer/zipball/b945ee5a596c54fb314496d61f0f14216a75eba0",
+                "reference": "b945ee5a596c54fb314496d61f0f14216a75eba0",
                 "shasum": ""
             },
             "require": {
@@ -892,9 +892,9 @@
             "description": "Keeps LLM API keys out of the WordPress database. Fetches keys from Pantheon Secrets or environment variables on-demand at the moment an LLM request fires — never stored in wp_options, never pre-loaded as a PHP constant.",
             "support": {
                 "issues": "https://github.com/jazzsequence/ai-connector-secure-layer/issues",
-                "source": "https://github.com/jazzsequence/ai-connector-secure-layer/tree/1.0.0"
+                "source": "https://github.com/jazzsequence/ai-connector-secure-layer/tree/1.1.0"
             },
-            "time": "2026-05-27T16:50:44+00:00"
+            "time": "2026-09-12T20:21:57+00:00"
         },
         {
             "name": "jazzsequence/ash-nazg",
@@ -932,16 +932,16 @@
         },
         {
             "name": "jazzsequence/jazzs3quence-priority-manager-for-ai-connectors",
-            "version": "1.2.1",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jazzsequence/jazzs3quence-priority-manager-for-ai-connectors.git",
-                "reference": "8c2a47ef0f3284eb8fceab8b5940a5ce9dcae3c9"
+                "reference": "c38fd3b6c47fa30e5ec838c599f99ae87670b08c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jazzsequence/jazzs3quence-priority-manager-for-ai-connectors/zipball/8c2a47ef0f3284eb8fceab8b5940a5ce9dcae3c9",
-                "reference": "8c2a47ef0f3284eb8fceab8b5940a5ce9dcae3c9",
+                "url": "https://api.github.com/repos/jazzsequence/jazzs3quence-priority-manager-for-ai-connectors/zipball/c38fd3b6c47fa30e5ec838c599f99ae87670b08c",
+                "reference": "c38fd3b6c47fa30e5ec838c599f99ae87670b08c",
                 "shasum": ""
             },
             "require": {
@@ -969,9 +969,9 @@
             "description": "Admin settings page to choose which AI provider to use for each task type (text, image, vision). Requires the WordPress AI plugin.",
             "support": {
                 "issues": "https://github.com/jazzsequence/jazzs3quence-priority-manager-for-ai-connectors/issues",
-                "source": "https://github.com/jazzsequence/jazzs3quence-priority-manager-for-ai-connectors/tree/1.2.1"
+                "source": "https://github.com/jazzsequence/jazzs3quence-priority-manager-for-ai-connectors/tree/1.3.0"
             },
-            "time": "2026-06-12T16:07:12+00:00"
+            "time": "2026-09-13T04:39:33+00:00"
         },
         {
             "name": "oscarotero/env",
@@ -2356,15 +2356,15 @@
         },
         {
             "name": "wp-plugin/ai-provider-for-google",
-            "version": "1.1.1",
+            "version": "1.2.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/ai-provider-for-google/",
-                "reference": "tags/1.1.1"
+                "reference": "tags/1.2.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/ai-provider-for-google.1.1.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/ai-provider-for-google.1.2.0.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2383,19 +2383,19 @@
                 "issues": "https://wordpress.org/support/plugin/ai-provider-for-google",
                 "source": "https://plugins.svn.wordpress.org/ai-provider-for-google"
             },
-            "time": "2026-08-17T20:10:10+00:00"
+            "time": "2026-09-21T18:31:45+00:00"
         },
         {
             "name": "wp-plugin/ai-provider-for-openai",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/ai-provider-for-openai/",
-                "reference": "tags/1.1.0"
+                "reference": "tags/1.2.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/ai-provider-for-openai.1.1.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/ai-provider-for-openai.1.2.0.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2414,7 +2414,7 @@
                 "issues": "https://wordpress.org/support/plugin/ai-provider-for-openai",
                 "source": "https://plugins.svn.wordpress.org/ai-provider-for-openai"
             },
-            "time": "2026-08-17T19:49:15+00:00"
+            "time": "2026-09-21T18:16:25+00:00"
         },
         {
             "name": "wp-plugin/akismet",
@@ -2601,15 +2601,15 @@
         },
         {
             "name": "wp-plugin/mailpoet",
-            "version": "5.38.0",
+            "version": "5.39.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/mailpoet/",
-                "reference": "tags/5.38.0"
+                "reference": "tags/5.39.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.38.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/mailpoet.5.39.0.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2628,19 +2628,19 @@
                 "issues": "https://wordpress.org/support/plugin/mailpoet",
                 "source": "https://plugins.svn.wordpress.org/mailpoet"
             },
-            "time": "2026-09-08T14:01:51+00:00"
+            "time": "2026-09-23T06:51:31+00:00"
         },
         {
             "name": "wp-plugin/ninja-forms",
-            "version": "3.15.3",
+            "version": "3.15.4",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/ninja-forms/",
-                "reference": "tags/3.15.3"
+                "reference": "tags/3.15.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.15.3.zip"
+                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.15.4.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2652,14 +2652,14 @@
                     "name": "Kevin Stover"
                 }
             ],
-            "description": "The 100% beginner friendly WordPress form builder. Drag & drop form fields to build beautiful, professional contact forms in minutes.",
-            "homepage": "http://ninjaforms.com/?utm_source=WordPress&utm_medium=readme",
+            "description": "Free WordPress form builder with calculations, signatures, star ratings, unlimited submissions stored on your site, and an AI form builder.",
+            "homepage": "https://ninjaforms.com/?utm_source=WordPress.org&utm_medium=Plugin+header",
             "support": {
                 "changelog": "https://wordpress.org/plugins/ninja-forms/#developers",
                 "issues": "https://wordpress.org/support/plugin/ninja-forms",
                 "source": "https://plugins.svn.wordpress.org/ninja-forms"
             },
-            "time": "2026-09-07T16:06:20+00:00"
+            "time": "2026-09-21T14:14:05+00:00"
         },
         {
             "name": "wp-plugin/powerpress",
@@ -2694,15 +2694,15 @@
         },
         {
             "name": "wp-plugin/progress-planner",
-            "version": "1.10.0",
+            "version": "1.10.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/progress-planner/",
-                "reference": "tags/1.10.0"
+                "reference": "tags/1.10.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/progress-planner.1.10.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/progress-planner.1.10.1.zip"
             },
             "require": {
                 "composer/installers": "~1.0|~2.0"
@@ -2721,7 +2721,7 @@
                 "issues": "https://wordpress.org/support/plugin/progress-planner",
                 "source": "https://plugins.svn.wordpress.org/progress-planner"
             },
-            "time": "2026-09-03T09:41:15+00:00"
+            "time": "2026-09-24T14:41:56+00:00"
         },
         {
             "name": "wp-plugin/wp-mail-smtp",
@@ -2782,16 +2782,16 @@
         },
         {
             "name": "yoast/wordpress-seo",
-            "version": "28.4",
+            "version": "28.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Yoast-dist/wordpress-seo.git",
-                "reference": "a87a0136d0a3c3ebc47b6a2435349cd4d73ff2bc"
+                "reference": "eccaa81034db8b35295b038fb085b9692c98b4a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Yoast-dist/wordpress-seo/zipball/a87a0136d0a3c3ebc47b6a2435349cd4d73ff2bc",
-                "reference": "a87a0136d0a3c3ebc47b6a2435349cd4d73ff2bc",
+                "url": "https://api.github.com/repos/Yoast-dist/wordpress-seo/zipball/eccaa81034db8b35295b038fb085b9692c98b4a5",
+                "reference": "eccaa81034db8b35295b038fb085b9692c98b4a5",
                 "shasum": ""
             },
             "require": {
@@ -2862,7 +2862,7 @@
                 "source": "https://github.com/Yoast/wordpress-seo",
                 "wiki": "https://github.com/Yoast/wordpress-seo/wiki"
             },
-            "time": "2026-09-01T06:12:48+00:00"
+            "time": "2026-09-15T06:53:25+00:00"
         },
         {
             "name": "yocto/yoclib-multibase",
