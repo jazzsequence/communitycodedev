@@ -191,9 +191,8 @@ NEWSLETTER_ENDPOINT=https://communitycode.dev/wp-json/community-code/v1/newslett
 NEWSLETTER_SECRET=<same value as CC_P1_NEWSLETTER_SECRET>
 ```
 
-Note: the P1 repo's `docs/newsletter-mailpoet.md` still shows the sketch route `cc/v1/subscribe`;
-the real path is the one above. P1 maps our 400 to "address wasn't accepted" and everything else
-to a generic failure, which matches this contract.
+P1 maps our 400 to "address wasn't accepted" and everything else to a generic failure, which
+matches this contract.
 
 ## Verifying (newsletter)
 
@@ -205,3 +204,26 @@ MailPoet is replaced by an in-memory fake through the `cc_p1_forms_mailpoet_api`
 subscriber is created and nothing is sent. It checks the route's logic against the API contract
 above; it does not prove real MailPoet behaves that way, so do one manual signup on a local site
 before relying on it.
+
+## Deploying and checking each environment
+
+This is a Bedrock mu-plugin in a directory, so the autoloader picks it up: there is nothing to
+activate. It only exists on an environment once its code has synced, so merging to `main` is not
+enough: dev syncs from `main`, and test and live only get it when you deploy.
+
+Probe an environment without needing the secret. An empty POST is harmless:
+
+```bash
+curl -s -o /dev/null -w '%{http_code}\n' -X POST -H 'Content-Type: application/json' -d '{}' \
+  https://<environment host>/wp-json/community-code/v1/contact
+```
+
+| Status | Meaning |
+|---|---|
+| 404 | The code is not on that environment (not synced or not deployed yet). |
+| 503 | Deployed, but its `cc_p1_*_secret` is not set (the route refuses everything, never open). |
+| 401 | Deployed and the secret is set; the probe just has no valid bearer token. |
+
+Repeat with `/newsletter`. If dev still answers 404 after a merge, check whether the `Sync code on
+"dev"` workflow failed (`terminus workflow:list communitycodedev`); the merged code builds with
+`composer install --no-dev` locally, so a failed sync is a platform-side problem, not the plugin.
