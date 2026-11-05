@@ -292,6 +292,23 @@ if ( $ep_prefix && $ep_host && $ep_token ) {
 	}
 }
 
+/**
+ * P1 headless frontend -> /wp-json/community-code/v1/{contact,newsletter} shared secrets, plus the
+ * optional MailPoet list id for the newsletter route.
+ *
+ * Read from the environment first (local .env.local), then Pantheon Secrets. Left undefined when
+ * unset: the cc-p1-forms mu-plugin treats a missing secret as "not configured" and refuses every
+ * request (503), and a missing list id falls back to MailPoet's only list (or 503 if ambiguous).
+ */
+foreach ( [ 'CC_P1_CONTACT_SECRET', 'CC_P1_NEWSLETTER_SECRET', 'CC_P1_NEWSLETTER_LIST_ID' ] as $cc_p1_constant ) {
+	// Env vars (local) keep the constant's UPPERCASE name; Pantheon secrets here are lowercase snake_case.
+	$cc_p1_value = env( $cc_p1_constant ) ?: pantheon_get_secret( strtolower( $cc_p1_constant ) );
+	if ( $cc_p1_value ) {
+		Config::define( $cc_p1_constant, $cc_p1_value );
+	}
+}
+unset( $cc_p1_constant, $cc_p1_value );
+
 $env_config = __DIR__ . '/environments/' . WP_ENV . '.php';
 
 if ( file_exists( $env_config ) ) {
