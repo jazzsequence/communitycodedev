@@ -92,6 +92,8 @@ web/app/mu-plugins/*/
 !web/app/mu-plugins/search-analytics/**
 !web/app/mu-plugins/cc-publish-requirements/
 !web/app/mu-plugins/cc-publish-requirements/**
+!web/app/mu-plugins/cc-p1-forms/
+!web/app/mu-plugins/cc-p1-forms/**
 
 # Plugins
 # Ignore the plugins directory by default. WordPress plugins should be managed
