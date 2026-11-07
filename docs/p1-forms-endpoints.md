@@ -127,7 +127,7 @@ Content-Type: application/json
 | 200    | `{"ok": true}`          | Subscribed (confirmation emailed) **or** nothing to do; indistinguishable |
 | 400    | `{"error": "<message>"}`| Invalid address or first name                                         |
 | 401    | `{"error": "…"}`        | Missing or wrong secret                                               |
-| 500    | `{"error": "…"}`        | MailPoet failure (generic text; only the exception class and code are logged) |
+| 500    | `{"error": "…"}`        | MailPoet failure (generic text; only the exception class and code are logged). See [Troubleshooting (newsletter)](#troubleshooting-newsletter) |
 | 503    | `{"error": "…"}`        | Secret unset, MailPoet inactive, double opt-in disabled in MailPoet, or no unambiguous list |
 
 Every response carries `Cache-Control: no-store`; auth runs before validation (401/503, never 400,
@@ -227,3 +227,78 @@ curl -s -o /dev/null -w '%{http_code}\n' -X POST -H 'Content-Type: application/j
 Repeat with `/newsletter`. If dev still answers 404 after a merge, check whether the `Sync code on
 "dev"` workflow failed (`terminus workflow:list communitycodedev`); the merged code builds with
 `composer install --no-dev` locally, so a failed sync is a platform-side problem, not the plugin.
+
+## Troubleshooting (newsletter)
+
+### 500 and `APIException code 10` in the PHP log
+
+```
+cc-p1-forms: newsletter MailPoet failure (MailPoet\API\MP\v1\APIException code 10)
+```
+
+Code 10 is MailPoet's `CONFIRMATION_FAILED_TO_SEND`. The subscriber **was** saved (as `unconfirmed`,
+so look under Subscribers > Unconfirmed, not in the list's own count) and the confirmation email
+could not be sent. The secret, endpoint, list and double opt-in are fine, or you would see 401/503
+instead. Retrying takes the resend path and fails the same way until the cause is fixed.
+
+Only the class and code are logged on purpose (MailPoet messages can embed the address), and
+MailPoet's own message here is generic, so the log will not say why. In MailPoet 5.39.0 the confirmation
+send (`ConfirmationEmailMailer::sendConfirmationEmailMessage`) fails like this when:
+
+| Cause | Result for the signup |
+|---|---|
+| The mailer is **paused** (`MailerLog::isSendingPaused()`) | Throws, so 500 / code 10 |
+| The send throws or the Sending Service returns a failure | Throws, so 500 / code 10 |
+| The sender address is flagged unauthorized while the Sending Service is on | Returns false **without throwing**: the signup answers `200` and no email is sent |
+| The subscriber already received 3 confirmation emails (anonymous cap) | Same: `200`, no email |
+
+So a success message does not prove an email went out.
+
+**Tell MailPoet from this plugin or P1.** In MailPoet > Subscribers, use **Resend confirmation email**
+on the saved subscriber. It runs entirely inside MailPoet. If that fails with "There was a problem with
+your sending method", the cause is MailPoet's sending state, not the plugin or P1.
+
+**Read the stored state** (read-only; prints no key and no address). `remote:wp` mangles quotes, so pass the PHP as base64:
+
+```bash
+cat > /tmp/mp-state.php <<'PHP'
+$s=\MailPoet\Settings\SettingsController::getInstance();
+$l=(array)$s->get("mta_log");
+$e=isset($l["error"])?(array)$l["error"]:null;
+echo json_encode(["status"=>$l["status"]??null,
+  "error"=>$e?preg_replace("/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+/","[email]",(string)($e["error_message"]??"")):null,
+  "method"=>$s->get("mta.method"),
+  "sender_check_keys"=>array_keys((array)$s->get("authorized_emails_addresses_check"))])."\n";
+PHP
+terminus remote:wp communitycodedev.live -- eval "eval(base64_decode('$(base64 < /tmp/mp-state.php | tr -d '\n')'));"
+```
+
+`status: "paused"` with an `error` is the pause. The MailPoet admin did not show a notice for it.
+
+### Mailer paused
+
+Seen on 2026-11-06: `status: paused`, error `MailPoet API key is invalid!`, left by an earlier send
+while the Sending Service key state was bad. The key later showed "valid" again, but
+**re-verifying the key does not unpause the mailer**, and a test email from Settings > Send With
+is not a reliable signal. A normal state after resuming is `status: null` and no error.
+
+**Before resuming, check what is being held.** Resuming releases every held send on MailPoet's next
+cron run. On that day 9 stale post-notification tasks (11 recipients each, never processed since
+2026-06-29) were queued and would all have gone out. List them first:
+
+```sql
+SELECT t.id, t.scheduled_at, q.count_total, q.count_processed, n.type
+FROM wp_mailpoet_scheduled_tasks t
+JOIN wp_mailpoet_sending_queues q ON q.task_id = t.id
+JOIN wp_mailpoet_newsletters n ON n.id = q.newsletter_id
+WHERE t.type = 'sending' AND t.status IS NULL AND t.deleted_at IS NULL;
+```
+
+Set any you do not want sent to `paused` (reversible), or cancel or delete them in the MailPoet
+admin, then resume with the admin's **Resume sending** action or `\MailPoet\Mailer\MailerLog::resumeSending()`
+(via `wp eval`). Then retry the signup; the saved `unconfirmed` subscriber takes the resend path.
+
+The status report (MailPoet > Help > System Status) shows `Sending Queue: Status: paused` and
+`Last seen error: SendingQueue: Sending has been paused` for this. `Premium key state:
+valid_underprivileged` next to a valid Sending Service key was reported on the free plan and is
+not the problem.
